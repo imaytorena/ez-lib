@@ -14,27 +14,27 @@ import {
     Text,
     Icon,
 } from '@chakra-ui/react';
-
-
 import { FaPlus } from 'react-icons/fa';
-
-
 import { FormModal } from '../../components/FormModal';
 
 import Row from './Row';
 import Misc from './Misc';
+import { Book, Row as RowType, User } from '../../constants';
 
-type Data = {
-    name: string;
-};
+type Model = RowType | Book | User | undefined;
+
+type HeaderRow = {
+    key: string;
+    label: string;
+}
 interface DatatableProps extends BoxProps {
-    label?: string;
-    data: Data[];
-    row_keys: Object;
+    header?: string;
+    data: Model[];
+    header_rows: HeaderRow[];
     totalCount: number;
 };
 
-const Datatable = ({ label, data, totalCount }: DatatableProps) => {
+const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) => {
     const { colorMode, toggleColorMode } = useColorMode();
     const borderColor = useColorModeValue("gray.200", "gray.600");
 
@@ -106,7 +106,7 @@ const Datatable = ({ label, data, totalCount }: DatatableProps) => {
                 borderRadius="md"
             >
                 <Misc.Heading
-                    label={"Hoaasdas"}
+                    header={header}
                 />
                 <Flex
                     justify="space-between"
@@ -158,25 +158,13 @@ const Datatable = ({ label, data, totalCount }: DatatableProps) => {
                 >
                     <Table size="sm">
                         <Row.Header
-                            header_rows={[
-                                { key: 'name', label: 'Nombre' },
-                                { key: 'author', label: 'Autor' },
-                            ]}
+                            header_rows={header_rows}
                         />
                         <Row.Body
-                            header_rows={[
-                                { key: 'name', label: 'Nombre' },
-                                { key: 'author', label: 'Autor' },
-                            ]}
-                            data={[
-                                { id: 1, name: 'nombre', author: 'assdads' },
-                                { id: 2, name: 'nombre', author: 'assdads' },
-                                { id: 3, name: 'nombre', author: 'assdads' },
-                                { id: 4, name: 'nombre', author: 'assdads' },
-                                { id: 5, name: 'nombre', author: 'assdads' },
-                            ]}
+                            header_rows={header_rows}
+                            data={data}
                         />
-                        <Row.Footer totalCount={33} page={page} setPage={setPage} />
+                        <Row.Footer totalCount={totalCount} page={page} setPage={setPage} />
                     </Table>
                 </Box>
             </Box>

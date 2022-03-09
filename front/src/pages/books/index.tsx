@@ -4,7 +4,19 @@ import Datatable from "../../components/Datatable";
 function Books({ posts }) {
 	return <AdminLayout>
 		<Datatable
-			label={'Hola'}
+			header={'Hola'}
+			header_rows={[
+				{ key: 'name', label: 'Nombre' },
+				{ key: 'author', label: 'Autor' },
+			]}
+			data={[
+				{ id: 1, name: 'nombre', author: 'assdads' },
+				{ id: 2, name: 'nombre', author: 'assdads' },
+				{ id: 3, name: 'nombre', author: 'assdads' },
+				{ id: 4, name: 'nombre', author: 'assdads' },
+				{ id: 5, name: 'nombre', author: 'assdads' },
+			]}
+			totalCount={33}
 		></Datatable>
 	</AdminLayout>;
 }
