@@ -30,7 +30,7 @@ export function Pagination({
     : []
 
   const nextPages = currentPage < lastPage
-    ?  generatePagesArray(currentPage, Math.min(currentPage + siblingsCount + lastPage))
+    ? generatePagesArray(currentPage, Math.min(currentPage + siblingsCount + lastPage))
     : []
 
   return (
@@ -40,14 +40,14 @@ export function Pagination({
       align="center"
       spacing="6"
     >
-      <Flex direction="row" spacing="2" ml="auto">
+      <Flex direction="row" ml="auto">
         {currentPage > (1 + siblingsCount) && (
           <>
-            <PaginationItem onPageChange={onPageChange} number={1}/>
+            <PaginationItem onPageChange={onPageChange} number={1} />
 
-            { currentPage > (2 + siblingsCount) && (
+            {currentPage > (2 + siblingsCount) && (
               <Text
-              mr="4"
+                mr="4"
                 color="gray.300"
                 width="8"
                 textAlign="center"
@@ -60,11 +60,11 @@ export function Pagination({
 
         {previousPages.length > 0 && previousPages.map(page => {
           return (
-              <PaginationItem
-                onPageChange={onPageChange}
-                key={page}
-                number={page}
-              />
+            <PaginationItem
+              onPageChange={onPageChange}
+              key={page}
+              number={page}
+            />
           )
         })}
 
@@ -86,7 +86,7 @@ export function Pagination({
 
         {(currentPage + siblingsCount) < lastPage && (
           <>
-            { (currentPage + 1 + siblingsCount) < lastPage && (
+            {(currentPage + 1 + siblingsCount) < lastPage && (
               <Text
                 mr="4"
                 color="gray.300"
@@ -96,7 +96,7 @@ export function Pagination({
                 ...
               </Text>
             )}
-            <PaginationItem onPageChange={onPageChange}  number={lastPage}/>
+            <PaginationItem onPageChange={onPageChange} number={lastPage} />
           </>
         )}
       </Flex>

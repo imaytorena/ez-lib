@@ -2,7 +2,7 @@ import { BoxProps, Heading as ChakraHeading, useColorMode } from '@chakra-ui/rea
 import React from 'react'
 
 interface HeadingProps extends BoxProps {
-    label?: string;
+    header: string;
 };
 const Heading = ({ label }: HeadingProps) => {
     const { colorMode, toggleColorMode } = useColorMode();

@@ -5,3 +5,14 @@ export interface Row {
 };
 
 export type Table = Row[];
+
+export type User = {
+    id: string,
+    name: string;
+    email: string;
+    createdAt: string;
+}
+export interface Book extends Row {
+    name: string;
+    author: string;
+}
