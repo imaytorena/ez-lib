@@ -15,9 +15,14 @@ class CreatePenaltiesTable extends Migration
     {
         Schema::create('penalties', function (Blueprint $table) {
             $table->id();
-            $table->string('folio');
-            $table->string('folio');
+            $table->unsignedBigInteger('loan_id');
+            $table->uuid('ticket_folio');
+            $table->enum('reason', ['out_date', 'never_will_return', 'book4book', 'return_damaged', 'other']);
+            $table->string('details')->nullable();
+            $table->integer('total')->nullable();
             $table->timestamps();
+
+            $table->foreign('loan_id')->references('id')->on('loans');
         });
     }
 

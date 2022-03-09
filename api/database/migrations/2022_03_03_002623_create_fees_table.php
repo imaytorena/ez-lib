@@ -15,10 +15,12 @@ class CreateFeesTable extends Migration
     {
         Schema::create('fees', function (Blueprint $table) {
             $table->id();
-            $table->date('reason')->nullable();
-            $table->date('amount');
-            $table->date('finish_date');
+            $table->morphs('folio');
+            $table->integer('amount')->comment('Monto en MXN');
+            $table->enum('transaction_type', ['cash', 'user_charge', 'debit_credit'])->default('cash')->comment('Tipo de transacción');
             $table->timestamps();
+
+            $table->index(['folio_id', 'folio_type']);
         });
     }
 

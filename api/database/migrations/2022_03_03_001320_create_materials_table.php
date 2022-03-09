@@ -15,12 +15,12 @@ class CreateMaterialsTable extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->string('serial_number');
-            $table->enum('option', ['computer', 'projector', 'peripherals', 'other']);
-            $table->string('description')->nullable();
-            $table->string('brand')->nullable();
-            $table->string('model')->nullable();
-            $table->enum('status', ['ok', 'has_details', 'new'])->default('ok')->nullable();
+            $table->string('serial_number')->comment('Número de serie');
+            $table->enum('option', ['computer', 'projector', 'peripherals', 'other'])->comment('Opcion o Tipo');
+            $table->string('details')->nullable()->comment('Detalles opcional');
+            $table->string('brand')->nullable()->comment('Marca');
+            $table->string('model')->nullable()->comment('Modelo');
+            $table->enum('status', ['ok', 'has_details', 'new'])->default('ok')->nullable()->comment('Estado');
             $table->timestamps();
         });
     }

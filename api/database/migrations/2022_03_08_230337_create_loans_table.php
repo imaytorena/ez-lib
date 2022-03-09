@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDevolutionTable extends Migration
+class CreateLoansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,13 @@ class CreateDevolutionTable extends Migration
      */
     public function up()
     {
-        Schema::create('devolution', function (Blueprint $table) {
+        Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            
-            $table->string('folio');
             $table->unsignedBigInteger('user_id');
-
-            $table->morphs('object');
-            $table->date('return_date');
-            $table->smallInteger('extension')->default(0)->nullable();
+            $table->enum('status', ['right', 'extension', 'overtime', 'cancelled'])->default('right')->comment('Estado actual del prestamo');
+            $table->string('details')->nullable()->comment('Detalles opcional');
             $table->timestamps();
 
-            $table->index(['object_id', 'object_type']);
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -36,6 +31,6 @@ class CreateDevolutionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('devolution');
+        Schema::dropIfExists('loans');
     }
 }
