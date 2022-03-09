@@ -8,38 +8,19 @@ import {
 	Text,
 } from "@chakra-ui/react";
 
-import {
-	FiHome,
-	FiTrendingUp,
-	FiCompass,
-	FiStar,
-	FiSettings,
-} from "react-icons/fi";
-import { IconType } from "react-icons";
 import { NavItem } from "./NavItem";
-import { admin_routes, RoutesContext } from "../AdminLayout";
 import { useRouter } from "next/router";
-
-interface LinkItemProps {
-	name: string;
-	icon: IconType;
-}
-const LinkItems: Array<LinkItemProps> = [
-	{ name: "Home", icon: FiHome },
-	{ name: "Trending", icon: FiTrendingUp },
-	{ name: "Explore", icon: FiCompass },
-	{ name: "Favourites", icon: FiStar },
-	{ name: "Settings", icon: FiSettings },
-];
+import { RoutesContext } from "../../context/Routes";
 
 interface SidebarProps extends BoxProps {
 	onClose: () => void;
 }
 export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-	const routes = admin_routes;
-
 	const router = useRouter();
-	const route = useContext(RoutesContext);
+	const routes = useContext(RoutesContext);
+
+	let key_from_path = router.pathname.split("/")[1];
+	key_from_path = (key_from_path == '' ? 'home' : key_from_path);
 
 	return (
 		<Box
@@ -70,7 +51,7 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 				<NavItem
 					key={link.key}
 					icon={link.icon}
-					isActive={(link.key == router.pathname.split("/")[1])}
+					isActive={link.key == key_from_path}
 					path={link.path}
 				>
 					{link.label}

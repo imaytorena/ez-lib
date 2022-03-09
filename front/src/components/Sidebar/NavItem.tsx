@@ -1,11 +1,6 @@
 import React, { ReactText } from 'react';
 import {
-	Box,
-	CloseButton,
 	Flex,
-	useColorModeValue,
-	Text,
-	BoxProps,
 	FlexProps,
 	Icon
 } from '@chakra-ui/react';
@@ -29,7 +24,7 @@ export const NavItem = ({ icon, children, isActive, path, ...rest }: NavItemProp
 				role="group"
 				cursor="pointer"
 				_hover={{
-					bg: 'cyan.400',
+					bg: isActive ? 'cyan.400' : 'gray.300',
 					color: 'white',
 				}}
 				bg={isActive && 'cyan.400'}

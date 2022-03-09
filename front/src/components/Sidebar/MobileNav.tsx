@@ -14,6 +14,8 @@ import {
 	MenuDivider,
 	MenuItem,
 	MenuList,
+	Button,
+	useColorMode,
 } from '@chakra-ui/react';
 import {
 	FiMenu,
@@ -25,6 +27,7 @@ interface MobileProps extends FlexProps {
 	onOpen: () => void;
 }
 export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex
 			ml={{ base: 0, md: 60 }}
@@ -53,6 +56,15 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 			</Text>
 
 			<HStack spacing={{ base: '0', md: '6' }}>
+				<Button
+					maxWidth={120}
+					my="4"
+					ml="auto"
+					colorScheme="cyan"
+					onClick={toggleColorMode}
+				>
+					Tema {colorMode === "light" ? "Dark" : "Light"}
+				</Button>
 				<IconButton
 					size="lg"
 					variant="ghost"
