@@ -1,21 +1,19 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 
-function Materials({ posts }) {
+function Materials({ materials }) {
 	return <AdminLayout>
 		<Datatable
-			header={'Materiales'}
+			header={'Libros'}
 			header_rows={[
-				{ key: 'name', label: 'Nombre' },
-				{ key: 'author', label: 'Autor' },
+				{key: 'serial_number', label: 'Númmero de serie'},
+				{key: 'option', label: 'Material'},
+				{key: 'details', label: 'Detalles'},
+				{key: 'brand', label: 'Marca'},
+				{key: 'model', label: 'Modelo'},
+				{key: 'status', label: 'Estado'},
 			]}
-			data={[
-				{ id: 1, name: 'nombre', author: 'assdads' },
-				{ id: 2, name: 'nombre', author: 'assdads' },
-				{ id: 3, name: 'nombre', author: 'assdads' },
-				{ id: 4, name: 'nombre', author: 'assdads' },
-				{ id: 5, name: 'nombre', author: 'assdads' },
-			]}
+			data={materials}
 			totalCount={33}
 		></Datatable>
 	</AdminLayout>;
@@ -24,14 +22,15 @@ function Materials({ posts }) {
 // This function gets called at build time
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts
-	// const res = await fetch('https://.../posts')
-	const posts = {}
+	const res = await fetch('http://localhost:8000/api/materials');
+	let { materials } = await res.json()
+	// console.log(materials);
 
-	// By returning { props: { posts } }, the Materials component
-	// will receive `posts` as a prop at build time
+	// By returning { props: { materials } }, the Materials component
+	// will receive `materials` as a prop at build time
 	return {
 		props: {
-			posts,
+			materials,
 		},
 	}
 }

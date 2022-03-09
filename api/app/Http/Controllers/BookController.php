@@ -88,7 +88,7 @@ class BookController extends Controller
     }
     
     /**
-     * Get one user.
+     * Get one book.
      *
      * @param  $id
      * @return Response

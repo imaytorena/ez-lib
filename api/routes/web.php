@@ -21,7 +21,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('register', 'AuthController@register');
     });
     
-    // USUARIOS
+    // USERS
     $router->get('profile', 'UserController@profile');
 
     $router->group(['prefix' => 'users'], function () use ($router) {
@@ -30,7 +30,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         
     });
 
-    // LIBROS
+    // BOOKS
     $router->group(['prefix' => 'books'], function () use ($router) {
         $router->get('', 'BookController@index');
         $router->post('{id}', 'BookController@create');
@@ -38,5 +38,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->delete('{id}', 'BookController@delete');
 
         $router->get('{id}', 'BookController@getById');
+    });
+
+    // MATERIALS
+    $router->group(['prefix' => 'materials'], function () use ($router) {
+        $router->get('', 'MaterialController@index');
+        $router->post('{id}', 'MaterialController@create');
+        $router->put('{id}', 'MaterialController@update');
+        $router->delete('{id}', 'MaterialController@delete');
+
+        $router->get('{id}', 'MaterialController@getById');
     });
 });
