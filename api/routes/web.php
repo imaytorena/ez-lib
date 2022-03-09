@@ -13,6 +13,30 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    // AUTH
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+        $router->post('login', 'AuthController@login');
+        $router->post('register', 'AuthController@register');
+    });
+    
+    // USUARIOS
+    $router->get('profile', 'UserController@profile');
+
+    $router->group(['prefix' => 'users'], function () use ($router) {
+        $router->get('', 'UserController@index');
+        $router->get('{id}', 'UserController@getById');
+        
+    });
+
+    // LIBROS
+    $router->group(['prefix' => 'books'], function () use ($router) {
+        $router->get('', 'BookController@index');
+        $router->post('{id}', 'BookController@create');
+        $router->put('{id}', 'BookController@update');
+        $router->delete('{id}', 'BookController@delete');
+
+        $router->get('{id}', 'BookController@getById');
+    });
 });
