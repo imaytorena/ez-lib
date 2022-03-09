@@ -49,4 +49,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('{id}', 'MaterialController@getById');
     });
+
+    // LOANS
+    $router->group(['prefix' => 'loans'], function () use ($router) {
+        $router->get('', 'LoanController@index');
+    });
+    
+    // PENALTIES
+    $router->group(['prefix' => 'penalties'], function () use ($router) {
+        $router->get('', 'PenaltyController@index');
+    });
+
+    // FEES
+    $router->group(['prefix' => 'fees'], function () use ($router) {
+        $router->get('', 'FeeController@index');
+    });
 });

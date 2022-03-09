@@ -1,21 +1,15 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 
-function Loans({ posts }) {
+function Loans({ loans }) {
 	return <AdminLayout>
 		<Datatable
 			header={'Prestamos'}
 			header_rows={[
-				{ key: 'name', label: 'Nombre' },
-				{ key: 'author', label: 'Autor' },
+				{ key: 'username', label: 'Usuario' },
+				{ key: 'details', label: 'Detalles' },
 			]}
-			data={[
-				{ id: 1, name: 'nombre', author: 'assdads' },
-				{ id: 2, name: 'nombre', author: 'assdads' },
-				{ id: 3, name: 'nombre', author: 'assdads' },
-				{ id: 4, name: 'nombre', author: 'assdads' },
-				{ id: 5, name: 'nombre', author: 'assdads' },
-			]}
+			data={loans}
 			totalCount={33}
 		></Datatable>
 	</AdminLayout>;
@@ -24,15 +18,21 @@ function Loans({ posts }) {
 // This function gets called at build time
 export async function getStaticProps() {
 
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/books')
-	const posts = {}
+	// Call an external API endpoint to get loans
+	const res = await fetch('http://localhost:8000/api/loans')
+	let loans;
+	try {
+		let data = await res.json();
+		loans = data.loans;
+	} catch (error) {
+		loans = [];
+	}
 
-	// By returning { props: { posts } }, the Loans component
-	// will receive `posts` as a prop at build time
+	// By returning { props: { loans } }, the Loans component
+	// will receive `loans` as a prop at build time
 	return {
 		props: {
-			posts,
+			loans,
 		},
 	}
 }
