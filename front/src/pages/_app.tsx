@@ -6,19 +6,19 @@ import { theme } from "../styles/theme";
 
 import { makeServer } from '../services/mirage';
 
-import { UsersProvider } from "../context/UseUsersContext";
+import { routes, RoutesContext } from "../context/Routes";
 
 
 makeServer();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <UsersProvider>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </UsersProvider>
-  )
+	return (
+		<RoutesContext.Provider value={routes}>
+			<ChakraProvider theme={theme}>
+				<Component {...pageProps} />
+			</ChakraProvider>
+		</RoutesContext.Provider>
+	)
 }
 
 export default MyApp

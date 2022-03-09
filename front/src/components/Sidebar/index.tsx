@@ -9,11 +9,7 @@ import {
 import { SidebarContent } from './SidebarContent';
 import { MobileNav } from './MobileNav';
 
-export default function SidebarWithHeader({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function SidebarWithHeader({ children, }: { children: ReactNode; }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>

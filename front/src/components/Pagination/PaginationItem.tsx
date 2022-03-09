@@ -12,14 +12,14 @@ export function PaginationItem({
   onPageChange,
 
 }: PaginationItemProps) {
-  if(isCurrent){
-    return(
+  if (isCurrent) {
+    return (
       <Button
         size="sm"
         fontSize="xs"
         width="4"
         mr="4"
-        colorScheme="green"
+        colorScheme="cyan"
         disabled
         _disabled={{
           cursor: 'default',
@@ -30,14 +30,14 @@ export function PaginationItem({
     )
   }
 
-  return(
+  return (
     <Button
       variant="outline"
       size="sm"
       fontSize="xs"
       width="4"
       mr="4"
-      colorScheme="green"
+      colorScheme="cyan"
       onClick={() => onPageChange(number)}
     >
       {number}
