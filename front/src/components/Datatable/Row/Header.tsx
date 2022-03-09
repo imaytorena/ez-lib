@@ -19,8 +19,8 @@ const Header = ({ header_rows }: HeaderProps) => {
     return (
         <Thead bg={colorMode === "light" ? "gray.200" : "gray.600"}>
             <Tr>
-                {header_rows.map(header_row =>
-                    <Th>{header_row.label}</Th>
+                {header_rows.map((header_row, index) =>
+                    <Th key={`${header_row.key}-${index}`}>{header_row.label}</Th>
                 )}
             </Tr>
         </Thead>

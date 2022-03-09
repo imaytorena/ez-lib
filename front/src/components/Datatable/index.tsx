@@ -21,7 +21,7 @@ import Row from './Row';
 import Misc from './Misc';
 import { Book, Row as RowType, User } from '../../constants';
 
-type Model = RowType | Book | User | undefined;
+export type Model = RowType | Book | User | undefined;
 
 type HeaderRow = {
     key: string;

@@ -4,7 +4,7 @@ import React from 'react'
 interface HeadingProps extends BoxProps {
     header: string;
 };
-const Heading = ({ label }: HeadingProps) => {
+const Heading = ({ header }: HeadingProps) => {
     const { colorMode, toggleColorMode } = useColorMode();
     return (
         <ChakraHeading
@@ -13,7 +13,7 @@ const Heading = ({ label }: HeadingProps) => {
             fontWeight="black"
             color={colorMode === "light" ? "gray.600" : "gray.200"}
         >
-            {label}
+            {header}
         </ChakraHeading>
     )
 }

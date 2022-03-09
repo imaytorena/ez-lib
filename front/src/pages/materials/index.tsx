@@ -1,10 +1,10 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 
-function Books({ books }) {
+function Materials({ posts }) {
 	return <AdminLayout>
 		<Datatable
-			header={'Libros'}
+			header={'Materiales'}
 			header_rows={[
 				{ key: 'name', label: 'Nombre' },
 				{ key: 'author', label: 'Autor' },
@@ -24,16 +24,16 @@ function Books({ books }) {
 // This function gets called at build time
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/books');
-	let { books } = await res.json()
+	// const res = await fetch('https://.../posts')
+	const posts = {}
 
-	// By returning { props: { posts } }, the Books component
+	// By returning { props: { posts } }, the Materials component
 	// will receive `posts` as a prop at build time
 	return {
 		props: {
-			books,
+			posts,
 		},
 	}
 }
 
-export default Books
+export default Materials

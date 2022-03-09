@@ -18,6 +18,7 @@ export const routes: RoutesObject = {
     'home': { key: 'home', label: 'Inicio', icon: FiHome, path: '/' },
     'books': { key: 'books', label: 'Libros', icon: FiTrendingUp, path: '/books' },
     'materials': { key: 'materials', label: 'Materiales', icon: FiCompass, path: '/materials' },
+    'loans': { key: 'loans', label: 'Prestamos', icon: FiCompass, path: '/loans' },
 };
 
 export const RoutesContext = React.createContext(routes);
