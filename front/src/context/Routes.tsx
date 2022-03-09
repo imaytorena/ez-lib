@@ -1,7 +1,8 @@
 
 import React from "react";
 import { IconType } from "react-icons";
-import { FiCompass, FiHome, FiTrendingUp } from "react-icons/fi";
+import { FaMoneyBillAlt, FaUserFriends } from "react-icons/fa";
+import { FiCompass, FiHome, FiBook, FiMonitor, FiShare, FiUserX, FiFileText, FiTrendingUp } from "react-icons/fi";
 
 
 interface RouteObject {
@@ -16,9 +17,14 @@ interface RoutesObject {
 }
 export const routes: RoutesObject = {
     'home': { key: 'home', label: 'Inicio', icon: FiHome, path: '/' },
-    'books': { key: 'books', label: 'Libros', icon: FiTrendingUp, path: '/books' },
-    'materials': { key: 'materials', label: 'Materiales', icon: FiCompass, path: '/materials' },
-    'loans': { key: 'loans', label: 'Prestamos', icon: FiCompass, path: '/loans' },
+    'users': { key: 'users', label: 'Usuarios', icon: FaUserFriends, path: '/users' },
+    'books': { key: 'books', label: 'Libros', icon: FiBook, path: '/books' },
+    'materials': { key: 'materials', label: 'Materiales', icon: FiMonitor, path: '/materials' },
+    'loans': { key: 'loans', label: 'Prestamos', icon: FiShare, path: '/loans' },
+    'penalties': { key: 'penalties', label: 'Penalizaciones', icon: FiUserX, path: '/penalties' },
+    'fees': { key: 'fees', label: 'Cobros', icon: FaMoneyBillAlt, path: '/fees' },
+    'reports': { key: 'reports', label: 'Reportes', icon: FiFileText, path: '/reports' },
+    'stats': { key: 'stats', label: 'Estadisticas', icon: FiTrendingUp, path: '/stats' },
 };
 
 export const RoutesContext = React.createContext(routes);

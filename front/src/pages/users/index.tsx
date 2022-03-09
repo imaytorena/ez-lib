@@ -1,21 +1,19 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 
-function Users({ posts }) {
+function Users({ users }) {
 	return <AdminLayout>
 		<Datatable
-			header={'Usuarios'}
+			header={'Penalizaciones'}
 			header_rows={[
-				{ key: 'name', label: 'Nombre' },
-				{ key: 'author', label: 'Autor' },
+				{key: 'username', label: 'Usuario'},
+				{key: 'code', label: 'Código'},
+				{key: 'email', label: 'Correo electrónico'},
+				{key: 'name', label: 'Nombre'},
+				{key: 'last_name', label: 'Apellido'},
+				{key: 'genre', label: 'Género'},
 			]}
-			data={[
-				{ id: 1, name: 'nombre', author: 'assdads' },
-				{ id: 2, name: 'nombre', author: 'assdads' },
-				{ id: 3, name: 'nombre', author: 'assdads' },
-				{ id: 4, name: 'nombre', author: 'assdads' },
-				{ id: 5, name: 'nombre', author: 'assdads' },
-			]}
+			data={users}
 			totalCount={33}
 		></Datatable>
 	</AdminLayout>;
@@ -24,14 +22,21 @@ function Users({ posts }) {
 // This function gets called at build time
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts
-	// const res = await fetch('https://.../posts')
-	const posts = {}
+	const res = await fetch('http://localhost:8000/api/users');
+	let users;
+	try {
+		let data = await res.json();
+		users = data.users;
+	} catch (error) {
+		users = []
+	}
+	// console.log(users);
 
-	// By returning { props: { posts } }, the Users component
-	// will receive `posts` as a prop at build time
+	// By returning { props: { users } }, the Users component
+	// will receive `users` as a prop at build time
 	return {
 		props: {
-			posts,
+			users,
 		},
 	}
 }
