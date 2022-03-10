@@ -12,8 +12,17 @@ class LoanFactory extends Factory
 
     public function definition(): array
     {
-    	return [
+        $objects = [
+            \App\Models\Book::class,
+            \App\Models\Material::class,
+        ];
+        $objectType = $this->faker->randomElement($objects);
+        $object = $objectType::factory()->create();
+
+        return [
             'user_id' => User::all()->random()->id,
+            'object_type' => $objectType,
+            'object_id' => $object->id,
             'status' => $this->faker->randomElement(['right', 'extension', 'overtime', 'cancelled']),
             'details' => $this->faker->paragraph(2),
     	];

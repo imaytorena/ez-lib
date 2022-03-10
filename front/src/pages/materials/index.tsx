@@ -23,8 +23,14 @@ function Materials({ materials }) {
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts
 	const res = await fetch('http://localhost:8000/api/materials');
-	let { materials } = await res.json()
-	// console.log(materials);
+	let materials;
+	try {
+		let data = await res.json();
+		materials = data.materials;
+	} catch (error) {
+		materials = [];
+	}
+	console.log(materials);
 
 	// By returning { props: { materials } }, the Materials component
 	// will receive `materials` as a prop at build time

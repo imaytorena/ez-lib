@@ -8,6 +8,7 @@ function Loans({ loans }) {
 			header_rows={[
 				{ key: 'username', label: 'Usuario' },
 				{ key: 'details', label: 'Detalles' },
+				{ key: 'type', label: 'Objeto prestado' },
 			]}
 			data={loans}
 			totalCount={33}
@@ -27,6 +28,7 @@ export async function getStaticProps() {
 	} catch (error) {
 		loans = [];
 	}
+	console.log(loans)
 
 	// By returning { props: { loans } }, the Loans component
 	// will receive `loans` as a prop at build time

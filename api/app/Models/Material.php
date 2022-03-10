@@ -17,4 +17,9 @@ class Material extends Model
         'model',
         'status',
     ];
+
+    public function loan()
+    {
+        return $this->morphOne('Loan', 'object');
+    }
 }

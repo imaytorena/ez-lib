@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Loan;
 
 class LoanController extends Controller
 {
@@ -26,7 +27,21 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = DB::table('loans')->leftjoin('users', 'loans.user_id', 'users.id')->get();
+        $query = Loan::query();
+        $results = $query
+            ->with('user')
+            ->get();
+
+        $loans = [];
+        $results->each( function ( $result ) use (&$loans) {
+            $loan = [];
+            $loan['id'] = $result['id'];
+            $loan['username'] = $result['user']['username'];
+            $loan['details'] = $result['details'];
+            $loan['type'] = $result['object_type'] == "App\Models\Book" ? "book" : "material";
+
+            array_push($loans, $loan);
+        });
         
         return response()->json(['loans' =>  $loans], 200);
     }

@@ -20,4 +20,9 @@ class Book extends Model
         'available',
         'stock',
     ];
+
+    public function loan()
+    {
+        return $this->morphOne('Loan', 'object');
+    }
 }

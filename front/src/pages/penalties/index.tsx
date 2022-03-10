@@ -6,15 +6,10 @@ function Penalties({ penalties }) {
 		<Datatable
 			header={'Penalizaciones'}
 			header_rows={[
-				{key: 'title', label: 'Titulo'},
-				{key: 'description', label: 'Descripción'},
-				{key: 'autor', label: 'Autor'},
-				{key: 'publisher', label: 'Editorial'},
-				{key: 'isbn', label: 'ISBN'},
-				{key: 'year', label: 'Año'},
-				{key: 'genre', label: 'Género'},
-				{key: 'available', label: 'Disponibilidad'},
-				{key: 'stock', label: 'stock'},
+				{key: 'ticket_folio', label: 'Folio del ticket levantado'},
+				{key: 'reason', label: 'Motivo'},
+				{key: 'details', label: 'Detalles'},
+				{key: 'total', label: 'Total'},
 			]}
 			data={penalties}
 			totalCount={33}
@@ -26,8 +21,14 @@ function Penalties({ penalties }) {
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts
 	const res = await fetch('http://localhost:8000/api/penalties');
-	let { penalties } = await res.json()
-	// console.log(penalties);
+	let penalties;
+	try {
+		let data = await res.json();
+		penalties = data.penalties;
+	} catch (error) {
+		penalties = [];
+	}
+	console.log(penalties);
 
 	// By returning { props: { penalties } }, the Penalties component
 	// will receive `penalties` as a prop at build time
