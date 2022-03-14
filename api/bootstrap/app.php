@@ -6,7 +6,7 @@ require_once __DIR__.'/../vendor/autoload.php';
     dirname(__DIR__)
 ))->bootstrap();
 
-date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
+date_default_timezone_set(env('APP_TIMEZONE', 'America/Mexico_City'));
 
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +112,9 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 | can respond to, as well as the controllers that may handle them.
 |
 */
+
+// app('translator')->setLocale('es');
+$app->setLocale('es');
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',

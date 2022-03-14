@@ -31,7 +31,6 @@ const userFormSchema = yup.object().shape({
         .nullable(),
 })
 
-type UserType = keyof User
 interface UserFormProps {
     element?: User;
     onCancel?: () => void;
@@ -39,7 +38,7 @@ interface UserFormProps {
 const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
-    const { register, handleSubmit, formState, reset } = useForm({
+    const { register, handleSubmit, formState, reset, setError } = useForm({
         resolver: yupResolver(userFormSchema)
     });
     const { errors } = formState;
@@ -67,6 +66,13 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                     console.log(response)
                 })
                 .catch(async (errors) => {
+                    let responseData = errors.response?.data
+                    Object.keys(responseData).forEach((key) => {
+                        setError(key, {
+                            type: "manual",
+                            message: responseData[key],
+                        });
+                    })
                     toast({
                         description: errors.response?.data?.message || "Hubo un error al crear",
                         status: "error",
@@ -92,7 +98,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
             });
         }
     }, [element])
-    
+
 
     return (<>
         <Alert mb={5} status='info'>

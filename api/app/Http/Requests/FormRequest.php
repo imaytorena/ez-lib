@@ -185,7 +185,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     public function messages()
     {
-        return [];
+        $messages = $this->utilities->getMessageErrors();
+        return $messages;
     }
     /**
      * Get custom attributes for validator errors.
@@ -194,7 +195,15 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     public function attributes()
     {
-        return [];
+        return [
+            'username' => 'nombre de usuario',
+            'code' => 'código',
+            'email' => 'correo electrónico',
+            'name' => 'nombre',
+            'last_name' => 'apellido',
+            'genre' => 'género',
+            'status' => 'estado',
+        ];
     }
 
     protected function cleanData()

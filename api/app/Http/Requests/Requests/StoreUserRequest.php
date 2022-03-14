@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Requests;
 
 use App\Http\Requests\FormRequest;
+use App\Classes\Utilities;
 
 class StoreUserRequest extends FormRequest
 {
@@ -39,7 +40,6 @@ class StoreUserRequest extends FormRequest
     {
         $data = $this->validationData();
 
-        \Log::info($data);
         if (isset($data['password'])) {
             $hashedPassword = app('hash')->make($data['password']);
             $data['password'] = $hashedPassword;
