@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { BoxProps } from '@chakra-ui/react';
+import { BoxProps, Flex } from '@chakra-ui/react';
 import SidebarWithHeader from '../Sidebar';
 
 interface AdminLayout extends BoxProps {
@@ -8,7 +8,16 @@ interface AdminLayout extends BoxProps {
 const AdminLayout = ({ children }: { children: ReactNode; }) => {
     return (
         <SidebarWithHeader>
-            {children}
+            <Flex
+                w="100%"
+                maxWidth={1220}
+                mx="auto"
+                px="6"
+                my="6"
+                direction="column"
+            >
+                {children}
+            </Flex>
         </SidebarWithHeader>
     )
 }

@@ -18,4 +18,8 @@ export interface Book extends Row {
     author: string;
 }
 
+
+export type Model = Book | User | undefined;
+
+
 export * from "./routes";

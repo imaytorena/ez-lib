@@ -15,13 +15,11 @@ import {
     Icon,
 } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
-import { FormModal } from '../../components/FormModal';
 
 import Row from './Row';
 import Misc from './Misc';
-import { Book, Row as RowType, User } from '../../constants';
-
-export type Model = RowType | Book | User | undefined;
+import { Model as ModelType, Row as RowType, User } from '../../constants';
+import { useRouter } from 'next/router';
 
 type HeaderRow = {
     key: string;
@@ -29,21 +27,21 @@ type HeaderRow = {
 }
 interface DatatableProps extends BoxProps {
     header?: string;
-    data: Model[];
+    data: ModelType[] | RowType[];
     header_rows: HeaderRow[];
     totalCount: number;
 };
 
 const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) => {
+    const router = useRouter();
     const { colorMode, toggleColorMode } = useColorMode();
     const borderColor = useColorModeValue("gray.200", "gray.600");
 
-    const toast = useToast();
-
     const [page, setPage] = useState(1);
-    const [selectedElement, setSelectedElement] = useState(null);
     const [valueSearch, setValueSearch] = useState('');
-    const [isOpenFormModal, setIsOpenFormModal] = useState(false);
+
+    let key_from_path = router.pathname.split("/")[1];
+    key_from_path = (key_from_path == '' ? 'home' : key_from_path);
 
     const isLgVerison = useBreakpointValue({
         base: false,
@@ -59,116 +57,99 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
         // TODO: Metodo parametro page 
     }, [page])
 
-    const handleToggleFormModal = () => {
-        setIsOpenFormModal(!isOpenFormModal);
-    }
+    // const handleToggleFormModal = () => {
+    //     setIsOpenFormModal(!isOpenFormModal);
+    // }
 
-    const handleCreate = async () => {
-        setSelectedElement(null);
-        setIsOpenFormModal(!isOpenFormModal);
-    }
+    // const handleUpdate = async (element) => {
+    //     setSelectedElement(element);
+    //     setIsOpenFormModal(!isOpenFormModal);
+    // }
 
-    const handleUpdate = async (element) => {
-        setSelectedElement(element);
-        setIsOpenFormModal(!isOpenFormModal);
-    }
+    // const handleDelete = async (element) => {
+    // TODO: Peticion de eliminación
+    // await deleteUser(user.id);
 
-    const handleDelete = async (element) => {
-        // TODO: Peticion de eliminación
-        // await deleteUser(user.id);
-
-        // toast({
-        //     description: `${user.name} eliminado exitosamente.`,
-        //     status: "success",
-        //     position: "top",
-        //     duration: 4000,
-        //     isClosable: true,
-        // });
-    }
+    // toast({
+    //     description: `${user.name} eliminado exitosamente.`,
+    //     status: "success",
+    //     position: "top",
+    //     duration: 4000,
+    //     isClosable: true,
+    // });
+    // }
 
     const handleSearchUser = async (value: string) => {
         // TODO: Peticion de busqueda
     }
 
     return (
-        <Flex
-            w="100%"
-            maxWidth={1220}
-            mx="auto"
-            px="6"
-            my="6"
-            direction="column"
+        <Box
+            flex="1"
+            p="4"
+            bg={colorMode === "light" ? "white" : "gray.700"}
+            borderRadius="md"
         >
-            <Box
-                flex="1"
-                p="4"
-                bg={colorMode === "light" ? "white" : "gray.700"}
-                borderRadius="md"
+            <Misc.Heading
+                header={header}
+            />
+            <Flex
+                justify="space-between"
+                align="center"
+                py="2"
             >
-                <Misc.Heading
-                    header={header}
-                />
                 <Flex
-                    justify="space-between"
+                    flex="1"
+                    direction="row"
                     align="center"
-                    py="2"
-                >
-                    <Flex
-                        flex="1"
-                        direction="row"
-                        align="center"
-                        border="1px"
-                        borderRadius="md"
-                        borderColor={borderColor}
-                    >
-                        <Misc.Searchbar
-                            text={valueSearch}
-                            onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                // console.log(e.target.value)
-                                handleSearchUser(e.target.value);
-                                setValueSearch(e.target.value);
-                            }}
-                            onSearch={() => handleSearchUser(valueSearch)}
-                        />
-                    </Flex>
-                    <Button
-                        onClick={handleCreate}
-                        as={asButton}
-                        ml="4"
-                        size="sm"
-                        fontSize="sm"
-                        colorScheme="cyan"
-                        leftIcon={<Icon as={FaPlus} fontSize="16" />}
-                        icon={<Icon as={FaPlus} fontSize="16" />}
-                        title="Crear"
-                    >
-                        {isMdVerison && <Text>{"Crear"}</Text>}
-                    </Button>
-                    <FormModal
-                        element={selectedElement}
-                        isOpen={isOpenFormModal}
-                        onClose={handleToggleFormModal}
-                    />
-
-                </Flex>
-                <Box
                     border="1px"
-                    borderRadius="sm"
+                    borderRadius="md"
                     borderColor={borderColor}
                 >
-                    <Table size="sm">
-                        <Row.Header
-                            header_rows={header_rows}
-                        />
-                        <Row.Body
-                            header_rows={header_rows}
-                            data={data}
-                        />
-                        <Row.Footer totalCount={totalCount} page={page} setPage={setPage} />
-                    </Table>
-                </Box>
+                    <Misc.Searchbar
+                        text={valueSearch}
+                        onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            // console.log(e.target.value)
+                            handleSearchUser(e.target.value);
+                            setValueSearch(e.target.value);
+                        }}
+                        onSearch={() => handleSearchUser(valueSearch)}
+                    />
+                </Flex>
+                <Button
+                    onClick={(e) => {
+                        e.preventDefault()
+                        router.push(`/${key_from_path}/create`)
+                    }}
+                    as={asButton}
+                    ml="4"
+                    size="sm"
+                    fontSize="sm"
+                    colorScheme="cyan"
+                    leftIcon={<Icon as={FaPlus} fontSize="16" />}
+                    icon={<Icon as={FaPlus} fontSize="16" />}
+                    title="Crear"
+                >
+                    {isMdVerison && <Text>{"Crear"}</Text>}
+                </Button>
+            </Flex>
+            <Box
+                border="1px"
+                borderRadius="sm"
+                borderColor={borderColor}
+            >
+                <Table size="sm">
+                    <Row.Header
+                        header_rows={header_rows}
+                    />
+                    <Row.Body
+                        header_rows={header_rows}
+                        data={data}
+                    />
+                    <Row.Footer totalCount={totalCount} page={page} setPage={setPage} />
+                </Table>
             </Box>
-        </Flex>
+        </Box>
 
     )
 }
