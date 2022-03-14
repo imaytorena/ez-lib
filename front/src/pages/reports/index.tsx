@@ -22,18 +22,27 @@ function Reports({ reports }) {
 	</AdminLayout>;
 }
 
-// This function gets called at build time
-export async function getStaticProps() {
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/reports');
-	let { reports } = await res.json()
-	// console.log(reports);
 
-	// By returning { props: { reports } }, the Reports component
-	// will receive `reports` as a prop at build time
+export async function getStaticProps() {
+	let reports, error;
+
+	await fetch('http://localhost:8000/api/fees')
+		.then(async response => {
+			if (!response.ok) {
+				const data = await response.text();
+				error = JSON.parse(data);
+				reports = [];
+			} else {
+				const data = await response.json();
+				reports = data.fees;
+				error = null;
+			}
+		}).catch(e => { console.error(e) });
+
 	return {
 		props: {
 			reports,
+			error
 		},
 	}
 }

@@ -12,7 +12,10 @@ export type User = {
     email: string;
     createdAt: string;
 }
+
 export interface Book extends Row {
     name: string;
     author: string;
 }
+
+export * from "./routes";

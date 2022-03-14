@@ -22,17 +22,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // import { useUsers } from "../../context/UseUsersContext";
 
 import { Input } from '../../components/Form/Input';
-import { Row } from "../../constants";
-import { Book } from "../../constants/books";
+import { Book as BookType, Row as RowType, User as UserType } from "../../constants";
 
-type User = {
-	id: string,
-	name: string;
-	email: string;
-	createdAt: string;
-}
 
-type Model = Row | Book | User | undefined;
+
+type Model = RowType | BookType | UserType | undefined;
 
 interface FormModalProps {
 	element: Model;

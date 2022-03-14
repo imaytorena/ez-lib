@@ -29,7 +29,7 @@ class BookController extends Controller
     
     /**
      * Store a new book.
-     *
+     *x
      * @param  Request  $request
      * @return Response
      */

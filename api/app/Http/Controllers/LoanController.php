@@ -27,21 +27,7 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $query = Loan::query();
-        $results = $query
-            ->with('user')
-            ->get();
-
-        $loans = [];
-        $results->each( function ( $result ) use (&$loans) {
-            $loan = [];
-            $loan['id'] = $result['id'];
-            $loan['username'] = $result['user']['username'];
-            $loan['details'] = $result['details'];
-            $loan['type'] = $result['object_type'] == "App\Models\Book" ? "book" : "material";
-
-            array_push($loans, $loan);
-        });
+        $loans = Loan::with('user')->get();
         
         return response()->json(['loans' =>  $loans], 200);
     }

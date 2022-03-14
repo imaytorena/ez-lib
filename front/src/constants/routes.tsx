@@ -1,8 +1,7 @@
 
-import React from "react";
 import { IconType } from "react-icons";
 import { FaMoneyBillAlt, FaUserFriends } from "react-icons/fa";
-import { FiCompass, FiHome, FiBook, FiMonitor, FiShare, FiUserX, FiFileText, FiTrendingUp } from "react-icons/fi";
+import { FiHome, FiBook, FiMonitor, FiShare, FiUserX, FiFileText, FiTrendingUp } from "react-icons/fi";
 
 
 interface RouteObject {
@@ -26,5 +25,3 @@ export const routes: RoutesObject = {
     'reports': { key: 'reports', label: 'Reportes', icon: FiFileText, path: '/reports' },
     'stats': { key: 'stats', label: 'Estadisticas', icon: FiTrendingUp, path: '/stats' },
 };
-
-export const RoutesContext = React.createContext(routes);

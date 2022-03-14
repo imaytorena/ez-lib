@@ -1,7 +1,7 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 
-function Fees({ fees }) {
+function Fees({ fees, error }) {
 	return <AdminLayout>
 		<Datatable
 			header={'Cobros o cargos'}
@@ -22,20 +22,29 @@ function Fees({ fees }) {
 	</AdminLayout>;
 }
 
-// This function gets called at build time
-export async function getStaticProps() {
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/fees');
-	let { fees } = await res.json()
-	// console.log(fees);
 
-	// By returning { props: { fees } }, the Fees component
-	// will receive `fees` as a prop at build time
+export async function getStaticProps() {
+	let fees, error;
+
+	await fetch('http://localhost:8000/api/fees')
+		.then(async response => {
+			if (!response.ok) {
+				const data = await response.text();
+				error = JSON.parse(data);
+				fees = [];
+			} else {
+				const data = await response.json();
+				fees = data.fees;
+				error = null;
+			}
+		}).catch(e => { console.error(e) });
+
 	return {
 		props: {
 			fees,
+			error
 		},
 	}
 }
 
-export default Fees
+export default Fees;

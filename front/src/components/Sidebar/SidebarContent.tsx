@@ -10,14 +10,13 @@ import {
 
 import { NavItem } from "./NavItem";
 import { useRouter } from "next/router";
-import { RoutesContext } from "../../context/Routes";
+import { routes } from "../../constants/routes";
 
 interface SidebarProps extends BoxProps {
 	onClose: () => void;
 }
 export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 	const router = useRouter();
-	const routes = useContext(RoutesContext);
 
 	let key_from_path = router.pathname.split("/")[1];
 	key_from_path = (key_from_path == '' ? 'home' : key_from_path);

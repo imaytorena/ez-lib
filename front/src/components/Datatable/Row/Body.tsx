@@ -14,7 +14,7 @@ const Body = ({ header_rows, data }: BodyProps) => {
     const borderColor = useColorModeValue("gray.200", "gray.600");
     return (
         <Tbody>
-            {data.map((data_row: Model, index: number) => {
+            {data?.map((data_row: Model, index: number) => {
                 return (
                     <Tr key={`${index}`}>
                         {header_rows.map((header_row: HeaderRow, iindex: number) =>

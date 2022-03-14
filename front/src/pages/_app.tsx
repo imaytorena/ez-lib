@@ -6,18 +6,13 @@ import { theme } from "../styles/theme";
 
 import { makeServer } from '../services/mirage';
 
-import { routes, RoutesContext } from "../context/Routes";
-
-
 makeServer();
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<RoutesContext.Provider value={routes}>
-			<ChakraProvider theme={theme}>
-				<Component {...pageProps} />
-			</ChakraProvider>
-		</RoutesContext.Provider>
+		<ChakraProvider theme={theme}>
+			<Component {...pageProps} />
+		</ChakraProvider>
 	)
 }
 

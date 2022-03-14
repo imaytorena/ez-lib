@@ -24,11 +24,17 @@ export async function getStaticProps() {
 	let loans;
 	try {
 		let data = await res.json();
-		loans = data.loans;
+		loans = data.loans?.map(loan => {
+			return {
+				...loan, 
+				'username' : loan?.user?.username,
+				'type' : loan?.object_type == "App\\Models\\Book" ? "Libro" : "Material"
+			}
+		});
 	} catch (error) {
 		loans = [];
 	}
-	console.log(loans)
+	// console.log(loans)
 
 	// By returning { props: { loans } }, the Loans component
 	// will receive `loans` as a prop at build time
