@@ -12,7 +12,7 @@ class AuthController extends Controller
     /**
      * Store a new user.
      *
-     * @param  Request  $request
+     * @param  StoreUserRequest  $request
      * @return Response
      */
     public function register(StoreUserRequest $request)

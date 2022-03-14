@@ -7,10 +7,17 @@ export interface Row {
 export type Table = Row[];
 
 export type User = {
-    id: string,
+    id?: string,
+    username: string;
+    password?: string;
+
+    code?: string;
+    email?: string;
+    
     name: string;
-    email: string;
-    createdAt: string;
+    last_name: string;
+    
+    genre?: string;
 }
 
 export interface Book extends Row {

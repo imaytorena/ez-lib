@@ -1,50 +1,82 @@
-import { forwardRef, ForwardRefRenderFunction } from 'react';
+import { forwardRef, ForwardRefRenderFunction, useState } from 'react';
 
 import {
-  Box,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input as ChakraInput,
-  InputProps as ChakraInputProps
+	Button,
+	Input as ChakraInput,
+	InputGroup,
+	InputProps as ChakraInputProps,
+	InputRightElement
 } from '@chakra-ui/react'
+import ElementFormControl from './ElementFormControl';
 
 import { FieldError } from 'react-hook-form';
 
 interface InputProps extends ChakraInputProps {
-  name: string;
-  label?: string;
-  isRequired?: boolean;
-  ref?: React.LegacyRef<HTMLInputElement>;
-  error?: FieldError;
+	name: string;
+	label?: string;
+	isRequired?: boolean;
+	ref?: React.LegacyRef<HTMLInputElement>;
+	error?: FieldError;
 }
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, error = null, isRequired = false, ...rest },
-  ref
+
+const PasswordInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
+	{ name, label, error = null, isRequired = false, ...rest },
+	ref
 ) => {
-  return (
-    <FormControl isInvalid={!!error}>
-      {!!label && <FormLabel htmlFor={name}>
-        {label}
-        {isRequired && <Box as="span" color="red"> *</Box>}
-      </FormLabel>}
+	const [show, setShow] = useState(false)
+	const handleClick = () => setShow(!show)
 
-      <ChakraInput
-        name={name}
-        id={name}
-        focusBorderColor={error ? "red" : "cyan.500"}
-        ref={ref}
-        {...rest}
-      />
+	return (
+		<ElementFormControl
+			label={label}
+			name={name}
+			error={error}
+			isRequired={isRequired}
+		>
+			<InputGroup>
+				<ChakraInput
+					pr='4.5rem'
+					id={name}
+					name={name}
+					type={show ? 'text' : 'password'}
 
-      {!!error && (
-        <FormErrorMessage>
-          {error.message}
-        </FormErrorMessage>
-      )}
+					focusBorderColor={error ? "red" : "cyan.500"}
+					ref={ref}
 
-    </FormControl>
-  )
+					{...rest}
+				/>
+				<InputRightElement width='4.5rem'>
+					<Button h='1.75rem' size='sm' onClick={handleClick}>
+						{show ? 'Hide' : 'Show'}
+					</Button>
+				</InputRightElement>
+			</InputGroup>
+		</ElementFormControl>
+
+	)
+}
+
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
+	{ name, label, error = null, isRequired = false, ...rest },
+	ref
+) => {
+	return (
+		<ElementFormControl
+			label={label}
+			name={name}
+			error={error}
+			isRequired={isRequired}
+		>
+			<ChakraInput
+				name={name}
+				id={name}
+				focusBorderColor={error ? "red" : "cyan.500"}
+				ref={ref}
+				{...rest}
+			/>
+		</ElementFormControl>
+	)
 }
 
 export const Input = forwardRef(InputBase);
+export const PasswordInput = forwardRef(PasswordInputBase);

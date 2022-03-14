@@ -1,8 +1,12 @@
+import axios from "axios";
 import { AppProps } from "next/app";
 
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { theme } from "../styles/theme";
+
+axios.defaults.baseURL =
+    process.env.REACT_APP_API_URL ?? `http://localhost:8000/api`;
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (

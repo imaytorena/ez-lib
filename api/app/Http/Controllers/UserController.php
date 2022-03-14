@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use App\Http\Requests\Requests\StoreUserRequest;
 use App\Models\User;
 
 class UserController extends Controller
@@ -26,6 +28,27 @@ class UserController extends Controller
     public function index()
     {
         return response()->json(['users' =>  User::all()], 200);
+    }
+
+    /**
+     * Store a new user.
+     *
+     * @param  StoreUserRequest  $request
+     * @return Response
+     */
+    public function create(StoreUserRequest $request)
+    {
+        try {
+            $user = User::create($request->all());
+
+            $user->save();
+            // return successful response
+            return response()->json(['user' => $user, 'message' => 'Usuario creado exitosamente'], 201);
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
     }
 
     /**

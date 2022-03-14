@@ -9,7 +9,7 @@ interface UserFormProps {
 function Create({ element }) {
     return (
         <AdminLayout>
-            <UserForm element={element}/>
+            <UserForm element={element} />
         </AdminLayout>
     )
 }

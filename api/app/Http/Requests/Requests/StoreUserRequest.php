@@ -39,8 +39,8 @@ class StoreUserRequest extends FormRequest
     {
         $data = $this->validationData();
 
-        
-        if (isset($data['password']) && isset($data['password_confirmation'])) {
+        \Log::info($data);
+        if (isset($data['password'])) {
             $hashedPassword = app('hash')->make($data['password']);
             $data['password'] = $hashedPassword;
         }

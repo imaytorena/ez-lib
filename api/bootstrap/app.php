@@ -72,10 +72,9 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     'trim' => App\Http\Middleware\TrimStrings::class,
-//     'emptystrtonull' => App\Http\Middleware\ConvertEmptyStringsToNull::class
-// ]);
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
