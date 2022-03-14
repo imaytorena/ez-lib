@@ -8,7 +8,7 @@ import {
 	Text,
 } from "@chakra-ui/react";
 
-import { NavItem } from "./NavItem";
+import { SidebarItem } from "./SidebarItem";
 import { useRouter } from "next/router";
 import { routes } from "../../constants/routes";
 
@@ -47,14 +47,14 @@ export const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 				/>
 			</Flex>
 			{Object.values(routes).map((link) => (
-				<NavItem
+				<SidebarItem
 					key={link.key}
 					icon={link.icon}
 					isActive={link.key == key_from_path}
 					path={link.path}
 				>
 					{link.label}
-				</NavItem>
+				</SidebarItem>
 			))}
 		</Box>
 	);

@@ -38,7 +38,7 @@ function Books({ books, error }) {
 	</AdminLayout>;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	let books, error;
 
 	await fetch('http://localhost:8000/api/books')

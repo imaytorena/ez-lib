@@ -26,7 +26,7 @@ import {
 interface MobileProps extends FlexProps {
 	onOpen: () => void;
 }
-export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+export const Navbar = ({ onOpen, ...rest }: MobileProps) => {
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex
@@ -34,9 +34,7 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 			px={{ base: 4, md: 4 }}
 			height="20"
 			alignItems="center"
-			bg={useColorModeValue('white', 'gray.900')}
 			borderBottomWidth="1px"
-			borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
 			justifyContent={{ base: 'space-between', md: 'flex-end' }}
 			{...rest}>
 			<IconButton
@@ -60,7 +58,6 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 					maxWidth={120}
 					my="4"
 					ml="auto"
-					colorScheme="cyan"
 					onClick={toggleColorMode}
 				>
 					Tema {colorMode === "light" ? "Dark" : "Light"}
@@ -99,9 +96,7 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 								</Box>
 							</HStack>
 						</MenuButton>
-						<MenuList
-							bg={useColorModeValue('white', 'gray.900')}
-							borderColor={useColorModeValue('gray.200', 'gray.700')}>
+						<MenuList>
 							<MenuItem>Profile</MenuItem>
 							<MenuItem>Settings</MenuItem>
 							<MenuItem>Billing</MenuItem>

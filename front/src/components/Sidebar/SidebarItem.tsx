@@ -6,14 +6,14 @@ import {
 } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import Link from 'next/link';
-interface NavItemProps extends FlexProps {
+interface SidebarItemProps extends FlexProps {
 	icon: IconType;
 	isActive: boolean;
 	path: string;
 	children: ReactText;
 }
 
-export const NavItem = ({ icon, children, isActive, path, ...rest }: NavItemProps) => {
+export const SidebarItem = ({ icon, children, isActive, path, ...rest }: SidebarItemProps) => {
 	return (
 		<Link href={path}>
 			<Flex

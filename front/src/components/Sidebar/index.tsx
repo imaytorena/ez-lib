@@ -7,12 +7,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { SidebarContent } from './SidebarContent';
-import { MobileNav } from './MobileNav';
+import { Navbar } from './Navbar';
 
 export default function SidebarWithHeader({ children, }: { children: ReactNode; }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -29,8 +29,7 @@ export default function SidebarWithHeader({ children, }: { children: ReactNode; 
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <Navbar onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
