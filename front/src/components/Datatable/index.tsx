@@ -6,7 +6,6 @@ import {
     Table,
     Button,
     IconButton,
-    useToast,
     useColorMode,
     useColorModeValue,
     useBreakpointValue,
@@ -18,7 +17,7 @@ import { FaPlus } from 'react-icons/fa';
 
 import Row from './Row';
 import Misc from './Misc';
-import { Model as ModelType, Row as RowType, User } from '../../constants';
+import { Model as ModelType, Row as RowType } from '../../constants';
 import { useRouter } from 'next/router';
 
 type HeaderRow = {
@@ -43,10 +42,6 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
     let key_from_path = router.pathname.split("/")[1];
     key_from_path = (key_from_path == '' ? 'home' : key_from_path);
 
-    const isLgVerison = useBreakpointValue({
-        base: false,
-        lg: true,
-    });
     const isMdVerison = useBreakpointValue({
         base: false,
         md: true,
@@ -56,15 +51,6 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
     useEffect(() => {
         // TODO: Metodo parametro page 
     }, [page])
-
-    // const handleToggleFormModal = () => {
-    //     setIsOpenFormModal(!isOpenFormModal);
-    // }
-
-    // const handleUpdate = async (element) => {
-    //     setSelectedElement(element);
-    //     setIsOpenFormModal(!isOpenFormModal);
-    // }
 
     // const handleDelete = async (element) => {
     // TODO: Peticion de eliminación
@@ -109,7 +95,6 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
                     <Misc.Searchbar
                         text={valueSearch}
                         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            // console.log(e.target.value)
                             handleSearchUser(e.target.value);
                             setValueSearch(e.target.value);
                         }}
@@ -138,7 +123,7 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
                 borderRadius="sm"
                 borderColor={borderColor}
             >
-                <Table size="sm">
+                <Table>
                     <Row.Header
                         header_rows={header_rows}
                     />

@@ -57,7 +57,7 @@ class BookController extends Controller
     {
         try {
             // $book = Book::create($request->all());
-            $book = Book::find($id);
+            $book = Book::findOrFail($id);
 
             return response()->json(['book' => $book], 200);
 

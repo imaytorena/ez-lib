@@ -41,7 +41,6 @@ export async function getStaticProps() {
 
 	await userService.getAll()
 		.then(function (response) {
-			console.log(response)
 			if (response.status == 200) {
 				users = response.data?.users;
 			}

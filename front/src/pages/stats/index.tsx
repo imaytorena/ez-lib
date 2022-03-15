@@ -33,7 +33,6 @@ export async function getStaticProps() {
 	} catch (error) {
 		stats = []
 	}
-	// console.log(stats);
 
 	// By returning { props: { stats } }, the Stats component
 	// will receive `stats` as a prop at build time

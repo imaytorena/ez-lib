@@ -52,6 +52,51 @@ class UserController extends Controller
     }
 
     /**
+     * Update a user.
+     *
+     * @param  UpdateUserRequest  $request
+     * @return Response
+     */
+    public function update($id, StoreUserRequest $request)
+    {
+        try {
+            $user = User::findOrFail($id);
+            
+            $user->fill($request->all());
+            $user->save();
+            
+            // return successful response
+            return response()->json(['user' => $user, 'message' => 'Usuario editado exitosamente'], 201);
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
+    }
+    
+    /**
+     * Delete a user.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function delete($id, Request $request)
+    {
+        try {
+            $user = User::findOrFail($id);
+            
+            $user->delete();
+            $user->save();
+            
+            // return successful response
+            return response()->json(['user' => $user, 'message' => 'Usuario eliminado exitosamente'], 201);
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
+    }
+    
+    /**
      * Get one user.
      *
      * @return Response
@@ -65,7 +110,7 @@ class UserController extends Controller
 
         } catch (\Exception $e) {
 
-            return response()->json(['message' => 'user not found!'], 404);
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
     }
 

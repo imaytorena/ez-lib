@@ -31,6 +31,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->get('', 'UserController@index');
         $router->post('', 'UserController@create');
+        $router->put('{id}', 'UserController@update');
         
         $router->get('{id}', 'UserController@getById');
         

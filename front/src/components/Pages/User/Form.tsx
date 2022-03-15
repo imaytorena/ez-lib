@@ -25,7 +25,7 @@ const genres = [
     {value: "other",label: "Otro"},
 ];
 
-const userFormSchema = yup.object().shape({
+const createUserFormSchema = yup.object().shape({
     'username': yup.string().required('El nombre de usuario es requerido'),
     'password': yup.string().required('Proporcione una contraseña.')
         .min(8, 'La contraseña es muy corta (8 caracteres minimo)')
@@ -33,6 +33,21 @@ const userFormSchema = yup.object().shape({
             /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
             "Mínimo 8 caracteres y minimo un número."
         ),
+    'code': yup.string()
+        .nullable(),
+    'email': yup.string()
+        .email('Correo electrónico inválido')
+        .nullable(),
+    'name': yup.string()
+        .nullable(),
+    'last_name': yup.string()
+        .nullable(),
+    'genre': yup.string()
+        .nullable(),
+})
+
+const editUserFormSchema = yup.object().shape({
+    'username': yup.string(),
     'code': yup.string()
         .nullable(),
     'email': yup.string()
@@ -54,18 +69,42 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState, reset, setError } = useForm({
-        resolver: yupResolver(userFormSchema)
+        resolver: yupResolver(!element?.id ? createUserFormSchema : editUserFormSchema)
     });
     const { errors } = formState;
 
 
     const handleCreateUser: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
-        let res: { status: "error" | "info" | "warning" | "success", msg: "" | string } = { msg: "", status: "error" };
-
         if (element) {
-            // await updateUser({ id: user.id, ...values })
-            // msg = `${values.name} modificado exitosamente.`;
+            userService.update(element.id, values)
+                .then(function (response) {
+                    if (response.status == 201) {
+                        toast({
+                            description: response.data?.message || "Se editó el usuario exitosamente",
+                            status: "success",
+                            position: "bottom",
+                            duration: 4000,
+                            isClosable: true,
+                        });
+                    }
+                })
+                .catch(async (errors) => {
+                    let responseData = errors.response?.data
+                    Object.keys(responseData).forEach((key) => {
+                        setError(key, {
+                            type: "manual",
+                            message: responseData[key],
+                        });
+                        toast({
+                            description: responseData[key] || "Hubo un error al editar",
+                            status: "error",
+                            position: "bottom",
+                            duration: 4000,
+                            isClosable: true,
+                        });
+                    })
+                });
         } else {
             userService.create(values)
                 .then(function (response) {
@@ -97,10 +136,10 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                 });
         }
         setIsLoading(false);
-    }, [toast]);
+    }, [toast, element, setError]);
 
     useEffect(() => {
-        if (element) {
+        if (!!element) {
             reset({
                 username: element.username,
                 password: element.password,
@@ -111,15 +150,15 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                 genre: element.genre
             });
         }
-    }, [element])
+    }, [element, reset])
 
 
     return (<>
-        <Alert mb={5} status='info'>
+        {!element && <Alert mb={5} status='info'>
             <AlertIcon />
             <AlertTitle mr={2}>Puedes crear usuarios sin llenar todos los datos.</AlertTitle>
             <AlertDescription>Mas tarde se te solicitará actualizarlos.</AlertDescription>
-        </Alert>
+        </Alert>}
         <Box as="form" onSubmit={handleSubmit(handleCreateUser)}>
             <HStack spacing={4}>
                 <Input
@@ -134,6 +173,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                     label="Contraseña"
                     placeholder="Ingresa una contraseña"
                     isRequired
+                    disabled={!!element}
 
                     error={errors.password}
                     {...register('password')}
@@ -187,7 +227,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                     colorScheme="cyan"
                     type="submit"
                 >
-                    Guardar
+                    {!!element ? 'Editar' : 'Guardar'}
                 </Button>
                 <Button onClick={onCancel}>Cancelar</Button>
             </HStack>

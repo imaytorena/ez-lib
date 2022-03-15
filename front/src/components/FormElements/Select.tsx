@@ -25,7 +25,6 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
         error={error}
         isRequired={isRequired}
     >
-        {console.log(name)}
         <ChakraSelect
             id={name}
             name={name}

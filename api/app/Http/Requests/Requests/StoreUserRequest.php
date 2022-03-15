@@ -5,6 +5,8 @@ namespace App\Http\Requests\Requests;
 use App\Http\Requests\FormRequest;
 use App\Classes\Utilities;
 
+use App\Models\User;
+
 class StoreUserRequest extends FormRequest
 {
     protected $rules =  [
@@ -12,7 +14,7 @@ class StoreUserRequest extends FormRequest
         'password' => 'required',
         
         'code' => 'string|nullable|unique:users',
-        'email' => 'email|nullable',
+        'email' => 'email|nullable|unique:users',
         'genre' => 'nullable|in:male,female,other',
 
         'name' => 'string|nullable',
@@ -38,13 +40,41 @@ class StoreUserRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        $id = $this->route()[2]['id'] ?? null;
         $data = $this->validationData();
-
+        
         if (isset($data['password'])) {
             $hashedPassword = app('hash')->make($data['password']);
             $data['password'] = $hashedPassword;
         }
 
+        if ($id) {
+            $validate = $this->rules;
+            $user_already_exist = User::where('id', '!=', $id)
+                ->where(function ($query) use ($data) {
+                    $query->where('username', '=', $data['username']);
+                    $query->orWhere('code', '=', $data['code']);
+                    $query->orWhere('email', '=', $data['email']);
+                })
+                ->first();
+
+            if ($user_already_exist) {
+
+                $key_validated = array('username', 'code', 'email');
+                foreach ($key_validated as $key => $value) {
+                    $validate[$value] = !($data[$value] == $user_already_exist[$value]) ? 'string|nullable' : $validate[$value];
+                }
+
+                $this->rules = $validate;
+            } else {
+                $this->rules["username"] = 'string';
+                $this->rules["code"] = 'string|nullable';
+                $this->rules["email"] = 'string|email|nullable';
+            }
+            
+            $this->rules['password'] = 'nullable';
+        }
+        
         $this->cleanData();
         $data = $this->utilities->cleanEmptysAndNULLKeys($data);
         $data = $this->utilities->cleanKeys($data, $this->rules);
