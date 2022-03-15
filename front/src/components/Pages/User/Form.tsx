@@ -1,14 +1,29 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Grid, GridItem, HStack, SimpleGrid, useToast } from '@chakra-ui/react';
+import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
+    Box,
+    Button,
+    HStack,
+    useToast
+} from '@chakra-ui/react';
+
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+
 import { User } from '../../../constants';
 import { userService } from '../../../services';
 
-import { Input, PasswordInput } from '../../FormElements'
+import { Input, PasswordInput, Select } from '../../FormElements'
 
+const genres = [
+    {value: "male",label: "Masculino"},
+    {value: "female",label: "Femenino"},
+    {value: "other",label: "Otro"},
+];
 
 const userFormSchema = yup.object().shape({
     'username': yup.string().required('El nombre de usuario es requerido'),
@@ -63,7 +78,6 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                             isClosable: true,
                         });
                     }
-                    console.log(response)
                 })
                 .catch(async (errors) => {
                     let responseData = errors.response?.data
@@ -83,7 +97,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                 });
         }
         setIsLoading(false);
-    }, [toast, onCancel]);
+    }, [toast]);
 
     useEffect(() => {
         if (element) {
@@ -157,6 +171,14 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
                     {...register('last_name')}
                 />
             </HStack>
+            <Select
+                label="Género"
+                placeholder="Seleccione su genero"
+                options={genres}
+
+                error={errors.genre}
+                {...register('genre')}
+            />
 
             <HStack mt={4} justify={"center"} spacing={8}>
                 <Button
