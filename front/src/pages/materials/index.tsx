@@ -1,10 +1,37 @@
+import { useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { materialService } from "../../services";
 
-function Materials({ materials }) {
+function Materials({ materials, error }) {
+	const [materialsData, setMaterialsData] = useState(materials);
+	const toast = useToast();
+
+	useEffect(() => {
+		if (error) {
+			toast({
+				description: error?.message,
+				status: "error",
+				position: "bottom",
+				duration: 4000,
+				isClosable: true,
+			});
+		}
+	}, [error]);
+
+    const onPageChange = async (page) => {
+        await materialService.getAll({page: page})
+			.then(function (response) {
+				if (response.status == 200) {
+					setMaterialsData(response.data?.materials)
+				}
+			})
+    }
+
 	return <AdminLayout>
 		<Datatable
-			header={'Libros'}
+			header={'Materiales'}
 			header_rows={[
 				{key: 'serial_number', label: 'Númmero de serie'},
 				{key: 'option', label: 'Material'},
@@ -13,30 +40,29 @@ function Materials({ materials }) {
 				{key: 'model', label: 'Modelo'},
 				{key: 'status', label: 'Estado'},
 			]}
-			data={materials}
-			totalCount={33}
+			onPageChange={onPageChange}
+			{...materialsData}
 		></Datatable>
 	</AdminLayout>;
 }
 
-// This function gets called at build time
 export async function getServerSideProps() {
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/materials');
-	let materials;
-	try {
-		let data = await res.json();
-		materials = data.materials;
-	} catch (error) {
-		materials = [];
-	}
-	console.log(materials);
+	let materials = null, error = null;
 
-	// By returning { props: { materials } }, the Materials component
-	// will receive `materials` as a prop at build time
+	await materialService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				materials = response.data?.materials;
+			}
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
+		});
+
 	return {
 		props: {
 			materials,
+			error
 		},
 	}
 }

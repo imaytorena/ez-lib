@@ -1,9 +1,11 @@
 import { useToast } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { bookService } from "../../services";
 
 function Books({ books, error }) {
+	const [booksData, setBooksData] = useState(books);
 	const toast = useToast();
 
 	useEffect(() => {
@@ -17,6 +19,15 @@ function Books({ books, error }) {
 			});
 		}
 	}, [error]);
+
+    const onPageChange = async (page) => {
+        await bookService.getAll({page: page})
+			.then(function (response) {
+				if (response.status == 200) {
+					setBooksData(response.data?.books)
+				}
+			})
+    }
 
 	return <AdminLayout>
 		<Datatable
@@ -32,27 +43,24 @@ function Books({ books, error }) {
 				{ key: 'available', label: 'Disponibilidad' },
 				{ key: 'stock', label: 'stock' },
 			]}
-			data={books}
-			totalCount={33}
+			onPageChange={onPageChange}
+			{...booksData}
 		></Datatable>
 	</AdminLayout>;
 }
 
 export async function getServerSideProps() {
-	let books, error;
+	let books = null, error = null;
 
-	await fetch('http://localhost:8000/api/books')
-		.then(async response => {
-			if (!response.ok) {
-				const data = await response.text();
-				error = JSON.parse(data);
-				books = [];
-			} else {
-				const data = await response.json();
-				books = data.books;
-				error = null;
+	await bookService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				books = response.data?.books;
 			}
-		}).catch(e => { console.error(e) });
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
+		});
 
 	return {
 		props: {

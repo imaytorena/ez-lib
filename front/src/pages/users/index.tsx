@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
-import { userService } from "../../services/users";
+import { userService } from "../../services";
 
 function Users({ users, error }) {
 	const [usersData, setUsersData] = useState(users);
@@ -20,8 +20,8 @@ function Users({ users, error }) {
 		}
 	}, [error]);
 
-    const onPageChange = (page) => {
-        userService.getAll({page: page})
+    const onPageChange = async (page) => {
+        await userService.getAll({page: page})
 			.then(function (response) {
 				if (response.status == 200) {
 					setUsersData(response.data?.users)
@@ -46,7 +46,7 @@ function Users({ users, error }) {
 	</AdminLayout>;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	let users = null, error = null;
 
 	await userService.getAll()

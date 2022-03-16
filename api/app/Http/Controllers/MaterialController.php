@@ -22,9 +22,17 @@ class MaterialController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request, $paginate=true)
     {
-        return response()->json(['materials' =>  Material::all()], 200);
+
+        $materials = Material::query();
+        if ($paginate) {
+            $materials = $materials->paginate(10);
+        } else {
+            $materials = $materials->get();
+        }
+        
+        return response()->json(['materials' =>  $materials], 200);
     }
     
     /**

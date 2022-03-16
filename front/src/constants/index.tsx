@@ -1,13 +1,13 @@
 export interface Row {
-    id: number;
+    id: string | number;
     created_at?: Date;
     updated_at?: Date;
 };
 
 export type Table = Row[];
 
-export type User = {
-    id?: string,
+export interface User extends Row {
+    id: string | number,
     username: string;
     password?: string;
 
@@ -21,12 +21,33 @@ export type User = {
 }
 
 export interface Book extends Row {
-    name: string;
-    author: string;
+    id: string | number,
+    
+    title: string;
+    description?: string;
+    autor: string;
+    
+    publisher: string;
+    isbn: string;
+    year: string;
+    genre: string;
+
+    available: string;
+    stock: string;
+}
+
+export interface Material extends Row {
+    id: string | number,
+    serial_number: string;    
+    option: string;
+    details: string;
+    brand: string;
+    model: string;
+    status: string;
 }
 
 
-export type Model = Book | User | undefined;
+export type Model = User | Material | Book | undefined;
 
 
 export * from "./routes";

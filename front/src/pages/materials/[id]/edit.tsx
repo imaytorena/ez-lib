@@ -1,12 +1,12 @@
 import React from 'react'
-import AdminLayout from '../../../components/AdminLayout'
-import UserForm from '../../../components/Pages/User/Form'
-import { userService } from '../../../services';
+import AdminLayout from '../../../components/AdminLayout';
+
+import { materialService } from '../../../services';
 
 function Edit({ element }) {
     return (
         <AdminLayout>
-            <UserForm element={element} />
+
         </AdminLayout>
     )
 }
@@ -16,10 +16,10 @@ export async function getServerSideProps(context) {
 
 	let element = null, error = null;
 
-	await userService.getById(id)
+	await materialService.getById(id)
 		.then(function (response) {
 			if (response.status == 200) {
-				element = response.data?.user;
+				element = response.data?.material;
 			}
 		})
 		.catch(async (errors) => {

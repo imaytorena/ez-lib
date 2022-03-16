@@ -22,9 +22,16 @@ class BookController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request, $paginate=true)
     {
-        return response()->json(['books' =>  Book::all()], 200);
+        $books = Book::query();
+        if ($paginate) {
+            $books = $books->paginate(10);
+        } else {
+            $books = $books->get();
+        }
+        
+        return response()->json(['books' =>  $books], 200);
     }
     
     /**

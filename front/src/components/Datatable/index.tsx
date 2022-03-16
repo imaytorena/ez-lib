@@ -19,7 +19,6 @@ import Row from './Row';
 import Misc from './Misc';
 import { Model as ModelType, Row as RowType } from '../../constants';
 import { useRouter } from 'next/router';
-import { userService } from '../../services';
 
 type HeaderRow = {
     key: string;
