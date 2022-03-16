@@ -1,10 +1,11 @@
 import { useToast } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 import { userService } from "../../services/users";
 
 function Users({ users, error }) {
+	const [usersData, setUsersData] = useState(users);
 	const toast = useToast();
 
 	useEffect(() => {
@@ -19,6 +20,15 @@ function Users({ users, error }) {
 		}
 	}, [error]);
 
+    const onPageChange = (page) => {
+        userService.getAll({page: page})
+			.then(function (response) {
+				if (response.status == 200) {
+					setUsersData(response.data?.users)
+				}
+			})
+    }
+
 	return <AdminLayout>
 		<Datatable
 			header={'Usuarios'}
@@ -30,8 +40,8 @@ function Users({ users, error }) {
 				{ key: 'last_name', label: 'Apellido' },
 				{ key: 'genre', label: 'Género' },
 			]}
-			data={users}
-			totalCount={33}
+			onPageChange={onPageChange}
+			{...usersData}
 		></Datatable>
 	</AdminLayout>;
 }

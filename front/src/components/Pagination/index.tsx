@@ -2,10 +2,16 @@ import { Stack, Text, Flex } from "@chakra-ui/react";
 
 import { PaginationItem } from "./PaginationItem";
 
+type Link = {
+  active: boolean;
+  label: string;
+  url: string;
+}
+
 interface PaginationProps {
-  totalCountOfRegisters: number;
-  registersPerPages?: number;
-  currentPage?: number;
+  last_page?: number;
+  current_page?: number;
+  links?: Link[];
   onPageChange: (page: number) => void;
 }
 
@@ -18,19 +24,18 @@ function generatePagesArray(from: number, to: number) {
 }
 
 export function Pagination({
-  totalCountOfRegisters,
-  registersPerPages = 10,
-  currentPage = 1,
-  onPageChange,
+  last_page,
+  current_page,
+  links,
+  onPageChange
 }: PaginationProps) {
-  const lastPage = Math.ceil(totalCountOfRegisters / registersPerPages);
 
-  const previousPages = currentPage > 1
-    ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
+  const previousPages = current_page > 1
+    ? generatePagesArray(current_page - 1 - siblingsCount, current_page - 1)
     : []
 
-  const nextPages = currentPage < lastPage
-    ? generatePagesArray(currentPage, Math.min(currentPage + siblingsCount + lastPage))
+  const nextPages = current_page < last_page
+    ? generatePagesArray(current_page, Math.min(current_page + siblingsCount + last_page))
     : []
 
   return (
@@ -41,11 +46,10 @@ export function Pagination({
       spacing="6"
     >
       <Flex direction="row" ml="auto">
-        {currentPage > (1 + siblingsCount) && (
+        {current_page > (1 + siblingsCount) && (
           <>
             <PaginationItem onPageChange={onPageChange} number={1} />
-
-            {currentPage > (2 + siblingsCount) && (
+            {current_page > (2 + siblingsCount) && (
               <Text
                 mr="4"
                 color="gray.300"
@@ -70,7 +74,7 @@ export function Pagination({
 
         <PaginationItem
           onPageChange={onPageChange}
-          number={currentPage}
+          number={current_page}
           isCurrent
         />
 
@@ -84,9 +88,9 @@ export function Pagination({
           )
         })}
 
-        {(currentPage + siblingsCount) < lastPage && (
+        {(current_page + siblingsCount) < last_page && (
           <>
-            {(currentPage + 1 + siblingsCount) < lastPage && (
+            {(current_page + 1 + siblingsCount) < last_page && (
               <Text
                 mr="4"
                 color="gray.300"
@@ -96,7 +100,7 @@ export function Pagination({
                 ...
               </Text>
             )}
-            <PaginationItem onPageChange={onPageChange} number={lastPage} />
+            <PaginationItem onPageChange={onPageChange} number={last_page} />
           </>
         )}
       </Flex>

@@ -18,7 +18,7 @@ const UserCard = ({ id, username, code, email, name, last_name, genre, history }
 	return (
 		<CardElements.Container>
 			<CardElements.Avatar
-				src={'https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'}
+				src={'http://www.fcaktp.cu/wp-content/uploads/2019/05/default-user-image.png'}
 			/>
 			<Heading fontSize={'2xl'} fontFamily={'body'}>
 				{name} {last_name}

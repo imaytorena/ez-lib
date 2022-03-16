@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -65,14 +66,19 @@ interface UserFormProps {
     element?: User;
     onCancel?: () => void;
 }
-const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
+const UserForm = ({ element = null }: UserFormProps) => {
     const toast = useToast();
+    const router = useRouter();
+
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState, reset, setError } = useForm({
         resolver: yupResolver(!element?.id ? createUserFormSchema : editUserFormSchema)
     });
     const { errors } = formState;
 
+    const onCancel = () => {
+        router.push("/users")
+    }
 
     const handleCreateUser: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
@@ -80,6 +86,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
             userService.update(element.id, values)
                 .then(function (response) {
                     if (response.status == 201) {
+                        router.push(`/users/${element.id}`)
                         toast({
                             description: response.data?.message || "Se editó el usuario exitosamente",
                             status: "success",
@@ -109,6 +116,7 @@ const UserForm = ({ element = null, onCancel = () => { } }: UserFormProps) => {
             userService.create(values)
                 .then(function (response) {
                     if (response.status == 201) {
+                        router.push(`/users/${response.data?.user?.id}`)
                         toast({
                             description: response.data?.message || "Se creó el usuario exitosamente",
                             status: "success",

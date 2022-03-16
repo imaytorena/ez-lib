@@ -3,21 +3,23 @@ import React from 'react'
 import { Pagination } from '../../Pagination';
 
 interface FooterProps extends BoxProps {
-    totalCount: number;
-    page: number;
-    setPage: (page: number) => void;
+    total?: number;
+    current_page?: number;
+    last_page?: number;
+    onPageChange: (page: number) => void;
 };
-const Footer = ({ totalCount, page, setPage }: FooterProps) => {
+const Footer = ({ onPageChange, current_page, total, last_page, ...rest }: FooterProps) => {
     const { colorMode, toggleColorMode } = useColorMode();
     return (
-        totalCount > 10 && (
+        total > 10 && (
             <Tfoot>
                 <Tr>
                     <Td colSpan={5}>
                         <Pagination
-                            totalCountOfRegisters={totalCount}
-                            currentPage={page}
-                            onPageChange={setPage}
+                            current_page={current_page}
+                            last_page={last_page}
+                            onPageChange={onPageChange}
+                            {...rest}
                         />
                     </Td>
                 </Tr>

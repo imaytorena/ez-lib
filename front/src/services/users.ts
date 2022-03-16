@@ -1,17 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const userService = {
     getAll,
     getById,
     create,
     update,
-    delete: _delete
+    delete: _delete,
 };
 
 const baseUrl = `/users`;
 
-function getAll() {
-    return axios.get(baseUrl);
+function getAll(params: { page?: number } = {}) {
+    return axios.get(
+        `${baseUrl}?${params["page"] ? `?page=${params["page"]}` : ""}`
+    );
 }
 
 function getById(id) {

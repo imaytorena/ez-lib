@@ -19,6 +19,7 @@ import Row from './Row';
 import Misc from './Misc';
 import { Model as ModelType, Row as RowType } from '../../constants';
 import { useRouter } from 'next/router';
+import { userService } from '../../services';
 
 type HeaderRow = {
     key: string;
@@ -28,15 +29,16 @@ interface DatatableProps extends BoxProps {
     header?: string;
     data: ModelType[] | RowType[];
     header_rows: HeaderRow[];
-    totalCount: number;
+    current_page: number,
+    total: number;
+    onPageChange: (page: number) => {}
 };
 
-const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) => {
+const Datatable = ({ header, header_rows, data, current_page, total, onPageChange, ...rest }: DatatableProps) => {
     const router = useRouter();
     const { colorMode, toggleColorMode } = useColorMode();
     const borderColor = useColorModeValue("gray.200", "gray.600");
 
-    const [page, setPage] = useState(1);
     const [valueSearch, setValueSearch] = useState('');
 
     let key_from_path = router.pathname.split("/")[1];
@@ -47,23 +49,6 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
         md: true,
     });
     const asButton = useBreakpointValue({ base: IconButton, md: Button })
-
-    useEffect(() => {
-        // TODO: Metodo parametro page 
-    }, [page])
-
-    // const handleDelete = async (element) => {
-    // TODO: Peticion de eliminación
-    // await deleteUser(user.id);
-
-    // toast({
-    //     description: `${user.name} eliminado exitosamente.`,
-    //     status: "success",
-    //     position: "top",
-    //     duration: 4000,
-    //     isClosable: true,
-    // });
-    // }
 
     const handleSearchUser = async (value: string) => {
         // TODO: Peticion de busqueda
@@ -131,7 +116,12 @@ const Datatable = ({ header, header_rows, data, totalCount }: DatatableProps) =>
                         header_rows={header_rows}
                         data={data}
                     />
-                    <Row.Footer totalCount={totalCount} page={page} setPage={setPage} />
+                    <Row.Footer
+                        current_page={current_page}
+                        total={total}
+                        onPageChange={onPageChange}
+                        {...rest}
+                    />
                 </Table>
             </Box>
         </Box>
