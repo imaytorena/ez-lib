@@ -4,16 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Models\User;
 
 class Loan extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'user_id', 
+        'object_type',
+        'object_id', 
         'status',
         'details',
+    ];
+    
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
     
     public function user()

@@ -9,12 +9,12 @@ import {
 
 import { CardElements } from './CardElements';
 import { User as UserType } from '../../../constants';
+import { generos } from './constants';
 
 interface UserCardProps extends UserType {
 	history?: string[];
 }
-const generos = { "male": "Masculino", "female": "Femenino", "other": "Otro" };
-const UserCard = ({ id, username, code, email, name, last_name, genre, history }: UserCardProps) => {
+const UserCard = ({ id, username, code, email, asas, name, last_name, genre, history }: UserCardProps) => {
 	return (
 		<CardElements.Container>
 			<CardElements.Avatar

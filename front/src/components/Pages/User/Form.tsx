@@ -13,54 +13,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 
 import { User } from '../../../constants';
 import { userService } from '../../../services';
 
 import { Input, PasswordInput, Select } from '../../FormElements'
-
-const genres = [
-    {value: "male",label: "Masculino"},
-    {value: "female",label: "Femenino"},
-    {value: "other",label: "Otro"},
-];
-
-const createUserFormSchema = yup.object().shape({
-    'username': yup.string().required('El nombre de usuario es requerido'),
-    'password': yup.string().required('Proporcione una contraseña.')
-        .min(8, 'La contraseña es muy corta (8 caracteres minimo)')
-        .matches(
-            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-            "Mínimo 8 caracteres y minimo un número."
-        ),
-    'code': yup.string()
-        .nullable(),
-    'email': yup.string()
-        .email('Correo electrónico inválido')
-        .nullable(),
-    'name': yup.string()
-        .nullable(),
-    'last_name': yup.string()
-        .nullable(),
-    'genre': yup.string()
-        .nullable(),
-})
-
-const editUserFormSchema = yup.object().shape({
-    'username': yup.string(),
-    'code': yup.string()
-        .nullable(),
-    'email': yup.string()
-        .email('Correo electrónico inválido')
-        .nullable(),
-    'name': yup.string()
-        .nullable(),
-    'last_name': yup.string()
-        .nullable(),
-    'genre': yup.string()
-        .nullable(),
-})
+import { createUserFormSchema, editUserFormSchema, genres } from './constants';
 
 interface UserFormProps {
     element?: User;
@@ -144,7 +102,7 @@ const UserForm = ({ element = null }: UserFormProps) => {
                 });
         }
         setIsLoading(false);
-    }, [toast, element, setError]);
+    }, [element, router, toast, setError]);
 
     useEffect(() => {
         if (!!element) {
