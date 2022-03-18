@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { generos } from "../../components/Pages/User/constants";
 import { userService } from "../../services";
 
 function Users({ users, error }) {
@@ -34,11 +35,11 @@ function Users({ users, error }) {
 			header={'Usuarios'}
 			header_rows={[
 				{ key: 'username', label: 'Usuario' },
-				{ key: 'code', label: 'Código' },
+				// { key: 'code', label: 'Código' },
+				{ key: 'name', label: 'Nombre(s)' },
+				{ key: 'last_name', label: 'Apellido(s)' },
 				{ key: 'email', label: 'Correo electrónico' },
-				{ key: 'name', label: 'Nombre' },
-				{ key: 'last_name', label: 'Apellido' },
-				{ key: 'genre', label: 'Género' },
+				// { key: 'genre', label: 'Género', uses: generos },
 			]}
 			onPageChange={onPageChange}
 			{...usersData}

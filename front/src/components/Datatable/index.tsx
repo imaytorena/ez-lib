@@ -17,13 +17,9 @@ import { FaPlus } from 'react-icons/fa';
 
 import Row from './Row';
 import Misc from './Misc';
-import { Model as ModelType, Row as RowType } from '../../constants';
+import { HeaderRow, Model as ModelType, Row as RowType } from '../../constants';
 import { useRouter } from 'next/router';
 
-type HeaderRow = {
-    key: string;
-    label: string;
-}
 interface DatatableProps extends BoxProps {
     header?: string;
     data: ModelType[] | RowType[];

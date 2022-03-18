@@ -1,10 +1,4 @@
-export interface Row {
-    id: string | number;
-    created_at?: Date;
-    updated_at?: Date;
-};
-
-export type Table = Row[];
+import { Row } from "./datatable";
 
 export interface User extends Row {
     id: string | number,
@@ -46,8 +40,4 @@ export interface Material extends Row {
     status: string;
 }
 
-
 export type Model = User | Material | Book | undefined;
-
-
-export * from "./routes";

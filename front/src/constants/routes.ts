@@ -1,8 +1,7 @@
-
+import React from 'react'
 import { IconType } from "react-icons";
 import { FaMoneyBillAlt, FaUserFriends } from "react-icons/fa";
 import { FiHome, FiBook, FiMonitor, FiShare, FiUserX, FiFileText, FiTrendingUp } from "react-icons/fi";
-
 
 interface RouteObject {
     key: string;
