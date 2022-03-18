@@ -1,11 +1,12 @@
 
 import AdminLayout from '../../../components/AdminLayout';
+import BookCard from '../../../components/Pages/Book/BookCard';
 import { bookService } from '../../../services';
 
 const Book = ({ book }) => {
 	return (
 		<AdminLayout>
-
+			<BookCard {...book} />
 		</AdminLayout>
 	);
 }

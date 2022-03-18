@@ -48,7 +48,7 @@ const Badge = ({ text }) => <ChakraBadge
     {text}
 </ChakraBadge>
 
-const BadgeButton = ({ href, text, baseColor }) => <Link href={href}><Button
+const BadgeButton = ({ onClick, text, baseColor }) => <Button
     flex={1}
     fontSize={'sm'}
     rounded={'full'}
@@ -63,7 +63,8 @@ const BadgeButton = ({ href, text, baseColor }) => <Link href={href}><Button
     _focus={{
         bg: `${baseColor}.500`,
     }}
->{text}</Button></Link>
+    onClick={onClick}
+>{text}</Button>
 
 export const CardElements = {
     Container,

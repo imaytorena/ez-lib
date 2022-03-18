@@ -7,14 +7,17 @@ import {
 	HStack,
 } from '@chakra-ui/react';
 
-import { CardElements } from './CardElements';
 import { User as UserType } from '../../../constants';
 import { generos } from './constants';
+import { CardElements } from '../../Elements';
+import { useRouter } from 'next/router';
 
 interface UserCardProps extends UserType {
 	history?: string[];
 }
-const UserCard = ({ id, username, code, email, asas, name, last_name, genre, history }: UserCardProps) => {
+const UserCard = ({ id, username, code, email, name, last_name, genre, history }: UserCardProps) => {
+	const router = useRouter();
+
 	return (
 		<CardElements.Container>
 			<CardElements.Avatar
@@ -47,12 +50,12 @@ const UserCard = ({ id, username, code, email, asas, name, last_name, genre, his
 					baseColor="gray"
 				/>
 				<CardElements.BadgeButton
-					href={`/users/${id}/edit`}
+					onClick={() => {router.push(`/users/${id}/edit`)}}
 					text="Editar"
 					baseColor="cyan"
 				/>
 				<CardElements.BadgeButton
-					href={`/users/${id}/delete`}
+					onClick={() => {router.push(`/users/${id}/delete`)}}
 					text="Eliminar"
 					baseColor="red"
 				/>
