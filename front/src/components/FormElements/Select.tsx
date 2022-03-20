@@ -1,6 +1,6 @@
 import React, { forwardRef, ForwardRefRenderFunction } from 'react'
 import { Select as ChakraSelect, SelectProps as ChakraSelectProps } from '@chakra-ui/react'
-import ElementFormControl from './ElementFormControl'
+import { ElementFormControl } from './ElementFormControl'
 import { FieldError } from 'react-hook-form';
 
 type Item = {

@@ -6,7 +6,7 @@ import {
     AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
 import React, { useState } from 'react'
-import ElementFormControl from "./ElementFormControl";
+import { ElementFormControl } from "./ElementFormControl";
 
 const SelectAutocomplete = ({ name, label, error = null, isRequired = false, options, ...rest }) => {
     return (

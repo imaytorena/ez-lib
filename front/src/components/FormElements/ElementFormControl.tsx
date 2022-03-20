@@ -5,7 +5,7 @@ import {
 	FormLabel
 } from '@chakra-ui/react'
 
-const ElementFormControl = ({ label, name, error, isRequired, children }) => {
+export const ElementFormControl = ({ label, name, error, isRequired, children }) => {
 	return <FormControl isInvalid={!!error} pb={!error?.message ? 8 : 2}>
 		{!!label && <FormLabel htmlFor={name}>
 			{label}
@@ -20,4 +20,3 @@ const ElementFormControl = ({ label, name, error, isRequired, children }) => {
 	</FormControl>
 
 }
-export default ElementFormControl;

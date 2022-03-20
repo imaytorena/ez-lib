@@ -5,11 +5,13 @@ import {
 	Input as ChakraInput,
 	InputGroup,
 	InputProps as ChakraInputProps,
-	InputRightElement
+	InputRightElement,
+	Textarea as ChakraTextArea,
+	TextareaProps as ChakraTextareaProps,
 } from '@chakra-ui/react'
-import ElementFormControl from './ElementFormControl';
 
 import { FieldError } from 'react-hook-form';
+import { ElementFormControl } from './ElementFormControl';
 
 interface InputProps extends ChakraInputProps {
 	name: string;
@@ -81,5 +83,38 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
 	)
 }
 
+interface TextAreaProps extends ChakraTextareaProps {
+	name: string;
+	label?: string;
+	isRequired?: boolean;
+	disabled?: boolean;
+	ref?: React.LegacyRef<HTMLTextAreaElement>;
+	error?: FieldError;
+}
+const TextAreaBase: ForwardRefRenderFunction<HTMLTextAreaElement, TextAreaProps> = (
+	{ name, label, error = null, isRequired = false, ...rest },
+	ref
+) => {
+	return (
+		<ElementFormControl
+			label={label}
+			name={name}
+			error={error}
+			isRequired={isRequired}
+		>
+			<ChakraTextArea
+				name={name}
+				id={name}
+				focusBorderColor={error ? "red" : "cyan.500"}
+				resize='none'
+				ref={ref}
+
+				{...rest}
+			/>
+		</ElementFormControl>
+	)
+}
+
+export const TextArea = forwardRef(TextAreaBase);
 export const Input = forwardRef(InputBase);
 export const PasswordInput = forwardRef(PasswordInputBase);

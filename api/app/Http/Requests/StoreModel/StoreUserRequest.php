@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Requests;
+namespace App\Http\Requests\StoreModel;
 
 use App\Http\Requests\FormRequest;
 use App\Classes\Utilities;

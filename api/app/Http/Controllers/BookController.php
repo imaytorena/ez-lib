@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use App\Http\Requests\StoreModel\StoreBookRequest;
 use App\Models\Book;
 
 class BookController extends Controller
 {
      /**
-     * Instantiate a new UserController instance.
+     * Instantiate a new BookController instance.
      *
      * @return void
      */
@@ -18,7 +20,7 @@ class BookController extends Controller
     }
 
     /**
-     * Get all User.
+     * Get all Book.
      *
      * @return Response
      */
@@ -40,12 +42,12 @@ class BookController extends Controller
      * @param  Request  $request
      * @return Response
      */
-    public function create(Request $request)
+    public function create(StoreBookRequest $request)
     {
         try {
-            $book = Book::create($request->all());
+            // $book = Book::create($request->all());
 
-            return response()->json(['book' => $book], 200);
+            return response()->json(['book' => "book"], 200);
 
         } catch (\Exception $e) {
 

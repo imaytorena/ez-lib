@@ -1,6 +1,6 @@
 import { CUIAutoComplete } from 'chakra-ui-autocomplete'
 import { useState } from 'react';
-import ElementFormControl from './ElementFormControl';
+import { ElementFormControl } from './ElementFormControl';
 
 
 export interface Item {

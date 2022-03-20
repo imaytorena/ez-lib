@@ -40,7 +40,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // BOOKS
     $router->group(['prefix' => 'books'], function () use ($router) {
         $router->get('', 'BookController@index');
-        $router->post('{id}', 'BookController@create');
+        $router->post('', 'BookController@create');
         $router->put('{id}', 'BookController@update');
         $router->delete('{id}', 'BookController@delete');
 

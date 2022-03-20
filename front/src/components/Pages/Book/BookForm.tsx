@@ -1,52 +1,54 @@
 import {
-    Alert,
-    AlertDescription,
-    AlertIcon,
-    AlertTitle,
     Box,
     Button,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
     HStack,
+    Switch,
     useToast
 } from '@chakra-ui/react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { User } from '../../../constants';
-import { userService } from '../../../services';
+import { Book } from '../../../constants';
+import { bookService } from '../../../services';
 
-import { Input, PasswordInput, Select } from '../../FormElements'
-import { createUserFormSchema, editUserFormSchema, genres } from './constants';
+import { ElementFormControl, Input, TextArea } from '../../FormElements'
+import { createBookFormSchema, editBookFormSchema } from './contants';
 
-interface UserFormProps {
-    element?: User;
+interface BookFormProps {
+    element?: Book;
     onCancel?: () => void;
 }
-const UserForm = ({ element = null }: UserFormProps) => {
+const BookForm = ({ element = null }: BookFormProps) => {
     const toast = useToast();
     const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [date, setDate] = useState(new Date());
+
     const { register, handleSubmit, formState, reset, setError } = useForm({
-        resolver: yupResolver(!element?.id ? createUserFormSchema : editUserFormSchema)
+        resolver: yupResolver(!element?.id ? createBookFormSchema : editBookFormSchema)
     });
     const { errors } = formState;
 
     const onCancel = () => {
-        router.push("/users")
+        router.push("/books");
     }
 
     const handleCreateUser: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
         if (element) {
-            userService.update(element.id, values)
+            bookService.update(element.id, values)
                 .then(function (response) {
                     if (response.status == 201) {
                         router.push(`/users/${element.id}`)
                         toast({
-                            description: response.data?.message || "Se editó exitosa el usuariomente",
+                            description: response.data?.message || "Se editó exitosamente el libro",
                             status: "success",
                             position: "bottom",
                             duration: 4000,
@@ -62,7 +64,7 @@ const UserForm = ({ element = null }: UserFormProps) => {
                             message: responseData[key],
                         });
                         toast({
-                            description: responseData[key] || "Hubo un error al editar el usuario",
+                            description: responseData[key] || "Hubo un error al editar el libro",
                             status: "error",
                             position: "bottom",
                             duration: 4000,
@@ -71,12 +73,12 @@ const UserForm = ({ element = null }: UserFormProps) => {
                     })
                 });
         } else {
-            userService.create(values)
+            bookService.create(values)
                 .then(function (response) {
                     if (response.status == 201) {
-                        router.push(`/users/${response.data?.user?.id}`)
+                        router.push(`/books/${response.data?.book?.id}`)
                         toast({
-                            description: response.data?.message || "Se creó exitosamente el usuario ",
+                            description: response.data?.message || "Se creó exitosamente el libro",
                             status: "success",
                             position: "bottom",
                             duration: 4000,
@@ -93,7 +95,7 @@ const UserForm = ({ element = null }: UserFormProps) => {
                         });
                     })
                     toast({
-                        description: errors.response?.data?.message || "Hubo un error al crear el usuario",
+                        description: errors.response?.data?.message || "Hubo un error al crear el libro",
                         status: "error",
                         position: "bottom",
                         duration: 4000,
@@ -104,87 +106,97 @@ const UserForm = ({ element = null }: UserFormProps) => {
         setIsLoading(false);
     }, [element, router, toast, setError]);
 
-    useEffect(() => {
-        if (!!element) {
-            reset({
-                username: element.username,
-                password: element.password,
-                code: element.code,
-                email: element.email,
-                name: element.name,
-                last_name: element.last_name,
-                genre: element.genre
-            });
-        }
-    }, [element, reset])
-
-
     return (<>
-        {!element && <Alert mb={5} status='info'>
-            <AlertIcon />
-            <AlertTitle mr={2}>Puedes crear usuarios sin llenar todos los datos.</AlertTitle>
-            <AlertDescription>Mas tarde se te solicitará actualizarlos.</AlertDescription>
-        </Alert>}
         <Box as="form" onSubmit={handleSubmit(handleCreateUser)}>
             <HStack spacing={4}>
                 <Input
-                    label="Nombre de usuario"
-                    placeholder="Ingresa un nombre de usuario"
+                    label="Titulo"
+                    placeholder="Ingresa el titulo"
                     isRequired
 
-                    error={errors.username}
-                    {...register('username')}
+                    error={errors.title}
+                    {...register('title')}
                 />
-                <PasswordInput
-                    label="Contraseña"
-                    placeholder="Ingresa una contraseña"
+                <Input
+                    label="Autor"
+                    placeholder="Ingresa el autor"
                     isRequired
-                    disabled={!!element}
 
-                    error={errors.password}
-                    {...register('password')}
+                    error={errors.autor}
+                    {...register('autor')}
+                />
+                <Input
+                    label="Editorial"
+                    placeholder="Ingresa la editorial"
+                    isRequired
+
+                    error={errors.publisher}
+                    {...register('publisher')}
                 />
             </HStack>
-            <HStack spacing={4}>
-                <Input
-                    label="Código"
-                    placeholder="Ingrese su código"
+            <TextArea
+                label="Descripción"
+                placeholder="Ingresa la descripción"
 
-                    error={errors.code}
-                    {...register('code')}
-                />
-                <Input
-                    label="Correo electrónico"
-                    placeholder="Ingrese un correo electrónico"
-
-                    error={errors.email}
-                    {...register('email')}
-                />
-            </HStack>
-            <HStack spacing={4}>
-                <Input
-                    label="Nombre"
-                    placeholder="Ingrese su primer nombre"
-
-                    error={errors.name}
-                    {...register('name')}
-                />
-                <Input
-                    label="Apellido"
-                    placeholder="Ingrese su primer apellido"
-
-                    error={errors.last_name}
-                    {...register('last_name')}
-                />
-            </HStack>
-            <Select
-                label="Género"
-                placeholder="Seleccione su genero"
-                options={genres}
-
-                error={errors.genre}
-                {...register('genre')}
+                error={errors.description}
+                {...register('description')}
             />
+            <HStack spacing={4}>
+                <Input
+                    label="ISBN"
+                    placeholder="Ingresa el código ISBN"
+                    isRequired
+
+                    error={errors.isbn}
+                    {...register('isbn')}
+                />
+                <Input
+                    label="Año"
+                    placeholder="Ingresa el año de publicación"
+                    maxLength={4}
+                    isRequired
+                    // pattern={"[0-9]+"}
+
+                    error={errors.year}
+                    {...register('year')}
+                />
+            </HStack>
+            <HStack spacing={4}>
+                <Input
+                    label="Género"
+                    placeholder="Ingresa el género literario"
+                    isRequired
+
+                    error={errors.genre}
+                    {...register('genre')}
+                />
+                <FormControl display='flex' alignItems='center' justifyContent='center' width={"40%"}>
+                    <FormLabel htmlFor='available' mb='0'>
+                        Disponible
+                    </FormLabel>
+                    <Switch
+                        id='available'
+                        defaultChecked
+                        isRequired
+
+                        {...register('available')}
+                    />
+                    {!!errors?.available && (
+                        <FormErrorMessage>
+                            {errors.available}
+                        </FormErrorMessage>
+                    )}
+                </FormControl>
+                <Input
+                    label="Existencias"
+                    placeholder="Ingresa las existencias"
+                    maxLength={3}
+                    isRequired
+
+                    error={errors.stock}
+                    {...register('stock')}
+                />
+            </HStack>
 
             <HStack mt={4} justify={"center"} spacing={8}>
                 <Button onClick={onCancel}>Cancelar</Button>
@@ -198,7 +210,8 @@ const UserForm = ({ element = null }: UserFormProps) => {
                 </Button>
             </HStack>
         </Box>
-    </>)
+    </>
+    )
 }
 
-export default UserForm
+export default BookForm

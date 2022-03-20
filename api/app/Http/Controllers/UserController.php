@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-use App\Http\Requests\Requests\StoreUserRequest;
+use App\Http\Requests\StoreModel\StoreUserRequest;
 use App\Models\User;
 
 class UserController extends Controller
