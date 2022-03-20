@@ -85,8 +85,7 @@ const BookCard = ({ id, title, description, autor, publisher, isbn, year, genre,
 					<CardElements.Badge text={`${stock} EXISTENCIAS`} />
 				</Stack>
 				<Divider />
-				{copies.length &&
-					<Box w={"100%"}>
+				{copies.length && <Box w={"100%"}>
 						<Text fontWeight={800}>Ejemplares</Text>
 						<br/>
 						<Table size='sm'>

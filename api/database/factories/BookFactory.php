@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
+use App\Models\Book;
+use App\Models\BookCopy;
 
 class BookFactory extends Factory
 {
@@ -23,4 +25,24 @@ class BookFactory extends Factory
             'stock' => $this->faker->randomNumber(2, false),
     	];
     }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Book $book) {
+            // creates two book copies
+            BookCopy::create([
+                'book_id' => $book->id,
+                'name' => $this->faker->sentence(3),
+                'features' => $this->faker->paragraph(1),
+                'folio' => $this->faker->ean8()
+            ]);
+            BookCopy::create([
+                'book_id' => $book->id,
+                'name' => $this->faker->sentence(3),
+                'features' => $this->faker->paragraph(1),
+                'folio' => $this->faker->ean8()
+            ]);
+        });
+    }
+
 }
