@@ -6,8 +6,7 @@ import {
     FormLabel,
     HStack,
     Switch,
-    useToast
-} from '@chakra-ui/react';
+    useToast} from '@chakra-ui/react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
@@ -17,8 +16,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Book } from '../../../constants';
 import { bookService } from '../../../services';
 
-import { ElementFormControl, Input, TextArea } from '../../FormElements'
+import { Input, TextArea } from '../../FormElements'
 import { createBookFormSchema, editBookFormSchema } from './contants';
+import CopiesTableForm from './CopiesTableForm';
 
 interface BookFormProps {
     element?: Book;
@@ -27,14 +27,14 @@ interface BookFormProps {
 const BookForm = ({ element = null }: BookFormProps) => {
     const toast = useToast();
     const router = useRouter();
+    const [copiesState, setCopiesState] = useState([])
 
     const [isLoading, setIsLoading] = useState(false);
-    const [date, setDate] = useState(new Date());
 
-    const { register, handleSubmit, formState, reset, setError } = useForm({
+    const { register, handleSubmit, formState: { errors }, watch, reset, setError } = useForm({
         resolver: yupResolver(!element?.id ? createBookFormSchema : editBookFormSchema)
     });
-    const { errors } = formState;
+    const watchStock = watch("stock");
 
     const onCancel = () => {
         router.push("/books");
@@ -197,6 +197,11 @@ const BookForm = ({ element = null }: BookFormProps) => {
                     {...register('stock')}
                 />
             </HStack>
+            <CopiesTableForm
+                copies={watchStock}
+                copiesState={copiesState}
+                setCopiesState={setCopiesState}
+            />
 
             <HStack mt={4} justify={"center"} spacing={8}>
                 <Button onClick={onCancel}>Cancelar</Button>

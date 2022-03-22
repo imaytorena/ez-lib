@@ -45,7 +45,7 @@ const PasswordInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> 
 
 					disabled={disabled}
 
-					focusBorderColor={error ? "red" : "cyan.500"}
+					focusBorderColor={error ? "red.500" : "cyan.500"}
 					ref={ref}
 
 					{...rest}
@@ -75,7 +75,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
 			<ChakraInput
 				name={name}
 				id={name}
-				focusBorderColor={error ? "red" : "cyan.500"}
+				focusBorderColor={error ? "red.500" : "cyan.500"}
 				ref={ref}
 				{...rest}
 			/>
@@ -105,7 +105,7 @@ const TextAreaBase: ForwardRefRenderFunction<HTMLTextAreaElement, TextAreaProps>
 			<ChakraTextArea
 				name={name}
 				id={name}
-				focusBorderColor={error ? "red" : "cyan.500"}
+				focusBorderColor={error ? "red.500" : "cyan.500"}
 				resize='none'
 				ref={ref}
 

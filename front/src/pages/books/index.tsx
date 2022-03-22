@@ -42,6 +42,9 @@ function Books({ books, error }) {
 					setBooksData(response.data?.books)
 				}
 			})
+			.catch(async (errors) => {
+				console.error(errors.response?.data);
+			});
 	}
 
 	return <AdminLayout>

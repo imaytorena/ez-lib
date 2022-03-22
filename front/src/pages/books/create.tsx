@@ -1,12 +1,16 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import AdminLayout from '../../components/AdminLayout'
+import { SelectAutocomplete } from '../../components/FormElements';
 import BookForm from '../../components/Pages/Book/BookForm';
+import CopyForm from '../../components/Pages/Book/CopyForm';
+import { bookService } from '../../services';
 
-function Create({ copy }) {
+function Create({ book, error }) {
+    const [copiesState, setCopiesState] = useState([])
     return (
         <AdminLayout>
-            <Tabs defaultIndex={copy && 1} isFitted variant='enclosed'>
+            <Tabs defaultIndex={!!book ? 1 : 0} isFitted variant='enclosed'>
                 <TabList mb='1em'>
                     <Tab>{"CREAR UN NUEVO LIBRO"}</Tab>
                     <Tab>{"AGREGAR EJEMPLAR A UN LIBRO"}</Tab>
@@ -14,14 +18,9 @@ function Create({ copy }) {
                 <TabPanels>
                     <TabPanel>
                         <BookForm />
-                        {/* <p>Formulario crear libro</p>
-                        <hr />
-                        <p>apartado para agregar ejemplares</p> */}
                     </TabPanel>
                     <TabPanel>
-                        {/* <p>{`${copy ? copy : "select libro"}`}</p>
-                        <hr />
-                        <p>formulario crear ejemplar</p> */}
+                        <CopyForm book={book} />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
@@ -30,11 +29,25 @@ function Create({ copy }) {
 }
 
 export async function getServerSideProps(context) {
+    let book = null, error = null;
     const { copy } = context.query;
+    if (copy) {
+        await bookService.getById(copy)
+            .then(function (response) {
+                if (response.status == 200) {
+                    console.log(response.data)
+                    book = response.data?.book;
+                }
+            })
+            .catch(async (errors) => {
+                error = errors.response?.data
+            });
+    }
 
     return {
         props: {
-            copy: copy || null
+            book,
+            error
         }
     }
 }
