@@ -19,7 +19,7 @@ class StoreBookRequest extends FormRequest
         'genre' => 'string|required',
         
         'available' => 'boolean|required',
-        'stock' => 'integer|nullable',
+        'stock' => 'nullable',
     ];
 
     /**
@@ -50,12 +50,18 @@ class StoreBookRequest extends FormRequest
         $data['isbn'] = isset($data['isbn']) ? (int) $data['isbn'] : null;
         $data['year'] = isset($data['year']) ? (int) $data['year'] : null;
         
+
+        // Edits on rule validations
+        if (isset($data['available']) && $data['available']) {
+            $this->rules['stock'] = 'integer|required';
+        }
+        $date = \Carbon\Carbon::tomorrow()->year;
+        $this->rules['year'] = 'integer|required|digits:4|max:'.($date);
+
+        // Validations when is update method
         if ($id) {
             // Validations when is update method
         }
-
-        $date = \Carbon\Carbon::tomorrow()->year;
-        $this->rules['year'] = 'integer|required|digits:4|max:'.($date);
         
         $this->cleanData();
         $data = $this->utilities->cleanEmptysAndNULLKeys($data);

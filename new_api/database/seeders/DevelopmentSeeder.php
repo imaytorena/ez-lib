@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Book;
 use App\Models\Material;
+use App\Models\Role;
+use App\Models\Permission;
 // use App\Models\Fee;
 
 class DevelopmentSeeder extends Seeder
@@ -21,6 +23,5 @@ class DevelopmentSeeder extends Seeder
         Book::factory()->count(10)->create();
         Material::factory()->count(10)->create();
         Role::factory()->count(1)->create();
-        Permission::factory()->count(1)->create();
     }
 }
