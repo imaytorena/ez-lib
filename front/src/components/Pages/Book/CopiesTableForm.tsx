@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useEffect, useState } from 'react'
+import React, { Dispatch, useCallback, useEffect, useRef, useState } from 'react'
 import {
 	Box,
 	Table,
@@ -20,7 +20,8 @@ import {
 	EditablePreview,
 	EditableInput,
 	Icon,
-	Divider
+	Divider,
+	Tooltip
 } from '@chakra-ui/react';
 import { AddIcon, CopyIcon, DeleteIcon } from '@chakra-ui/icons';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -35,15 +36,33 @@ interface Copy {
 interface CopiesTableFormProps {
 	copies?: number;
 	copiesState: Copy[];
-	setCopiesState: Dispatch<Copy[]>
+	setCopiesState: Dispatch<Copy[]>;
+
+	theresUnsavedChanges?: boolean;
+	setUnsavedChanges?: Dispatch<boolean>;
 }
-const CopiesTableForm = ({ copies, copiesState, setCopiesState }: CopiesTableFormProps) => {
-	const { register, getValues, formState: { errors }, reset, setError, clearErrors } = useForm();
+const CopiesTableForm = ({ copies, copiesState, setCopiesState, theresUnsavedChanges, setUnsavedChanges }: CopiesTableFormProps) => {
+	const { register, getValues, formState: { errors }, reset, setError, clearErrors, watch } = useForm();
 	const [copiesNumberState, setCopiesNumberState] = useState(null)
+
+	const buttonRef = useRef(HTMLButtonElement);
+
+	useEffect(() => {
+		// if (theresUnsavedChanges) {
+		// 	buttonRef?.focus();
+		// }
+	}, [theresUnsavedChanges]);
 
 	useEffect(() => {
 		setCopiesNumberState(copies);
 	}, [copies]);
+
+	useEffect(() => {
+		const subscription = watch((value, { name }) => {
+			setUnsavedChanges(true)
+		});
+		return () => subscription.unsubscribe();
+	}, [setUnsavedChanges, watch]);
 
 
 	const onDelete = (id) => {
@@ -178,12 +197,15 @@ const CopiesTableForm = ({ copies, copiesState, setCopiesState }: CopiesTableFor
 							/>
 						</Td>
 						<Td>
-							<Button
-								isDisabled={copiesState.length >= copiesNumberState}
-								onClick={onAdd}
-							>
-								<Icon as={AddIcon} />
-							</Button>
+							<Tooltip label='Guarda tus cambios' hasArrow placement='bottom' isOpen={copiesState.length >= copiesNumberState ? theresUnsavedChanges : false}>
+								<Button
+									isActive={(copiesState.length >= copiesNumberState) && theresUnsavedChanges}
+									isDisabled={copiesState.length >= copiesNumberState}
+									onClick={onAdd}
+								>
+									<Icon as={AddIcon} />
+								</Button>
+							</Tooltip>
 						</Td>
 					</Tr>}
 				</Tbody>

@@ -10,7 +10,7 @@ import {
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Book } from '../../../constants';
@@ -27,19 +27,25 @@ interface BookFormProps {
 const BookForm = ({ element = null }: BookFormProps) => {
     const toast = useToast();
     const router = useRouter();
-    const [copiesState, setCopiesState] = useState([])
-
     const [isLoading, setIsLoading] = useState(false);
+    const [unsavedChanges, setUnsavedChanges] = useState(false);
+    const [copiesState, setCopiesState] = useState([])
 
     const { register, handleSubmit, formState: { errors }, watch, reset, setError } = useForm({
         resolver: yupResolver(!element?.id ? createBookFormSchema : editBookFormSchema)
     });
+
     const watchStock = watch("stock");
+    const watchAvailable = watch("available");
 
     const onCancel = () => {
         router.push("/books");
     }
 
+    useEffect(() => {
+        console.log(copiesState);
+    }, [copiesState])
+    
     const handleCreateUser: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
         if (element) {
@@ -176,8 +182,6 @@ const BookForm = ({ element = null }: BookFormProps) => {
                     </FormLabel>
                     <Switch
                         id='available'
-                        defaultChecked
-                        isRequired
 
                         {...register('available')}
                     />
@@ -191,7 +195,7 @@ const BookForm = ({ element = null }: BookFormProps) => {
                     label="Existencias"
                     placeholder="Ingresa las existencias"
                     maxLength={3}
-                    isRequired
+                    isRequired={watchAvailable}
 
                     error={errors.stock}
                     {...register('stock')}
@@ -201,6 +205,9 @@ const BookForm = ({ element = null }: BookFormProps) => {
                 copies={watchStock}
                 copiesState={copiesState}
                 setCopiesState={setCopiesState}
+
+                theresUnsavedChanges={unsavedChanges}
+                setUnsavedChanges={setUnsavedChanges}
             />
 
             <HStack mt={4} justify={"center"} spacing={8}>
