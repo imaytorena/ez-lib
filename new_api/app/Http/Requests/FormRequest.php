@@ -181,6 +181,16 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
             'last_name' => 'apellido',
             'genre' => 'género',
             'status' => 'estado',
+            
+            'title' => 'título',
+            'description' => 'descripción',
+            'autor' => 'autor',
+            'publisher' => 'editorial',
+            'isbn' => 'ISBN',
+            'year' => 'año',
+            'genre' => 'género',
+            'available' => 'disponible',
+            'stock' => 'existencias',
         ];
     }
 
