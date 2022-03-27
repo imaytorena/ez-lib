@@ -45,13 +45,11 @@ class BookController extends Controller
     public function create(StoreBookRequest $request)
     {
         try {
-            // $book = Book::create($request->all());
+            $book = Book::create($request->all());
 
-            return response()->json(['book' => "book"], 200);
-
+            return response()->json(['book' => $book], 201);
         } catch (\Exception $e) {
-
-            return response()->json(['message' => 'book not found!'], 404);
+            return response()->json(['message' => $e->getMessage()], 404);
         }
     }
 
@@ -62,13 +60,14 @@ class BookController extends Controller
      * @param  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update($id, StoreBookRequest $request)
     {
         try {
             // $book = Book::create($request->all());
-            $book = Book::findOrFail($id);
+            // $book = Book::findOrFail($id);
 
-            return response()->json(['book' => $book], 200);
+            // return response()->json(['book' => $book], 200);
+            return response()->json(['book' => "book"], 200);
 
         } catch (\Exception $e) {
 

@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use App\Traits\PermissionsHandler;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
+class User extends Authenticatable
 {
-    use Authenticatable, Authorizable, HasFactory;
+    use PermissionsHandler, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'username',
@@ -30,31 +29,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
+     * The attributes that should be cast.
      *
-     * @return mixed
+     * @var array<string, string>
      */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
+    public function roles()
     {
-        return [];
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'role_id')->withPivot('extinct');
     }
 }

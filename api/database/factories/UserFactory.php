@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class UserFactory extends Factory
 {
     /**
+     * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+     * 
      * The name of the factory's corresponding model.
      *
      * @var string
@@ -17,7 +19,7 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function definition()
     {
@@ -32,10 +34,9 @@ class UserFactory extends Factory
             'status' => $this->faker->boolean(true),
             'genre' => $this->faker->randomElement(['male', 'female', 'other']),
             'phone' => $this->faker->e164PhoneNumber(),
-            'remember_token' => Str::random(10),
         ];
     }
-    
+
     /**
      * Indicate that the model's email address should be unverified.
      *

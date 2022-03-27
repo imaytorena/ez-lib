@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Classes\Utilities;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Laravel\Lumen\Http\Redirector;
@@ -14,9 +13,10 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Foundation\Http\FormRequest as HttpFormRequest;
 
 
-class FormRequest extends Request implements ValidatesWhenResolved
+class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
 {
     use ValidatesWhenResolvedTrait;
     /**
@@ -86,7 +86,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
      *
      * @return array
      */
-    protected function validationData()
+    public  function validationData()
     {
         return $this->all();
     }
@@ -157,28 +157,6 @@ class FormRequest extends Request implements ValidatesWhenResolved
         return $validator->getMessageBag()->toArray();
     }
     /**
-     * Set the Redirector instance.
-     *
-     * @param  \Laravel\Lumen\Http\Redirector  $redirector
-     * @return $this
-     */
-    public function setRedirector(Redirector $redirector)
-    {
-        $this->redirector = $redirector;
-        return $this;
-    }
-    /**
-     * Set the container implementation.
-     *
-     * @param  \Illuminate\Container\Container  $container
-     * @return $this
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-        return $this;
-    }
-    /**
      * Get custom messages for validator errors.
      *
      * @return array
@@ -203,6 +181,16 @@ class FormRequest extends Request implements ValidatesWhenResolved
             'last_name' => 'apellido',
             'genre' => 'género',
             'status' => 'estado',
+            
+            'title' => 'título',
+            'description' => 'descripción',
+            'autor' => 'autor',
+            'publisher' => 'editorial',
+            'isbn' => 'ISBN',
+            'year' => 'año',
+            'genre' => 'género',
+            'available' => 'disponible',
+            'stock' => 'existencias',
         ];
     }
 
@@ -214,11 +202,11 @@ class FormRequest extends Request implements ValidatesWhenResolved
         }
     }
 
-    protected function setAuthorizationErrorMessage($message = 'No tienes permiso para acceder.', $statusCode = 403){
-        $this->authorizationError = [
-            'message' => $message,
-            'code' => $statusCode
-        ];
-    }
+    // protected function setAuthorizationErrorMessage($message = 'No tienes permiso para acceder.', $statusCode = 403){
+    //     $this->authorizationError = [
+    //         'message' => $message,
+    //         'code' => $statusCode
+    //     ];
+    // }
 
 }

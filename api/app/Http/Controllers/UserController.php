@@ -27,8 +27,8 @@ class UserController extends Controller
      */
     public function index(Request $request, $paginate=true)
     {
-
         $users = User::query();
+
         if ($paginate) {
             $users = $users->paginate(10);
         } else {

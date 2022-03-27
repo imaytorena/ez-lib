@@ -3,7 +3,7 @@
 //Nota asegurarse de que el namespace apunte a la carpeta correcta  (modulo).
 namespace App\Http\Requests;
 
-use App\Http\Requests\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ExampleListarRequest extends FormRequest

@@ -20,7 +20,7 @@ class CreateBooksTable extends Migration
             $table->string('autor', 70)->comment('Autor');
             $table->string('publisher', 50)->comment('Editorial');
             $table->string('isbn', 10)->comment('ISBN')->unique();
-            $table->year('year')->comment('Año de publicación');
+            $table->integer('year')->comment('Año de publicación');
             $table->string('genre', 40)->comment('Genero');
             $table->boolean('available')->default(false)->comment('Disponibilidad');
             $table->integer('stock')->comment('Existencia');
