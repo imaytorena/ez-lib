@@ -6,8 +6,9 @@ import { HeaderRow, Model, Row } from '../../../constants';
 interface BodyProps extends BoxProps {
     header_rows: HeaderRow[];
     data: Model[] | Row[];
+    onClickRow?: (header: HeaderRow[], data: Model | Row, index: number) => void;
 };
-const Body = ({ header_rows, data }: BodyProps) => {
+const Body = ({ header_rows, data, onClickRow }: BodyProps) => {
     const router = useRouter()
     const borderColor = useColorModeValue("gray.200", "gray.600");
     const { colorMode } = useColorMode();
@@ -20,9 +21,10 @@ const Body = ({ header_rows, data }: BodyProps) => {
                 return (
                     <Tr
                         key={`${dr['id']}-${index}`}
-                        onClick={() => {
-                            router.push(`/${key_from_path}/${dr["id"]}`)
-                        }}
+                        onClick={onClickRow ? () => { onClickRow(header_rows, dr, index) }
+                            : () => {
+                                router.push(`/${key_from_path}/${dr["id"]}`)
+                            }}
                         _hover={{
                             cursor: "pointer",
                             bg: `${colorMode === "light" ? "gray.50" : "gray.800"}`
@@ -31,7 +33,7 @@ const Body = ({ header_rows, data }: BodyProps) => {
                         {header_rows.map((hr: HeaderRow, iindex: number) => {
                             return (hr.custom_row ?
                                 hr.custom_row({
-                                    header:hr,
+                                    header: hr,
                                     data: dr,
                                     index: iindex,
                                     ...{

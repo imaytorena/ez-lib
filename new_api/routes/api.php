@@ -43,6 +43,16 @@ Route::group(['prefix' => 'users'], function () {
     
 });
 
+// ROLES
+Route::group(['prefix' => 'roles'], function () {
+    Route::get('', 'RoleController@index');
+    // Route::post('', 'UserController@create');
+    // Route::put('{id}', 'UserController@update');
+    
+    Route::get('{id}', 'RoleController@getById');
+    
+});
+
 // BOOKS
 Route::group(['prefix' => 'books'], function () {
     Route::get('', 'BookController@index');

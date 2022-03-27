@@ -27,9 +27,10 @@ interface DatatableProps extends BoxProps {
     current_page: number,
     total: number;
     onPageChange: (page: number) => {}
+    onClickRow?: () => void
 };
 
-const Datatable = ({ header, header_rows, data, current_page, total, onPageChange, ...rest }: DatatableProps) => {
+const Datatable = ({ header, header_rows, data, current_page, total, onPageChange, onClickRow, ...rest }: DatatableProps) => {
     const router = useRouter();
     const { colorMode, toggleColorMode } = useColorMode();
     const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -110,6 +111,7 @@ const Datatable = ({ header, header_rows, data, current_page, total, onPageChang
                     <Row.Body
                         header_rows={header_rows}
                         data={data}
+                        onClickRow={onClickRow}
                     />
                     <Row.Footer
                         current_page={current_page}

@@ -14,8 +14,8 @@ interface RoutesObject {
     [index: string]: RouteObject;
 }
 export const routes: RoutesObject = {
-    'home': { key: 'home', label: 'Inicio', icon: FiHome, path: '/' },
     'users': { key: 'users', label: 'Usuarios', icon: FaUserFriends, path: '/users' },
+    'roles_permissions': { key: 'roles_permissions', label: 'Roles y Permisos', icon: FaUserFriends, path: '/roles_permissions' },
     'books': { key: 'books', label: 'Libros', icon: FiBook, path: '/books' },
     'materials': { key: 'materials', label: 'Materiales', icon: FiMonitor, path: '/materials' },
     'loans': { key: 'loans', label: 'Prestamos', icon: FiShare, path: '/loans' },

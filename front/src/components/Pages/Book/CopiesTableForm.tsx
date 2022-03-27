@@ -45,8 +45,6 @@ const CopiesTableForm = ({ copies, copiesState, setCopiesState, theresUnsavedCha
 	const { register, getValues, formState: { errors }, reset, setError, clearErrors, watch } = useForm();
 	const [copiesNumberState, setCopiesNumberState] = useState(null)
 
-	const buttonRef = useRef(HTMLButtonElement);
-
 	useEffect(() => {
 		// if (theresUnsavedChanges) {
 		// 	buttonRef?.focus();

@@ -35,3 +35,6 @@ export const userService = new Service(`/users`);
 
 export const bookService = new Service(`/books`);
 export const materialService = new Service(`/materials`);
+
+export const roleService = new Service(`/roles`);
+export const permissionService = new Service(`/permission`);

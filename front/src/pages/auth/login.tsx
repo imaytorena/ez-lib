@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import {
 	Flex,
 	Box,
@@ -7,7 +8,7 @@ import {
 	Input,
 	Checkbox,
 	Stack,
-	Link,
+	Link as ChakraLink,
 	Button,
 	Heading,
 	Text,
@@ -25,11 +26,11 @@ const Login = () => {
 		align={'center'}
 		justify={'center'}
 		bg={useColorModeValue('gray.50', 'gray.800')}>
-		<Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+		<Stack spacing={8} mx={'auto'} maxW={'xl'} py={12} px={6}>
 			<Stack align={'center'}>
-				<Heading fontSize={'4xl'}>Sign in to your account</Heading>
-				<Text fontSize={'lg'} color={'gray.600'}>
-					to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
+				<Heading fontSize={'4xl'}>Iniciar sesión con una cuenta</Heading>
+				<Text fontSize={'lg'} color={'gray.500'}>
+					para disfrutar las <Link href={"/features"} passHref><ChakraLink color={'blue.500'}>caracteristicas personalizadas</ChakraLink></Link> ✌️
 				</Text>
 			</Stack>
 			<Box
@@ -39,21 +40,19 @@ const Login = () => {
 				p={8}>
 				<Stack spacing={4}>
 					<FormControl id="email">
-						<FormLabel>Email address</FormLabel>
+						<FormLabel>Correo Electrónico</FormLabel>
 						<Input type="email" />
 					</FormControl>
 					<FormControl id="password">
-						<FormLabel>Password</FormLabel>
+						<FormLabel>Contraseña</FormLabel>
 						<InputGroup>
 							<Input
 								pr='4.5rem'
 								type={show ? 'text' : 'password'}
-
-							// focusBorderColor={error ? "red" : "cyan.500"}
 							/>
 							<InputRightElement width='4.5rem'>
 								<Button h='1.75rem' size='sm' onClick={handleClick}>
-									{show ? 'Hide' : 'Show'}
+									{show ? 'Ocultar' : 'Mostrar'}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
@@ -63,8 +62,8 @@ const Login = () => {
 							direction={{ base: 'column', sm: 'row' }}
 							align={'start'}
 							justify={'space-between'}>
-							<Checkbox>Remember me</Checkbox>
-							<Link color={'blue.400'}>Forgot password?</Link>
+							<Checkbox>Recordar mi sesión</Checkbox>
+							<ChakraLink color={'blue.500'}>Olvidé mi contraseña</ChakraLink>
 						</Stack>
 						<Button
 							bg={'blue.400'}
@@ -74,6 +73,11 @@ const Login = () => {
 							}}>
 							Sign in
 						</Button>
+					</Stack>
+					<Stack pt={6}>
+						<Text align={'center'}>
+							<Link href={"/auth/signup"} passHref><ChakraLink color={'blue.500'}>No cuento con un usuario</ChakraLink></Link>
+						</Text>
 					</Stack>
 				</Stack>
 			</Box>
