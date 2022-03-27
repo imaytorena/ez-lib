@@ -28,6 +28,7 @@ class AuthController extends Controller
             return response()->json(['user' => $user, 'message' => 'Usuario registrado exitosamente'], 201);
 
         } catch (\Exception $e) {
+            \Log::info($e);
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
@@ -40,19 +41,36 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-          //validate incoming request 
-        $this->validate($request, [
-            'email' => 'required|string',
+        //validate incoming request 
+        $request->validate([
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
-        $credentials = $request->only(['email', 'password']);
-
+        $credentials = $request(['email', 'password']);
+        
+        \Log::info($credentials);
+        
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $user = $request->user();
+        $tokenResult = $request->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+
+
+        $token = $tokenResult->token;
+        $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->save();
+
+        return response()->json([
+            "access_token" => $tokenResult->accessToken,
+            "token_type" => "Bearer",
+            "expires_at" => \Carbon\Carbon::parse($tokenResult->token->expires_at->toDateTimeString())
+        ]);
+        // return response()->json(['message' => 'No fue posible terminar la sesión'], 400);
+        // return $this->respondWithToken($token);
     }
 
     /**

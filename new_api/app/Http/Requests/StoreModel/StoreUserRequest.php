@@ -4,6 +4,7 @@ namespace App\Http\Requests\StoreModel;
 
 use App\Http\Requests\FormRequest;
 use App\Classes\Utilities;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 
@@ -44,6 +45,7 @@ class StoreUserRequest extends FormRequest
         $data = $this->validationData();
         
         if (isset($data['password'])) {
+            // $hashedPassword = Hash::make($data['password']);
             $hashedPassword = bcrypt($data['password']);
             $data['password'] = $hashedPassword;
         }

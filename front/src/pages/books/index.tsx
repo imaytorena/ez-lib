@@ -7,16 +7,16 @@ import { bookService } from "../../services";
 
 const customRow = ({ header, data, index, ...rest }: CustomRowProps) => {
 	let available = parseInt(data["available"]);
-	return <Tooltip label={!available && "No hay disponibilidad"} placement='bottom'>
-		<Td
-			key={`${header}-${index}`}
-			{...rest}
-		>
+	return <Td
+		key={`${header}-${index}`}
+		{...rest}
+	>
+		<Tooltip label={!available && "No hay disponibilidad"} placement='bottom'>
 			<Text noOfLines={1} color={(header.key == "stock" && !available) && "red.700"}>
 				{data[header.key]}
 			</Text>
-		</Td>
-	</Tooltip>
+		</Tooltip>
+	</Td>
 }
 
 function Books({ books, error }) {
