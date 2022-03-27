@@ -35,7 +35,6 @@ export async function getServerSideProps(context) {
         await bookService.getById(copy)
             .then(function (response) {
                 if (response.status == 200) {
-                    console.log(response.data)
                     book = response.data?.book;
                 }
             })

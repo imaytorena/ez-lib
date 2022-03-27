@@ -40,13 +40,14 @@ const Avatar = ({ src }) => <ChakraAvatar
     }}
 />
 
-const Badge = ({ text }) => <ChakraBadge
+const Badge = ({ text }) => (text && <ChakraBadge
     px={2}
     py={1}
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     bg={useColorModeValue('gray.50', 'gray.800')}
     fontWeight={'400'}>
     {text}
-</ChakraBadge>
+</ChakraBadge>)
 
 const BadgeButton = ({ onClick, text, baseColor }) => <Button
     flex={1}
