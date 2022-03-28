@@ -31,6 +31,8 @@ export class Service {
     }
 }
 
+export * from "./authService"
+
 export const userService = new Service(`/users`);
 
 export const bookService = new Service(`/books`);

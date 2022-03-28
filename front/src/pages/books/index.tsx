@@ -1,5 +1,5 @@
 import { Td, Text, Tooltip, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 import { CustomRowProps } from "../../constants";
@@ -21,19 +21,6 @@ const customRow = ({ header, data, index, ...rest }: CustomRowProps) => {
 
 function Books({ books, error }) {
 	const [booksData, setBooksData] = useState(books);
-	const toast = useToast();
-
-	useEffect(() => {
-		if (error) {
-			toast({
-				description: error?.message,
-				status: "error",
-				position: "bottom",
-				duration: 4000,
-				isClosable: true,
-			});
-		}
-	}, [error]);
 
 	const onPageChange = async (page) => {
 		await bookService.getAll({ page: page })
@@ -47,7 +34,7 @@ function Books({ books, error }) {
 			});
 	}
 
-	return <AdminLayout>
+	return <AdminLayout error={error}>
 		<Datatable
 			header={'Libros'}
 			header_rows={[
@@ -71,12 +58,16 @@ export async function getServerSideProps() {
 
 	await bookService.getAll()
 		.then(function (response) {
+			// console.log(response)
 			if (response.status == 200) {
 				books = response.data?.books;
 			}
 		})
 		.catch(async (errors) => {
+			// console.error(errors.response?.data)
 			error = errors.response?.data
+			if (errors.response.status == 401)
+				error = { status: 401, message: 'Usuario no autenticado' }
 		});
 
 	return {

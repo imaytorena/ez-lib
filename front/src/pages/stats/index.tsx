@@ -1,5 +1,6 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { bookService } from "../../services";
 
 function Stats({ stats }) {
 	return <AdminLayout>
@@ -22,23 +23,22 @@ function Stats({ stats }) {
 	</AdminLayout>;
 }
 
-// This function gets called at build time
 export async function getStaticProps() {
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/stats');
-	let stats;
-	try {
-		let data = await res.json();
-		stats = data.stats;
-	} catch (error) {
-		stats = []
-	}
+	let stats, error;
 
-	// By returning { props: { stats } }, the Stats component
-	// will receive `stats` as a prop at build time
+	await bookService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				stats = response.data?.books;
+			}
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
+		});
 	return {
 		props: {
 			stats,
+			error
 		},
 	}
 }

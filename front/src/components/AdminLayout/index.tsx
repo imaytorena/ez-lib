@@ -1,11 +1,31 @@
-import React, { ReactNode } from 'react'
-import { BoxProps, Flex } from '@chakra-ui/react';
+import React, { ReactNode, useEffect } from 'react'
+import { BoxProps, Flex, useToast } from '@chakra-ui/react';
 import SidebarWithHeader from '../Sidebar';
+import { useRouter } from 'next/router';
 
 interface AdminLayout extends BoxProps {
     onClose: () => void;
 }
-const AdminLayout = ({ children }: { children: ReactNode; }) => {
+const AdminLayout = ({ error, children }: { error?: { status?: number; message: string; }, children: ReactNode; }) => {
+
+    const router = useRouter();
+    const toast = useToast();
+
+    useEffect(() => {
+        if (error) {
+            toast({
+                description: error?.message,
+                status: "error",
+                position: "bottom",
+                duration: 4000,
+                isClosable: true,
+            });
+        }
+
+        if (error?.status == 401)
+            router.push("/auth/login")
+    }, [error, router, toast]);
+    
     return (
         <SidebarWithHeader>
             <Flex

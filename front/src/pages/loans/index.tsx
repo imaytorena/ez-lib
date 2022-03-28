@@ -1,5 +1,6 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { bookService } from "../../services";
 
 function Loans({ loans }) {
 	return <AdminLayout>
@@ -16,31 +17,22 @@ function Loans({ loans }) {
 	</AdminLayout>;
 }
 
-// This function gets called at build time
 export async function getStaticProps() {
+	let loans, error;
 
-	// Call an external API endpoint to get loans
-	const res = await fetch('http://localhost:8000/api/loans')
-	let loans;
-	try {
-		let data = await res.json();
-		loans = data.loans?.map(loan => {
-			return {
-				...loan, 
-				'username' : loan?.user?.username,
-				'type' : loan?.object_type == "App\\Models\\Book" ? "Libro" : "Material"
+	await bookService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				loans = response.data?.books;
 			}
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
 		});
-	} catch (error) {
-		loans = [];
-	}
-	// console.log(loans)
-
-	// By returning { props: { loans } }, the Loans component
-	// will receive `loans` as a prop at build time
 	return {
 		props: {
 			loans,
+			error
 		},
 	}
 }

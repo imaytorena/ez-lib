@@ -31,7 +31,7 @@ class RoleFactory extends Factory
             // creates two book copies
             $permission = Permission::factory()->count(1)->create();
             // $role->permissions()->attach($permission[0]["id"], ['active_actions' => decbin(15)]);
-            $role->givePermissionTo("crud", "1111");
+            $role->givePermissionTo("crud", bindec("1111111"));
         });
     }
 }

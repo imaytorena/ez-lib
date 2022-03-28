@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('permission_id');
-            $table->char('active_actions', 8)->default('0000');
+            
+            $table->unsignedBigInteger('active_actions')->default(15)->comment('Estados de acciones');
+            $table->timestamp('extinct')->nullable()->comment('Fecha de extinción');
+            $table->boolean('is-lattice')->default(false)->comment('Es lattice');
 
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('permission_id')->references('id')->on('permissions');

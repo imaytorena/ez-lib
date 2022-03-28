@@ -14,28 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::group(['prefix' => 'auth'], function () {
-//     Route::post('login', 'UsersController@login')->name('login');
-//     Route::post('register', 'UsersController@register')->name('register');
-//     Route::get('logout', 'UsersController@logout')->middleware('auth:api')->name('logout');
-// });
-
-
 // AUTH
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login')->name('login');
-    Route::post('register', 'AuthController@register')->name('register');
+    Route::post('register', 'AuthController@register')
+        ->name('register');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'AuthController@logout');
     });
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('profile', 'UserController@profile');
 });
 

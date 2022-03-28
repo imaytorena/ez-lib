@@ -1,5 +1,6 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { bookService } from "../../services";
 
 function Penalties({ penalties }) {
 	return <AdminLayout>
@@ -17,24 +18,22 @@ function Penalties({ penalties }) {
 	</AdminLayout>;
 }
 
-// This function gets called at build time
 export async function getStaticProps() {
-	// Call an external API endpoint to get posts
-	const res = await fetch('http://localhost:8000/api/penalties');
-	let penalties;
-	try {
-		let data = await res.json();
-		penalties = data.penalties;
-	} catch (error) {
-		penalties = [];
-	}
-	console.log(penalties);
+	let penalties, error;
 
-	// By returning { props: { penalties } }, the Penalties component
-	// will receive `penalties` as a prop at build time
+	await bookService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				penalties = response.data?.books;
+			}
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
+		});
 	return {
 		props: {
 			penalties,
+			error
 		},
 	}
 }

@@ -1,5 +1,6 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
+import { bookService } from "../../services";
 
 function Reports({ reports }) {
 	return <AdminLayout>
@@ -26,19 +27,15 @@ function Reports({ reports }) {
 export async function getStaticProps() {
 	let reports, error;
 
-	await fetch('http://localhost:8000/api/fees')
-		.then(async response => {
-			if (!response.ok) {
-				const data = await response.text();
-				error = JSON.parse(data);
-				reports = [];
-			} else {
-				const data = await response.json();
-				reports = data.fees;
-				error = null;
+	await bookService.getAll()
+		.then(function (response) {
+			if (response.status == 200) {
+				reports = response.data?.books;
 			}
-		}).catch(e => { console.error(e) });
-
+		})
+		.catch(async (errors) => {
+			error = errors.response?.data
+		});
 	return {
 		props: {
 			reports,

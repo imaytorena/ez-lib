@@ -1,10 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreModel\StoreUserRequest;
+
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Validation\Rules;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 use App\Models\User;
 
 class AuthController extends Controller
@@ -18,59 +24,66 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
         try {
-            $user = User::create($request->all());
-            $accessToken = $user->createToken('appToken')->accessToken;
-            $user->save();
+            $request->validate([
+                'username' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', Rules\Password::defaults()],
+            ]);
 
-            $user['token'] = $accessToken;
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
             
-            // return successful response
+            // $tokenResult = $user->createToken('Personal Access Token');
+            // $token = $tokenResult->token;
+            
+            // if ($request->remember_me)
+            //     $token->expires_at = Carbon::now()->addWeeks(1);
+            // $token->save();
+            
             return response()->json(['user' => $user, 'message' => 'Usuario registrado exitosamente'], 201);
 
         } catch (\Exception $e) {
-            \Log::info($e);
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
 
     /**
-     * Get a JWT via given credentials.
-     *
-     * @param  Request  $request
-     * @return Response
+     * Inicio de sesión y creación de token
      */
     public function login(Request $request)
     {
-        //validate incoming request 
+        \Log::info($request);
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
+            // 'remember_me' => 'boolean|nullable'
         ]);
 
-        $credentials = $request(['email', 'password']);
-        
-        \Log::info($credentials);
-        
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        $credentials = request(['email', 'password']);
+
+        if (!Auth::attempt($credentials))
+        {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
         }
 
         $user = $request->user();
-        $tokenResult = $request->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-
+        $tokenResult = $user->createToken('Personal Access Token');
 
         $token = $tokenResult->token;
-        $token->expires_at = Carbon::now()->addWeeks(1);
+        if ($request->remember_me)
+            $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
         return response()->json([
-            "access_token" => $tokenResult->accessToken,
-            "token_type" => "Bearer",
-            "expires_at" => \Carbon\Carbon::parse($tokenResult->token->expires_at->toDateTimeString())
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
         ]);
-        // return response()->json(['message' => 'No fue posible terminar la sesión'], 400);
-        // return $this->respondWithToken($token);
     }
 
     /**

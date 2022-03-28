@@ -19,7 +19,7 @@ class PermissionFactory extends Factory
         return [
             'name' => "crud",
             'description' => "Basic actions for a crud",
-            'actions' => json_encode(['CREATE', 'READ', 'UPDATE', 'DELETE']),
+            'actions' => json_encode(['AUDIT', 'TESTING', 'REPORTS', 'CREATE', 'READ', 'UPDATE', 'DELETE']),
         ];
     }
 }

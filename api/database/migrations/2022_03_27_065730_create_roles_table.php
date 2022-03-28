@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->comment('Nombre');
             $table->text('description')->comment('Descripción');
+
             $table->timestamps();
         });
     }

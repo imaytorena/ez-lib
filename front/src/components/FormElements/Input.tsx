@@ -9,6 +9,7 @@ import {
 	Textarea as ChakraTextArea,
 	TextareaProps as ChakraTextareaProps,
 } from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import { FieldError } from 'react-hook-form';
 import { ElementFormControl } from './ElementFormControl';
@@ -52,7 +53,7 @@ const PasswordInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> 
 				/>
 				<InputRightElement width='4.5rem'>
 					<Button h='1.75rem' size='sm' onClick={handleClick} disabled={disabled}>
-						{show ? 'Hide' : 'Show'}
+						{show ? <ViewIcon /> : <ViewOffIcon />}
 					</Button>
 				</InputRightElement>
 			</InputGroup>

@@ -5,8 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import { theme } from "../styles/theme";
 
-axios.defaults.baseURL =
-    process.env.REACT_APP_API_URL ?? `http://localhost:8000/api`;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL ?? `http://easylibrary.test/api`;
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (

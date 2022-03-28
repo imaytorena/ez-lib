@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('username', 50)->unique()->comment('Usuario');
             $table->string('code', 12)->unique()->nullable()->comment('Código escolar');
             $table->string('email', 50)->unique()->nullable()->comment('Correo');
-            $table->string('password', 50)->nullable()->comment('Contraseña');
+            $table->string('tipo', 50)->nullable()->comment('Tipo');
+            $table->string('password')->nullable()->comment('Contraseña');
             
             $table->string('name', 50)->nullable()->comment('Nombre');
             $table->string('last_name', 50)->nullable()->comment('Apellido');

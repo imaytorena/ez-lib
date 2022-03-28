@@ -18,4 +18,5 @@ class Authenticate extends Middleware
             return route('login');
         }
     }
+    // ->with(['message' => 'You should login.'])
 }
