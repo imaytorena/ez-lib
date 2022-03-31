@@ -21,11 +21,13 @@ const AdminLayout = ({ error, children }: { error?: { status?: number; message: 
                 isClosable: true,
             });
         }
-
-        if (error?.status == 401)
-            router.push("/auth/login")
     }, [error, router, toast]);
-    
+
+    if (error?.status == 403) {
+        router.push("/auth/login")
+        return <></>
+    }
+
     return (
         <SidebarWithHeader>
             <Flex

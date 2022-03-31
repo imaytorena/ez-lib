@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import SwitchTheme from '../../components/Misc/SwitchTheme';
 import { AuthContainer, FormContainer, HeaderText, SwitchRoute } from '../../components/Pages/Auth';
 import SignupForm from '../../components/Pages/Auth/SignupForm';
 
 export default function SignupCard() {
 	const [showPassword, setShowPassword] = useState(false);
 
-	return (
+	return (<>
 		<AuthContainer>
 			<HeaderText title={"Registrar un nuevo usuario"} />
 			<FormContainer>
@@ -16,6 +17,8 @@ export default function SignupCard() {
 				/>
 			</FormContainer>
 		</AuthContainer>
+		<SwitchTheme />
+	</>
 
 	);
 }

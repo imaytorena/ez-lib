@@ -8,20 +8,64 @@ use App\Http\Requests\StoreModel\StoreUserRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    protected static function createPasswordToken($username, $password)
+    {
+        $client = DB::table('oauth_clients')->where('id', env('PASSPORT_PASSWORD_CLIENT_ID'))->first();
+
+        $tokenRequest = Request::create('/oauth/token','post');
+        $tokenRequest->request->add([
+            'grant_type'    => 'password',
+            'client_id'     => $client->id,
+            'client_secret' => $client->secret,
+            'username'      => $username,
+            'password'      => $password,
+            'scope'         => ''
+        ]);
+
+        try {
+            $tokenResponse = app()->handle($tokenRequest);
+            return json_decode($tokenResponse->getContent());
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
+
+    protected static function refreshToken($refreshToken)
+    {
+        $client = DB::table('oauth_clients')->where('id', env('PASSPORT_PASSWORD_CLIENT_ID'))->first();
+
+        $tokenRequest = Request::create('/oauth/token','post');
+        $tokenRequest->request->add([
+            'grant_type'    => 'refresh_token',
+            'refresh_token' => $refreshToken,
+            'client_id'     => $client->id,
+            'client_secret' => $client->secret,
+            'scope' =>      ''
+        ]);
+
+        try {
+            $tokenResponse = app()->handle($tokenRequest);
+            return json_decode($tokenResponse->getContent());
+        } catch (\Exception $e) {
+            return $e;
+        }
+    }
     /**
      * Store a new user.
      *
      * @param  StoreUserRequest  $request
      * @return Response
      */
-    public function register(StoreUserRequest $request)
+    public function register(Request $request)
     {
         try {
             $request->validate([
@@ -35,15 +79,11 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
+                
+            $user = $request->user();
+            $token = $this->createPasswordToken($request->email, $request->password);
             
-            // $tokenResult = $user->createToken('Personal Access Token');
-            // $token = $tokenResult->token;
-            
-            // if ($request->remember_me)
-            //     $token->expires_at = Carbon::now()->addWeeks(1);
-            // $token->save();
-            
-            return response()->json(['user' => $user, 'message' => 'Usuario registrado exitosamente'], 201);
+            return response()->json(['user' => $user, 'token' => $token, 'message' => 'Usuario registrado exitosamente'], 201);
 
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 409);
@@ -55,14 +95,12 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        \Log::info($request);
         $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string',
-            // 'remember_me' => 'boolean|nullable'
+            'password' => 'required|string'
         ]);
-
-        $credentials = request(['email', 'password']);
+        
+        $credentials = $request->only(['email', 'password']);
 
         if (!Auth::attempt($credentials))
         {
@@ -72,18 +110,9 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $this->createPasswordToken($request->email, $request->password);
 
-        $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
-
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
-        ]);
+        return response()->json(['user' => $user, 'token' => $token]);
     }
 
     /**

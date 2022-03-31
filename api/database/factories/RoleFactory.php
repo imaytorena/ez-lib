@@ -27,6 +27,7 @@ class RoleFactory extends Factory
 
     public function configure()
     {
+        
         return $this->afterCreating(function (Role $role) {
             // creates two book copies
             $permission = Permission::factory()->count(1)->create();

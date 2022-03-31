@@ -66,8 +66,9 @@ export async function getServerSideProps() {
 		.catch(async (errors) => {
 			// console.error(errors.response?.data)
 			error = errors.response?.data
-			if (errors.response.status == 401)
-				error = { status: 401, message: 'Usuario no autenticado' }
+			if (errors.response.status == 403) {
+				error = { status: 403, message: 'Usuario no autenticado' }
+			}
 		});
 
 	return {

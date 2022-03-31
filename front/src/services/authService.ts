@@ -13,12 +13,12 @@ class Service {
         //     .then(response => {
         //         console.log(response.data);
         //     });
-        axios.defaults.baseURL = process.env.REACT_APP_API_URL ?? `http://easylibrary.test/api`;
+        // axios.defaults.baseURL = process.env.REACT_APP_API_URL ?? `http://easylibrary.test/api`;
         return axios.post(`${this.baseUrl}/register`, params);
     }
     
     login(params) {
-        return axios.post(`${this.baseUrl}`, params);
+        return axios.post(`${this.baseUrl}/login`, params);
     }
 }
 

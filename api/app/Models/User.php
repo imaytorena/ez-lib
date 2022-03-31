@@ -11,7 +11,7 @@ use App\Traits\PermissionsHandler;
 
 class User extends Authenticatable
 {
-    use PermissionsHandler, HasApiTokens, HasFactory, Notifiable;
+    use PermissionsHandler, HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +26,8 @@ class User extends Authenticatable
         'last_name',
         'genre',
         'status',
+        'password',
+        'remember_token',
     ];
 
     /**

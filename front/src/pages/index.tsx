@@ -8,10 +8,13 @@ import {
 	Text,
 	Link as ChakraLink,
 	useBreakpointValue,
+	useColorMode,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import SwitchTheme from '../components/Misc/SwitchTheme';
 
 export default function Home() {
+	const { colorMode, toggleColorMode } = useColorMode();
 
 	return (
 		<Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
@@ -77,6 +80,7 @@ export default function Home() {
 					}
 				/>
 			</Flex>
+			<SwitchTheme />
 		</Stack>
 	)
 }

@@ -44,6 +44,8 @@ class BookController extends Controller
      */
     public function create(StoreBookRequest $request)
     {
+        // $user()->can('books', '10000');
+        // $user()->can('Edit books');
         try {
             $book = Book::create($request->all());
 
