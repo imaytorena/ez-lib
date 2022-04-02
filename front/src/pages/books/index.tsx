@@ -38,23 +38,25 @@ function Books({ books, error }) {
 		<Datatable
 			header={'Libros'}
 			header_rows={[
-				{ key: 'title', label: 'Titulo' },
+				{key: 'title', label: 'Titulo'},
 				// { key: 'description', label: 'Descripción' },
-				{ key: 'autor', label: 'Autor' },
-				{ key: 'publisher', label: 'Editorial' },
+				{key: 'autor', label: 'Autor'},
+				{key: 'publisher', label: 'Editorial'},
 				// { key: 'isbn', label: 'ISBN' },
 				// { key: 'year', label: 'Año' },
-				{ key: 'genre', label: 'Género' },
-				{ key: 'stock', label: 'Existencia', custom_row: customRow },
+				{key: 'genre', label: 'Género'},
+				{key: 'stock', label: 'Existencia', custom_row: customRow},
 			]}
 			onPageChange={onPageChange}
 			{...booksData}
-		></Datatable>
+		/>
 	</AdminLayout>;
 }
 
 export async function getServerSideProps() {
+	// console.log(context);
 	let books = null, error = null;
+	// use
 
 	await bookService.getAll()
 		.then(function (response) {

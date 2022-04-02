@@ -1,8 +1,23 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 import { bookService } from "../../services";
+import {useState} from "react";
 
 function Fees({ fees, error }) {
+	const [booksData, setBooksData] = useState(fees);
+
+	const onPageChange = async (page) => {
+		await bookService.getAll({ page: page })
+			.then(function (response) {
+				if (response.status == 200) {
+					setBooksData(response.data?.books)
+				}
+			})
+			.catch(async (errors) => {
+				console.error(errors.response?.data);
+			});
+	}
+
 	return <AdminLayout>
 		<Datatable
 			header={'Cobros o cargos'}
@@ -17,9 +32,9 @@ function Fees({ fees, error }) {
 				{ key: 'available', label: 'Disponibilidad' },
 				{ key: 'stock', label: 'stock' },
 			]}
-			data={fees}
-			totalCount={33}
-		></Datatable>
+			onPageChange={onPageChange}
+			{...booksData}
+		/>
 	</AdminLayout>;
 }
 

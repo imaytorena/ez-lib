@@ -1,8 +1,23 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 import { bookService } from "../../services";
+import {useState} from "react";
 
 function Penalties({ penalties }) {
+	const [booksData, setBooksData] = useState(penalties);
+
+	const onPageChange = async (page) => {
+		await bookService.getAll({ page: page })
+			.then(function (response) {
+				if (response.status == 200) {
+					setBooksData(response.data?.books)
+				}
+			})
+			.catch(async (errors) => {
+				console.error(errors.response?.data);
+			});
+	}
+
 	return <AdminLayout>
 		<Datatable
 			header={'Penalizaciones'}
@@ -12,14 +27,15 @@ function Penalties({ penalties }) {
 				{key: 'details', label: 'Detalles'},
 				{key: 'total', label: 'Total'},
 			]}
-			data={penalties}
-			totalCount={33}
-		></Datatable>
+			onPageChange={onPageChange}
+			{...booksData}
+		/>
 	</AdminLayout>;
 }
 
-export async function getStaticProps() {
-	let penalties, error;
+
+export async function getServerSideProps() {
+	let penalties = null, error = null;
 
 	await bookService.getAll()
 		.then(function (response) {

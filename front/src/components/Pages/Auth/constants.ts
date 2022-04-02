@@ -7,7 +7,7 @@ export const genres = [
 ];
 
 export const loginSchema = yup.object().shape({
-    'credentials': yup.string().required('El nombre de usuario es requerido'),
+    'email': yup.string().required('El nombre de usuario o correo es requerido'),
     'password': yup.string().required('Proporcione una contraseña.')
         .min(8, 'La contraseña es muy corta (8 caracteres minimo)')
         .matches(

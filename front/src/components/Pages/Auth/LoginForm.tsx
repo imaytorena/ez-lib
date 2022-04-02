@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    HStack,
     Stack,
     useToast
 } from '@chakra-ui/react';
@@ -15,7 +14,7 @@ import { User } from '../../../constants';
 import { authService } from '../../../services';
 
 import { Input, PasswordInput } from '../../FormElements'
-import { signupSchema } from './constants';
+import { loginSchema } from './constants';
 
 interface LoginProps {
     element?: User;
@@ -27,20 +26,19 @@ const LoginForm = ({ element = null }: LoginProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState, reset, setError } = useForm({
-        resolver: yupResolver(signupSchema)
+        resolver: yupResolver(loginSchema)
     });
     const { errors } = formState;
 
     const handleLogin: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
-        authService.login(values)
+        // TODO:https://dev.to/mabaranowski/nextjs-authentication-jwt-refresh-token-rotation-with-nextauthjs-5696
+        await authService.login(values)
             .then(function (response) {
-                console.log(response)
                 if (response.status == 201) {
-                    console.log(response.data)
-                    // router.push(`/users/${response.data?.user?.id}`)
+                    router.push(`/books`);
                     toast({
-                        description: response.data?.message || "Se creó exitosamente el usuario ",
+                        description: response.data?.message || "Se inicio exitosamente la sesión ",
                         status: "success",
                         position: "bottom",
                         duration: 4000,
@@ -66,18 +64,13 @@ const LoginForm = ({ element = null }: LoginProps) => {
                 });
             });
         setIsLoading(false);
-    }, [toast, setError]);
+    }, [router, toast, setError]);
 
     useEffect(() => {
         if (!!element) {
             reset({
-                username: element.username,
-                password: element.password,
-                code: element.code,
                 email: element.email,
-                name: element.name,
-                last_name: element.last_name,
-                genre: element.genre
+                password: element.password,
             });
         }
     }, [element, reset])
@@ -89,8 +82,8 @@ const LoginForm = ({ element = null }: LoginProps) => {
                 label="Usuario o Correo electrónico"
                 isRequired
 
-                error={errors.name}
-                {...register('credentials')}
+                error={errors.email}
+                {...register('email')}
             />
             <PasswordInput
                 label="Contraseña"
@@ -112,7 +105,7 @@ const LoginForm = ({ element = null }: LoginProps) => {
                     }}
                     isLoading={isLoading}
                 >
-                    Iniciar Sesion
+                    Iniciar Sesión
                 </Button>
             </Stack>
         </Box>

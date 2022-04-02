@@ -30,9 +30,11 @@ class RoleFactory extends Factory
         
         return $this->afterCreating(function (Role $role) {
             // creates two book copies
-            $permission = Permission::factory()->count(1)->create();
+            $permission = Permission::factory()->create();
+            $a = $permission->ids;
             // $role->permissions()->attach($permission[0]["id"], ['active_actions' => decbin(15)]);
-            $role->givePermissionTo("crud", bindec("1111111"));
+            // $role->givePermissionTo("crud", bindec("1111111"));
+            $role->syncWi($a);
         });
     }
 }

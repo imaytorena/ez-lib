@@ -7,6 +7,7 @@ export default function SignupCard() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (<>
+		<SwitchTheme fixed />
 		<AuthContainer>
 			<HeaderText title={"Registrar un nuevo usuario"} />
 			<FormContainer>
@@ -17,7 +18,6 @@ export default function SignupCard() {
 				/>
 			</FormContainer>
 		</AuthContainer>
-		<SwitchTheme />
 	</>
 
 	);

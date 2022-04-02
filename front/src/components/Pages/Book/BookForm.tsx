@@ -39,8 +39,24 @@ const BookForm = ({ element = null }: BookFormProps) => {
     const watchAvailable = watch("available");
 
     const onCancel = () => {
-        router.push("/books");
+        return router.push("/books").then(r => r);
     }
+
+    useEffect(() => {
+        if (!!element) {
+            reset({
+                title: element.title,
+                description: element.description,
+                autor: element.autor,
+                publisher: element.publisher,
+                isbn: element.isbn,
+                year: element.year,
+                genre: element.genre,
+                available: element.available,
+                stock: element.stock,
+            });
+        }
+    }, [element, reset]);
 
     useEffect(() => {
         console.log(copiesState);

@@ -7,7 +7,6 @@ interface AdminLayout extends BoxProps {
     onClose: () => void;
 }
 const AdminLayout = ({ error, children }: { error?: { status?: number; message: string; }, children: ReactNode; }) => {
-
     const router = useRouter();
     const toast = useToast();
 
@@ -27,6 +26,7 @@ const AdminLayout = ({ error, children }: { error?: { status?: number; message: 
         router.push("/auth/login")
         return <></>
     }
+
 
     return (
         <SidebarWithHeader>

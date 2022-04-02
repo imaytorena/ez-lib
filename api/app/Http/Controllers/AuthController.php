@@ -16,7 +16,6 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-
     protected static function createPasswordToken($username, $password)
     {
         $client = DB::table('oauth_clients')->where('id', env('PASSPORT_PASSWORD_CLIENT_ID'))->first();
@@ -59,30 +58,25 @@ class AuthController extends Controller
             return $e;
         }
     }
+
     /**
      * Store a new user.
      *
      * @param  StoreUserRequest  $request
      * @return Response
      */
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
         try {
-            $request->validate([
-                'username' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', Rules\Password::defaults()],
-            ]);
+            $data = $request->all();
+            $data['password_unhashed'] = $data['password'];
 
-            $user = User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-                
-            $user = $request->user();
-            $token = $this->createPasswordToken($request->email, $request->password);
-            
+            $hashedPassword = bcrypt($data['password']);
+            $data['password'] = $hashedPassword;
+
+            $user = User::create($data);
+            $token = $this->createPasswordToken($data['email'], $data['password_unhashed']);
+
             return response()->json(['user' => $user, 'token' => $token, 'message' => 'Usuario registrado exitosamente'], 201);
 
         } catch (\Exception $e) {
@@ -95,11 +89,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
-        
         $credentials = $request->only(['email', 'password']);
 
         if (!Auth::attempt($credentials))
@@ -109,7 +98,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = $request->user();
+        $user = Auth::user();
         $token = $this->createPasswordToken($request->email, $request->password);
 
         return response()->json(['user' => $user, 'token' => $token]);

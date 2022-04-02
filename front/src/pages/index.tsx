@@ -80,7 +80,7 @@ export default function Home() {
 					}
 				/>
 			</Flex>
-			<SwitchTheme />
+			<SwitchTheme fixed />
 		</Stack>
 	)
 }

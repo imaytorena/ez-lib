@@ -41,14 +41,14 @@ class StoreUserRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $id = $this->route('id') ?? null;
+        // $id = $this->route('id') ?? null;
+        // \Log::info($id);
+        // $id = request()->route('id');
+        // \Log::info($id);
+        // $id = $this->route('id') ?? null;
+        $id = null;
+
         $data = $this->validationData();
-        
-        if (isset($data['password'])) {
-            // $hashedPassword = Hash::make($data['password']);
-            $hashedPassword = bcrypt($data['password']);
-            $data['password'] = $hashedPassword;
-        }
 
         if ($id) {
             $validate = $this->rules;
@@ -61,7 +61,6 @@ class StoreUserRequest extends FormRequest
                 ->first();
 
             if ($user_already_exist) {
-
                 $key_validated = array('username', 'code', 'email');
                 foreach ($key_validated as $key => $value) {
                     $validate[$value] = !($data[$value] == $user_already_exist[$value]) ? 'string|nullable' : $validate[$value];

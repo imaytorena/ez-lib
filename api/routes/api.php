@@ -30,12 +30,10 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('profile', 'UserController@profile');
-});
 
 // USERS
 Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
+    Route::get('profile', 'UserController@profile');
     Route::get('', 'UserController@index');
     Route::post('', 'UserController@create');
     Route::put('{id}', 'UserController@update');

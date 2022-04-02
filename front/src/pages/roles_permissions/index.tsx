@@ -1,5 +1,5 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
 import { roleService } from "../../services";
@@ -67,19 +67,19 @@ function RolesPermissions({ roles, error }) {
 		<Modal onClose={onClose} isOpen={isOpen} isCentered>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>{roleModalData?.name}</ModalHeader>
+				{/*<ModalHeader>{roleModalData?.name}</ModalHeader>*/}
 				<ModalCloseButton />
 				<ModalBody>
-					{roleModalData?.description}
+					{/*{roleModalData?.description}*/}
 					<br/>
 					<br/>
 					permisos:
 					<br/>
 					<br/>
 					<ul>
-						{roleModalData?.permissions?.map(p => <li key={p.id}>
-							{p.name} : {p.actions}
-						</li>)}
+						{/*{roleModalData?.permissions?.map(p => <li key={p.id}>*/}
+						{/*	{p.name} : {p.actions}*/}
+						{/*</li>)}*/}
 					</ul>
 					{/* <Lorem count={2} /> */}
 				</ModalBody>

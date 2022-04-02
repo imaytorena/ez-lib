@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { User } from '../../../constants';
+import { useUser } from '../../../context/UsersContext';
 import { authService } from '../../../services';
 
 import { Input, PasswordInput } from '../../FormElements'
@@ -24,6 +25,7 @@ interface SignupProps {
 const SignupForm = ({ element = null }: SignupProps) => {
     const toast = useToast();
     const router = useRouter();
+    const { saveUser } = useUser();
 
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, formState, reset, setError } = useForm({
@@ -33,12 +35,12 @@ const SignupForm = ({ element = null }: SignupProps) => {
 
     const handleSignup: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
-        authService.register(values)
+        await authService.register(values)
             .then(function (response) {
-                // console.log(response)
                 if (response.status == 201) {
-                    // console.log(response.data)
-                    // router.push(`/users/${response.data?.user?.id}`)
+                    saveUser(response.data);
+                    router.push(`/books`);
+                    
                     toast({
                         description: response.data?.message || "Se creó exitosamente el usuario ",
                         status: "success",
@@ -49,7 +51,7 @@ const SignupForm = ({ element = null }: SignupProps) => {
                 }
             })
             .catch(async (errors) => {
-                let responseData = errors.response?.data
+                let responseData = errors.response?.data;
                 
                 Object.keys(responseData).forEach((key) => {
                     setError(key, {
@@ -64,9 +66,11 @@ const SignupForm = ({ element = null }: SignupProps) => {
                     duration: 4000,
                     isClosable: true,
                 });
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-        setIsLoading(false);
-    }, [toast, setError]);
+    }, [saveUser, router, toast, setError]);
 
     useEffect(() => {
         if (!!element) {
@@ -81,8 +85,7 @@ const SignupForm = ({ element = null }: SignupProps) => {
             });
         }
     }, [element, reset])
-
-
+    
     return (<>
         <Box as="form" onSubmit={handleSubmit(handleSignup)}>
             <HStack spacing={4}>
