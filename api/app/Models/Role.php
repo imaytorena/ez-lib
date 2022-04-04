@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermissionsHandler;
 
 class Role extends Model
 {
-    use PermissionsHandler, HasFactory;
+    use HasPermissions, HasFactory;
 
     protected $fillable = [
         'name',
+        'label',
         'description',
     ];
 
@@ -19,7 +21,7 @@ class Role extends Model
         'created_at',
         'updated_at',
     ];
-    
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'users_roles', 'role_id', 'user_id')->withPivot('extinct');

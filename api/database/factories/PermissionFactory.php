@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Permission>
+ * @extends Factory
  */
 class PermissionFactory extends Factory
 {
@@ -17,9 +17,10 @@ class PermissionFactory extends Factory
     public function definition()
     {
         return [
-            'name' => "crud",
-            'description' => "Basic actions for a crud",
-            'actions' => json_encode(['AUDIT', 'TESTING', 'REPORTS', 'CREATE', 'READ', 'UPDATE', 'DELETE']),
+            'name' => "books",
+            'label' => "Libros",
+            'description' => "Acciones básicas para el módulo de libros",
+            'actions' => json_encode(['REPORTS', 'CREATE', 'SHOW', 'UPDATE', 'DELETE']),
         ];
     }
 }

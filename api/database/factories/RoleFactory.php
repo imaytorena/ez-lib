@@ -8,7 +8,7 @@ use App\Models\Role;
 use App\Models\Permission;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Role>
+ * @extends Factory
  */
 class RoleFactory extends Factory
 {
@@ -21,20 +21,20 @@ class RoleFactory extends Factory
     {
         return [
             'name' => "admin",
+            'label' => "Administrador",
             'description' => $this->faker->paragraph(2),
         ];
     }
 
-    public function configure()
+    public function configure(): RoleFactory
     {
-        
         return $this->afterCreating(function (Role $role) {
-            // creates two book copies
             $permission = Permission::factory()->create();
-            $a = $permission->ids;
+//            $a = $permission->ids;
             // $role->permissions()->attach($permission[0]["id"], ['active_actions' => decbin(15)]);
-            // $role->givePermissionTo("crud", bindec("1111111"));
-            $role->syncWi($a);
+             $role->givePermissionTo("books", bindec("1111111"));
+
+            return $permission;
         });
     }
 }

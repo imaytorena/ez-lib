@@ -15,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('Nombre del módulo')->unique();
+            $table->unsignedBigInteger('permission_category_id')->nullable();
+
+            $table->string('name')->comment('Nombre')->unique();
+            $table->string('label')->comment('Etiqueta para mostrar en frontend')->unique();
             $table->text('description')->comment('Descripción del módulo');
             $table->json('actions')->comment('JSON array con el nombre de cada permiso');
+
             $table->timestamps();
         });
     }

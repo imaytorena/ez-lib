@@ -25,64 +25,66 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'AuthController@register')
         ->name('register');
 
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'AuthController@logout');
-    });
+//    Route::group(['middleware' => 'auth:api'], function () {
+//        Route::get('logout', 'AuthController@logout');
+//    });
 });
 
 
 // USERS
-Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'users'], function () {
     Route::get('profile', 'UserController@profile');
     Route::get('', 'UserController@index');
     Route::post('', 'UserController@create');
     Route::put('{id}', 'UserController@update');
-    
+
     Route::get('{id}', 'UserController@getById');
-    
+
 });
 
 // ROLES
-Route::group(['prefix' => 'roles', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'roles'], function () {
     Route::get('', 'RoleController@index');
     // Route::post('', 'UserController@create');
     // Route::put('{id}', 'UserController@update');
-    
+
     Route::get('{id}', 'RoleController@getById');
-    
+
 });
 
 // BOOKS
-Route::group(['prefix' => 'books', 'middleware' => 'auth:api'], function () {
-    Route::get('', 'BookController@index');
-    Route::post('', 'BookController@create');
-    Route::put('{id}', 'BookController@update');
-    Route::delete('{id}', 'BookController@delete');
+//Route::middleware(['auth:api'])->group( function () {
+    Route::group(['prefix' => 'books'], function () {
+        Route::get('', 'BookController@index');
+        Route::post('', 'BookController@create');
+        Route::put('{id}', 'BookController@update');
+        Route::delete('{id}', 'BookController@delete');
 
-    Route::get('{id}', 'BookController@getById');
-});
+        Route::get('{id}', 'BookController@getById');
+    });
 
-// MATERIALS
-Route::group(['prefix' => 'materials', 'middleware' => 'auth:api'], function () {
-    Route::get('', 'MaterialController@index');
-    Route::post('{id}', 'MaterialController@create');
-    Route::put('{id}', 'MaterialController@update');
-    Route::delete('{id}', 'MaterialController@delete');
+    // MATERIALS
+    Route::group(['prefix' => 'materials'], function () {
+        Route::get('', 'MaterialController@index');
+        Route::post('{id}', 'MaterialController@create');
+        Route::put('{id}', 'MaterialController@update');
+        Route::delete('{id}', 'MaterialController@delete');
 
-    Route::get('{id}', 'MaterialController@getById');
-});
+        Route::get('{id}', 'MaterialController@getById');
+    });
 
-// LOANS
-Route::group(['prefix' => 'loans', 'middleware' => 'auth:api'], function () {
-    Route::get('', 'LoanController@index');
-});
+    // LOANS
+    Route::group(['prefix' => 'loans'], function () {
+        Route::get('', 'LoanController@index');
+    });
 
-// PENALTIES
-Route::group(['prefix' => 'penalties', 'middleware' => 'auth:api'], function () {
-    Route::get('', 'PenaltyController@index');
-});
+    // PENALTIES
+    Route::group(['prefix' => 'penalties'], function () {
+        Route::get('', 'PenaltyController@index');
+    });
 
-// FEES
-Route::group(['prefix' => 'fees', 'middleware' => 'auth:api'], function () {
-    Route::get('', 'FeeController@index');
-});
+    // FEES
+    Route::group(['prefix' => 'fees'], function () {
+        Route::get('', 'FeeController@index');
+    });
+//});

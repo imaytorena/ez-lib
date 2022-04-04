@@ -11,6 +11,7 @@ class Permission extends Model
 
     protected $fillable = [
         'name',
+        'label',
         'description',
         'actions',
     ];
@@ -19,7 +20,7 @@ class Permission extends Model
         'created_at',
         'updated_at',
     ];
-    
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_permissions', 'permission_id', 'role_id')->withPivot('active_actions');

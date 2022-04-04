@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('Nombre');
+            $table->string('label')->comment('Etiqueta');
             $table->text('description')->comment('Descripción');
 
             $table->timestamps();
