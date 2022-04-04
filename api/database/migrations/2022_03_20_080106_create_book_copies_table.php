@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookCopiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,7 @@ class CreateBookCopiesTable extends Migration
             $table->string('name', 50);
             $table->string('features');
             $table->timestamps();
-            
+
             $table->foreign('book_id')->references('id')->on('books');
         });
     }
@@ -34,4 +34,4 @@ class CreateBookCopiesTable extends Migration
     {
         Schema::dropIfExists('book_copies');
     }
-}
+};

@@ -29,12 +29,12 @@ class RoleFactory extends Factory
     public function configure(): RoleFactory
     {
         return $this->afterCreating(function (Role $role) {
-            $permission = Permission::factory()->create();
+//            $permission = Permission::factory()->create();
 //            $a = $permission->ids;
             // $role->permissions()->attach($permission[0]["id"], ['active_actions' => decbin(15)]);
-             $role->givePermissionTo("books", bindec("1111111"));
+//             $role->givePermissionTo("books", bindec("1111111"));
 
-            return $permission;
+//            return $permission;
         });
     }
 }
