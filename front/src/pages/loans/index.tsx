@@ -1,13 +1,13 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
-import { bookService } from "../../services";
+import { loanService } from "../../services";
 import {useState} from "react";
 
 function Loans({ loans }) {
 	const [booksData, setBooksData] = useState(loans);
 
 	const onPageChange = async (page) => {
-		await bookService.getAll({ page: page })
+		await loanService.getAll({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
 					setBooksData(response.data?.books)
@@ -32,18 +32,24 @@ function Loans({ loans }) {
 	</AdminLayout>;
 }
 
-export async function getStaticProps() {
-	let loans, error;
+export async function getServerSideProps() {
+	let loans = null, error = null;
 
-	await bookService.getAll()
+	await loanService.getAll()
 		.then(function (response) {
+			// console.log(response)
 			if (response.status == 200) {
-				loans = response.data?.books;
+				loans = response.data?.loans;
 			}
 		})
 		.catch(async (errors) => {
+			// console.error(errors.response?.data)
 			error = errors.response?.data
+			if (errors.response.status == 403) {
+				error = { status: 403, message: 'Usuario no autenticado' }
+			}
 		});
+
 	return {
 		props: {
 			loans,
