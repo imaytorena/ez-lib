@@ -8,11 +8,11 @@ use App\Models\User;
 
 class StoreUserRequest extends FormRequest
 {
-    protected array $rules =  [
+    protected array $rules = [
         'username' => 'required|string|unique:users',
         'password' => 'required',
 
-        'code' => 'string|nullable|unique:users',
+        'code' => 'string|digits_between:8,12|nullable|unique:users',
         'email' => 'email|nullable|unique:users',
         'genre' => 'nullable|in:male,female,other',
 
@@ -39,32 +39,38 @@ class StoreUserRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $id = null;
+        $id = $this->route("id") ?? null;
 
         $data = $this->validationData();
 
         if ($id) {
-            $validate = $this->rules;
+            $temp_rules = $this->rules;
+
+            // Validates unique values are not on another user
             $user_already_exist = User::query()->where('id', '!=', $id)
                 ->where(function ($query) use ($data) {
-                    $query->where('username', '=', $data['username']);
-                    $query->orWhere('code', '=', $data['code']);
-                    $query->orWhere('email', '=', $data['email']);
+                    if (isset($data['username']))
+                        $query->where('username', '=', $data['username']);
+                    if (isset($data['code']))
+                        $query->orWhere('code', '=', $data['code']);
+                    if (isset($data['email']))
+                        $query->orWhere('email', '=', $data['email']);
                 })
                 ->first();
 
-            if ($user_already_exist) {
-                $key_validated = array('username', 'code', 'email');
-                foreach ($key_validated as $key) {
-                    $validate[$key] = !($data[$key] == $user_already_exist[$key]) ? 'string|nullable' : $validate[$key];
+            $key_validated = array('username', 'code', 'email');
+            foreach ($key_validated as $key) {
+                // Remove restrictions from current key
+                $temp_rules[$key] = str_replace('|unique:users', '', $temp_rules[$key]);
+                $temp_rules[$key] = str_replace('required', 'nullable', $temp_rules[$key]);
+                // Only if exists and current key is in the request
+                if ($user_already_exist && isset($data[$key])) {
+                    if ($data[$key] == $user_already_exist[$key]) {
+                        $temp_rules[$key] = $this->rules[$key];
+                    }
                 }
-
-                $this->rules = $validate;
-            } else {
-                $this->rules["username"] = 'string';
-                $this->rules["code"] = 'string|nullable';
-                $this->rules["email"] = 'string|email|nullable';
             }
+            $this->rules = $temp_rules;
 
             $this->rules['password'] = 'nullable';
         }

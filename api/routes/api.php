@@ -27,7 +27,7 @@ Route::group(['prefix' => 'auth'], function () {
         ->name('register');
 
 //    Route::group(['middleware' => 'auth:api'], function () {
-//        Route::get('logou[', '::classAuthController, 'logout']);
+//        Route::get('logout', [AuthController::class, 'logout']);
 //    });
 });
 
@@ -38,6 +38,7 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('', [UserController::class, 'index']);
     Route::post('', [UserController::class, 'create']);
     Route::put('{id}', [UserController::class, 'update']);
+    Route::delete('{id}', [UserController::class, 'delete']);
 
     Route::get('{id}', [UserController::class, 'getById']);
 

@@ -74,11 +74,8 @@ class UserController extends Controller
             $user->fill($request->all());
             $user->save();
 
-            // return successful response
             return response()->json(['user' => $user, 'message' => 'Usuario editado exitosamente']);
-
         } catch (Exception $e) {
-            //return error message
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
@@ -97,10 +94,8 @@ class UserController extends Controller
             $user->delete();
             $user->save();
 
-            // return successful response
             return response()->json(['user' => $user, 'message' => 'Usuario eliminado exitosamente']);
         } catch (Exception $e) {
-            //return error message
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
