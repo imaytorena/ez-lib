@@ -11,13 +11,13 @@ class StoreBookRequest extends FormRequest
     protected $rules =  [
         'title' => 'string|required',
         'description' => 'string|nullable',
-        
+
         'autor' => 'string|required',
         'publisher' => 'string|required',
         'isbn' => 'digits:10|required|unique:books',
 
         'genre' => 'string|required',
-        
+
         'available' => 'boolean|required',
         'stock' => 'nullable',
     ];
@@ -41,15 +41,15 @@ class StoreBookRequest extends FormRequest
     {
         $id = null;
         $data = $this->validationData();
-        
+
         // \Log::info($this->route());
         // \Log::info($id);
         // \Log::info($data);
         // \Log::info($this->route());
-        
+
         $data['isbn'] = isset($data['isbn']) ? (int) $data['isbn'] : null;
         $data['year'] = isset($data['year']) ? (int) $data['year'] : null;
-        
+
 
         // Edits on rule validations
         if (isset($data['available']) && $data['available']) {
@@ -62,13 +62,12 @@ class StoreBookRequest extends FormRequest
         if ($id) {
             // Validations when is update method
         }
-        
+
         $this->cleanData();
         $data = $this->utilities->cleanEmptysAndNULLKeys($data);
         $data = $this->utilities->cleanKeys($data, $this->rules);
-        
+
         $this->merge($data);
-        \Log::info($this);
     }
 
     /**

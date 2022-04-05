@@ -32,10 +32,10 @@ class BookController extends Controller
         } else {
             $books = $books->get();
         }
-        
+
         return response()->json(['books' =>  $books], 200);
     }
-    
+
     /**
      * Store a new book.
      *x
@@ -76,7 +76,7 @@ class BookController extends Controller
             return response()->json(['message' => 'book not found!'], 404);
         }
     }
-    
+
     /**
      * Delete a book.
      *
@@ -96,7 +96,7 @@ class BookController extends Controller
             return response()->json(['message' => 'book not found!'], 404);
         }
     }
-    
+
     /**
      * Get one book.
      *

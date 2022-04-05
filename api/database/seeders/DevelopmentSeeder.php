@@ -22,6 +22,6 @@ class DevelopmentSeeder extends Seeder
         User::factory()->count(10)->create();
         Book::factory()->count(10)->create();
         Material::factory()->count(10)->create();
-        Role::factory()->count(1)->create();
+//        Role::factory()->count(1)->create();
     }
 }

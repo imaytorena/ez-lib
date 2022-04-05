@@ -76,6 +76,7 @@ Route::group(['prefix' => 'roles'], function () {
     // LOANS
     Route::group(['prefix' => 'loans'], function () {
         Route::get('', 'LoanController@index');
+        Route::post('', 'LoanController@create');
     });
 
     // PENALTIES
