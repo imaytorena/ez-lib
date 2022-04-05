@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 use App\Http\Requests\StoreModel\StoreUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -23,9 +25,10 @@ class UserController extends Controller
     /**
      * Get all User.
      *
-     * @return Response
+     * @param bool $paginate
+     * @return JsonResponse
      */
-    public function index(Request $request, $paginate=true)
+    public function index(bool $paginate=true): JsonResponse
     {
         $users = User::query();
 
@@ -34,27 +37,24 @@ class UserController extends Controller
         } else {
             $users = $users->get();
         }
-        
-        return response()->json(['users' =>  $users], 200);
+
+        return response()->json(['users' =>  $users]);
     }
 
     /**
      * Store a new user.
      *
      * @param  StoreUserRequest  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function create(StoreUserRequest $request)
+    public function create(StoreUserRequest $request): JsonResponse
     {
         try {
-            $user = User::create($request->all());
-
+            $user = User::query()->create($request->all());
             $user->save();
-            // return successful response
-            return response()->json(['user' => $user, 'message' => 'Usuario creado exitosamente'], 201);
 
-        } catch (\Exception $e) {
-            //return error message
+            return response()->json(['user' => $user, 'message' => 'Usuario creado exitosamente'], 201);
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
@@ -62,62 +62,64 @@ class UserController extends Controller
     /**
      * Update a user.
      *
-     * @param  UpdateUserRequest  $request
-     * @return Response
+     * @param $id
+     * @param StoreUserRequest $request
+     * @return JsonResponse
      */
-    public function update($id, StoreUserRequest $request)
+    public function update($id, StoreUserRequest $request): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
-            
+            $user = User::query()->findOrFail($id);
+
             $user->fill($request->all());
             $user->save();
-            
-            // return successful response
-            return response()->json(['user' => $user, 'message' => 'Usuario editado exitosamente'], 201);
 
-        } catch (\Exception $e) {
+            // return successful response
+            return response()->json(['user' => $user, 'message' => 'Usuario editado exitosamente']);
+
+        } catch (Exception $e) {
             //return error message
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
-    
+
     /**
      * Delete a user.
      *
-     * @param  Request  $request
-     * @return Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function delete($id, Request $request)
+    public function delete($id): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
-            
+            $user = User::query()->findOrFail($id);
+
             $user->delete();
             $user->save();
-            
+
             // return successful response
-            return response()->json(['user' => $user, 'message' => 'Usuario eliminado exitosamente'], 201);
-        } catch (\Exception $e) {
+            return response()->json(['user' => $user, 'message' => 'Usuario eliminado exitosamente']);
+        } catch (Exception $e) {
             //return error message
             return response()->json(['message' => $e->getMessage()], 409);
         }
     }
-    
+
     /**
      * Get one user.
      *
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function getById($id)
+    public function getById(int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::query()->findOrFail($id);
 
-            return response()->json(['user' => $user], 200);
+            return response()->json(['user' => $user]);
 
-        } catch (\Exception $e) {
-
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
     }
@@ -125,10 +127,10 @@ class UserController extends Controller
     /**
      * Get the authenticated User.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function profile()
+    public function profile(): JsonResponse
     {
-        return response()->json(['user' => Auth::user()], 200);
+        return response()->json(['user' => Auth::user()]);
     }
 }

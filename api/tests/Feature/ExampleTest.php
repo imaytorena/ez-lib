@@ -18,4 +18,16 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function test_api_route_returns_a_successful_response()
+    {
+        $response = $this->get('/api');
+
+        $response->assertStatus(200);
+    }
 }

@@ -3,24 +3,22 @@
 namespace App\Http\Requests\StoreModel;
 
 use App\Http\Requests\FormRequest;
-use App\Classes\Utilities;
-use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 
 class StoreUserRequest extends FormRequest
 {
-    protected $rules =  [
+    protected array $rules =  [
         'username' => 'required|string|unique:users',
         'password' => 'required',
-        
+
         'code' => 'string|nullable|unique:users',
         'email' => 'email|nullable|unique:users',
         'genre' => 'nullable|in:male,female,other',
 
         'name' => 'string|nullable',
         'last_name' => 'string|nullable',
-        
+
         'phone' => 'string|nullable|min:10|max:14',
     ];
 
@@ -41,18 +39,13 @@ class StoreUserRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // $id = $this->route('id') ?? null;
-        // \Log::info($id);
-        // $id = request()->route('id');
-        // \Log::info($id);
-        // $id = $this->route('id') ?? null;
         $id = null;
 
         $data = $this->validationData();
 
         if ($id) {
             $validate = $this->rules;
-            $user_already_exist = User::where('id', '!=', $id)
+            $user_already_exist = User::query()->where('id', '!=', $id)
                 ->where(function ($query) use ($data) {
                     $query->where('username', '=', $data['username']);
                     $query->orWhere('code', '=', $data['code']);
@@ -62,8 +55,8 @@ class StoreUserRequest extends FormRequest
 
             if ($user_already_exist) {
                 $key_validated = array('username', 'code', 'email');
-                foreach ($key_validated as $key => $value) {
-                    $validate[$value] = !($data[$value] == $user_already_exist[$value]) ? 'string|nullable' : $validate[$value];
+                foreach ($key_validated as $key) {
+                    $validate[$key] = !($data[$key] == $user_already_exist[$key]) ? 'string|nullable' : $validate[$key];
                 }
 
                 $this->rules = $validate;
@@ -72,10 +65,10 @@ class StoreUserRequest extends FormRequest
                 $this->rules["code"] = 'string|nullable';
                 $this->rules["email"] = 'string|email|nullable';
             }
-            
+
             $this->rules['password'] = 'nullable';
         }
-        
+
         $this->cleanData();
         $data = $this->utilities->cleanEmptysAndNULLKeys($data);
         $data = $this->utilities->cleanKeys($data, $this->rules);

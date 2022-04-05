@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,72 +21,72 @@ Route::group(['prefix' => 'auth'], function () {
         return response()->json(['message' => 'Usuario no autorizado'], 403);
     })->name('unauthenticated');
 
-    Route::post('login', 'AuthController@login')
+    Route::post('login', [AuthController::class, 'login'])
         ->name('login');
-    Route::post('register', 'AuthController@register')
+    Route::post('register', [AuthController::class, 'register'])
         ->name('register');
 
 //    Route::group(['middleware' => 'auth:api'], function () {
-//        Route::get('logout', 'AuthController@logout');
+//        Route::get('logou[', '::classAuthController, 'logout']);
 //    });
 });
 
 
 // USERS
 Route::group(['prefix' => 'users'], function () {
-    Route::get('profile', 'UserController@profile');
-    Route::get('', 'UserController@index');
-    Route::post('', 'UserController@create');
-    Route::put('{id}', 'UserController@update');
+    Route::get('profile', [UserController::class, 'profile']);
+    Route::get('', [UserController::class, 'index']);
+    Route::post('', [UserController::class, 'create']);
+    Route::put('{id}', [UserController::class, 'update']);
 
-    Route::get('{id}', 'UserController@getById');
+    Route::get('{id}', [UserController::class, 'getById']);
 
 });
 
 // ROLES
 Route::group(['prefix' => 'roles'], function () {
-    Route::get('', 'RoleController@index');
-    // Route::post('', 'UserController@create');
-    // Route::put('{id}', 'UserController@update');
+    Route::get('', [RoleController::class, 'index']);
+    // Route::pos[('', '::classUserController, 'create']);
+    // Route::put('{i[}', '::classUserController, 'update']);
 
-    Route::get('{id}', 'RoleController@getById');
+    Route::get('{id}', [RoleController::class, 'getById']);
 
 });
 
 // BOOKS
 //Route::middleware(['auth:api'])->group( function () {
-    Route::group(['prefix' => 'books'], function () {
-        Route::get('', 'BookController@index');
-        Route::post('', 'BookController@create');
-        Route::put('{id}', 'BookController@update');
-        Route::delete('{id}', 'BookController@delete');
+Route::group(['prefix' => 'books'], function () {
+    Route::get('', [BookController::class, 'index']);
+    Route::post('', [BookController::class, 'create']);
+    Route::put('{id}', [BookController::class, 'update']);
+    Route::delete('{id}', [BookController::class, 'delete']);
 
-        Route::get('{id}', 'BookController@getById');
-    });
+    Route::get('{id}', [BookController::class, 'getById']);
+});
 
-    // MATERIALS
-    Route::group(['prefix' => 'materials'], function () {
-        Route::get('', 'MaterialController@index');
-        Route::post('{id}', 'MaterialController@create');
-        Route::put('{id}', 'MaterialController@update');
-        Route::delete('{id}', 'MaterialController@delete');
+// MATERIALS
+Route::group(['prefix' => 'materials'], function () {
+    Route::get('', [MaterialController::class, 'index']);
+    Route::post('{id}', [MaterialController::class, 'create']);
+    Route::put('{id}', [MaterialController::class, 'update']);
+    Route::delete('{id}', [MaterialController::class, 'delete']);
 
-        Route::get('{id}', 'MaterialController@getById');
-    });
+    Route::get('{id}', [MaterialController::class, 'getById']);
+});
 
-    // LOANS
-    Route::group(['prefix' => 'loans'], function () {
-        Route::get('', 'LoanController@index');
-        Route::post('', 'LoanController@create');
-    });
+// LOANS
+Route::group(['prefix' => 'loans'], function () {
+    Route::get('', [LoanController::class, 'index']);
+    Route::post('', [LoanController::class, 'create']);
+});
 
-    // PENALTIES
-    Route::group(['prefix' => 'penalties'], function () {
-        Route::get('', 'PenaltyController@index');
-    });
+// PENALTIES
+Route::group(['prefix' => 'penalties'], function () {
+    Route::get('', [PenaltyController::class, 'index']);
+});
 
-    // FEES
-    Route::group(['prefix' => 'fees'], function () {
-        Route::get('', 'FeeController@index');
-    });
+// FEES
+Route::group(['prefix' => 'fees'], function () {
+    Route::get('', [FeeController::class, 'index']);
+});
 //});
