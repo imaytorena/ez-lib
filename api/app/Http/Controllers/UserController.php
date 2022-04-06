@@ -83,10 +83,10 @@ class UserController extends Controller
     /**
      * Delete a user.
      *
-     * @param $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function delete($id): JsonResponse
+    public function delete(int $id): JsonResponse
     {
         try {
             $user = User::query()->findOrFail($id);
