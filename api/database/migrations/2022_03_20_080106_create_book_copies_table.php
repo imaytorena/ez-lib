@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('features');
             $table->timestamps();
 
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->foreign('book_id')
+                ->references('id')
+                ->on('books')
+                ->onDelete('cascade');;
         });
     }
 

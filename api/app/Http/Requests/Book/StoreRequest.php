@@ -1,14 +1,13 @@
 <?php
-namespace App\Http\Requests\StoreModel;
+
+namespace App\Http\Requests\Book;
 
 use App\Http\Requests\FormRequest;
-use App\Classes\Utilities;
+use Carbon\Carbon;
 
-use App\Models\Book;
-
-class StoreBookRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
-    protected $rules =  [
+    protected array $rules = [
         'title' => 'string|required',
         'description' => 'string|nullable',
 
@@ -39,29 +38,18 @@ class StoreBookRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $id = null;
         $data = $this->validationData();
-
-        // \Log::info($this->route());
-        // \Log::info($id);
-        // \Log::info($data);
-        // \Log::info($this->route());
 
         $data['isbn'] = isset($data['isbn']) ? (int) $data['isbn'] : null;
         $data['year'] = isset($data['year']) ? (int) $data['year'] : null;
-
 
         // Edits on rule validations
         if (isset($data['available']) && $data['available']) {
             $this->rules['stock'] = 'integer|required';
         }
-        $date = \Carbon\Carbon::tomorrow()->year;
-        $this->rules['year'] = 'integer|required|digits:4|max:'.($date);
 
-        // Validations when is update method
-        if ($id) {
-            // Validations when is update method
-        }
+        $date = Carbon::tomorrow()->year;
+        $this->rules['year'] = 'integer|required|digits:4|max:'.($date);
 
         $this->cleanData();
         $data = $this->utilities->cleanEmptysAndNULLKeys($data);

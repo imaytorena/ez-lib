@@ -31,19 +31,6 @@ Route::group(['prefix' => 'auth'], function () {
 //    });
 });
 
-
-// USERS
-Route::group(['prefix' => 'users'], function () {
-    Route::get('profile', [UserController::class, 'profile']);
-    Route::get('', [UserController::class, 'index']);
-    Route::post('', [UserController::class, 'create']);
-    Route::put('{id}', [UserController::class, 'update']);
-    Route::delete('{id}', [UserController::class, 'delete']);
-
-    Route::get('{id}', [UserController::class, 'getById']);
-
-});
-
 // ROLES
 Route::group(['prefix' => 'roles'], function () {
     Route::get('', [RoleController::class, 'index']);
@@ -54,25 +41,37 @@ Route::group(['prefix' => 'roles'], function () {
 
 });
 
-// BOOKS
 //Route::middleware(['auth:api'])->group( function () {
+
+// USERS
+Route::group(['prefix' => 'users'], function () {
+    Route::get('profile', [UserController::class, 'profile']);
+    Route::get('', [UserController::class, 'index']);
+    Route::get('all', [UserController::class, 'all']);
+    Route::post('', [UserController::class, 'create']);
+    Route::put('{id}', [UserController::class, 'update']);
+    Route::get('{id}', [UserController::class, 'getById']);
+    Route::delete('{id}', [UserController::class, 'delete']);
+});
+
+// BOOKS
 Route::group(['prefix' => 'books'], function () {
     Route::get('', [BookController::class, 'index']);
+    Route::get('all', [BookController::class, 'all']);
     Route::post('', [BookController::class, 'create']);
     Route::put('{id}', [BookController::class, 'update']);
-    Route::delete('{id}', [BookController::class, 'delete']);
-
     Route::get('{id}', [BookController::class, 'getById']);
+    Route::delete('{id}', [BookController::class, 'delete']);
 });
 
 // MATERIALS
 Route::group(['prefix' => 'materials'], function () {
     Route::get('', [MaterialController::class, 'index']);
-    Route::post('{id}', [MaterialController::class, 'create']);
+    Route::get('all', [MaterialController::class, 'all']);
+    Route::post('', [MaterialController::class, 'create']);
     Route::put('{id}', [MaterialController::class, 'update']);
-    Route::delete('{id}', [MaterialController::class, 'delete']);
-
     Route::get('{id}', [MaterialController::class, 'getById']);
+    Route::delete('{id}', [MaterialController::class, 'delete']);
 });
 
 // LOANS

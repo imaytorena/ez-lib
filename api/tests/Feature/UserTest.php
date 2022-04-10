@@ -21,25 +21,53 @@ class UserTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonStructure([
-                    'users' => [
-                        'data' => [
-                            [
-                                'id',
-                                'username',
-                                'code',
-                                'email',
-                                'tipo',
-                                'name',
-                                'last_name',
-                                'status',
-                                'genre',
-                                'phone',
-                                'email_verified_at',
-                                'created_at',
-                                'updated_at',
-                            ]
-                        ],
+                    'data' => [
+                        [
+                            'id',
+                            'username',
+                            'code',
+                            'email',
+                            'tipo',
+                            'name',
+                            'last_name',
+                            'status',
+                            'genre',
+                            'phone',
+                            'email_verified_at',
+                            'created_at',
+                            'updated_at',
+                        ]
                     ],
+                ]
+            );
+    }
+
+    /**
+     * User list method must return a paginated list
+     *
+     * @return void
+     */
+    public function test_all()
+    {
+        $response = $this->getJSON("$this->base_url/all");
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                    [
+                        'id',
+                        'username',
+                        'code',
+                        'email',
+                        'tipo',
+                        'name',
+                        'last_name',
+                        'status',
+                        'genre',
+                        'phone',
+                        'email_verified_at',
+                        'created_at',
+                        'updated_at',
+                    ]
                 ]
             );
     }

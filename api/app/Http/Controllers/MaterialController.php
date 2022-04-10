@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
+
+use App\Http\Requests\Material\UpdateRequest;
+use App\Http\Requests\Material\StoreRequest;
 use App\Models\Material;
 
 class MaterialController extends Controller
 {
-     /**
-     * Instantiate a new UserController instance.
+    /**
+     * Instantiate a new MaterialController instance.
      *
      * @return void
      */
@@ -18,100 +22,101 @@ class MaterialController extends Controller
     }
 
     /**
-     * Get all User.
+     * Get all Materials on a datatable format.
      *
-     * @return Response
+     * @param bool $paginate
+     * @return JsonResponse
      */
-    public function index(Request $request, $paginate=true)
+    public function index(bool $paginate=true): JsonResponse
     {
-
         $materials = Material::query();
         if ($paginate) {
             $materials = $materials->paginate(10);
         } else {
             $materials = $materials->get();
         }
-        
-        return response()->json(['materials' =>  $materials], 200);
+        return response()->json($materials);
     }
-    
+
+    /**
+     * Get all Material.
+     *
+     * @return JsonResponse
+     */
+    public function all(): JsonResponse
+    {
+        return $this->index(false);
+    }
+
     /**
      * Store a new material.
-     *
-     * @param  Request  $request
-     * @return Response
+     *x
+     * @param StoreRequest $request
+     * @return JsonResponse
      */
-    public function create(Request $request)
+    public function create(StoreRequest $request): JsonResponse
     {
         try {
-            $material = Material::create($request->all());
+            $material = Material::query()->create($request->all());
 
-            return response()->json(['material' => $material], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'material not found!'], 404);
+            return response()->json(['material' => $material], 201);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al crear el material', 'error' => $e->getMessage()], 400);
         }
     }
 
     /**
      * Update a material.
      *
-     * @param  Request  $request
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @param UpdateRequest $request
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(int $id, UpdateRequest $request): JsonResponse
     {
         try {
-            // $material = Material::create($request->all());
-            $material = Material::find($id);
+            $material = Material::query()->findOrFail($id);
+            $material->fill($request->all());
+            $material->save();
 
-            return response()->json(['material' => $material], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'material not found!'], 404);
+            return response()->json(['material' => $material]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al actualizar el material', 'error' => $e->getMessage()], 400);
         }
     }
-    
+
+
     /**
      * Delete a material.
      *
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function delete($id)
+    public function delete(int $id): JsonResponse
     {
         try {
-            // $material = Material::create($request->all());
-            $material = Material::find($id);
+            $material = Material::query()->findOrFail($id);
+            $material->delete();
 
-            return response()->json(['material' => $material], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'material not found!'], 404);
+            return response()->json(['material' => $material, 'message' => 'Material eliminado exitosamente']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al eliminar el material', 'error' => $e->getMessage()], 400);
         }
     }
-    
+
     /**
      * Get one material.
      *
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function getById($id)
+    public function getById(int $id): JsonResponse
     {
         try {
-            $material = Material::findOrFail($id);
-
-            return response()->json(['material' => $material], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'material not found!'], 404);
+            $material = Material::query()->findOrFail($id);
+            return response()->json(['material' => $material]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'No se pudo encontrar el material', 'error' => $e->getMessage()], 404);
         }
-
     }
 }

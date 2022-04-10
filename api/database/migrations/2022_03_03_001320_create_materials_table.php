@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('details')->nullable()->comment('Detalles opcional');
             $table->string('brand')->nullable()->comment('Marca');
             $table->string('model')->nullable()->comment('Modelo');
-            $table->enum('status', ['ok', 'has_details', 'new'])->default('ok')->nullable()->comment('Estado');
+            $table->enum('status', ['ok', 'has_some_details', 'new'])->default('ok')->nullable()->comment('Estado');
             $table->timestamps();
         });
     }

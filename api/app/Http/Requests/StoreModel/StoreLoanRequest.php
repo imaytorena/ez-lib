@@ -33,7 +33,7 @@ class StoreLoanRequest extends FormRequest
     protected function prepareForValidation()
     {
         $data = $this->validationData();
-        $data['status'] =  "right";
+        $data['status'] =  "ok";
 
         if(!isset($data['return_date'])) {
             $data['return_date'] =  Carbon::now()->addWeeks(2);

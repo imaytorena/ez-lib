@@ -19,7 +19,7 @@ class LoanObserver
         Devolution::create([
             'loan_id' => $loan->id,
             'return_date' => Carbon::now()->addWeek(2),
-            'status_snapshot' => "right",
+            'status_snapshot' => "ok",
             'active' => 1,
         ]);
     }

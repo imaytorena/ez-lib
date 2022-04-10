@@ -16,7 +16,7 @@ return new class  extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->enum('status', ['right', 'extension', 'overtime', 'cancelled'])->default('right')->comment('Estado actual del prestamo');
+            $table->enum('status', ['ok', 'extension', 'overtime', 'cancelled'])->default('ok')->comment('Estado actual del prestamo');
             $table->string('details')->nullable()->comment('Detalles opcional');
             $table->timestamps();
 

@@ -29,11 +29,14 @@ class ChangeLoanStatus extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->info('iniciamos procedimiento para eliminar snapshots');
 
-        $pasts_devolution = Devolution::query()->whereDate('return_date', '<', Carbon::now())->where('status_snapshot', '!=','cancelled')->where('active', '=', 1)->get();
+        $pasts_devolution = Devolution::query()
+            ->whereDate('return_date', '<', Carbon::now())->where('status_snapshot', '!=','cancelled')
+            ->where('active', '=', 1)
+            ->get();
 
         $this->info("Devolutions to be updated : ".count($pasts_devolution));
 
@@ -44,6 +47,7 @@ class ChangeLoanStatus extends Command
 
             $this->info("Loan (".$obj_created['loan']->id.") updated : Devolution status from (".$devolution->status_snapshot.") to (".$obj_created['devolution']->status_snapshot.")");
         });
+
         return 0;
     }
 }

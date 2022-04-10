@@ -10,7 +10,7 @@ use App\Models\Loan;
  */
 class LoanService
 {
-    protected static array $status = [ 'right', 'extension', 'overtime', 'cancelled' ];
+    protected static array $status = [ 'ok', 'extension', 'overtime', 'cancelled' ];
 
 
     /**

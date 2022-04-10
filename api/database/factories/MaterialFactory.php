@@ -17,7 +17,7 @@ class MaterialFactory extends Factory
             'details' => $this->faker->sentence(3),
             'brand' => $this->faker->company(),
             'model' => $this->faker->countryISOAlpha3(),
-            'status' => $this->faker->randomElement(['ok', 'has_details', 'new']),
+            'status' => $this->faker->randomElement(['ok', 'has_some_details', 'new']),
     	];
     }
 }

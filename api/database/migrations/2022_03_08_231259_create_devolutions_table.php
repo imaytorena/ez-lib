@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('loan_id');
             $table->date('return_date')->comment('Fecha de termino del plazo');
-            $table->enum('status_snapshot', ['right', 'extension', 'overtime', 'cancelled'])->default('right')->comment('Copia del estado en el que se hizo');
+            $table->enum('status_snapshot', ['ok', 'extension', 'overtime', 'cancelled'])->default('ok')->comment('Copia del estado en el que se hizo');
             $table->boolean('active')->comment('Está activa esta devolución o no');
             $table->timestamps();
 

@@ -20,7 +20,7 @@ class LoanFactory extends Factory
         $object = $objectType::factory()->create();
 
         // $status = $this->faker->randomElement(['right', 'extension', 'overtime', 'cancelled']);
-        $status = "right";
+        $status = "ok";
         return [
             'user_id' => User::all()->random()->id,
             'object_type' => $objectType,

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
-use App\Http\Requests\StoreModel\StoreBookRequest;
+use App\Http\Requests\Book\UpdateRequest;
+use App\Http\Requests\Book\StoreRequest;
 use App\Models\Book;
 
 class BookController extends Controller
@@ -20,100 +22,102 @@ class BookController extends Controller
     }
 
     /**
-     * Get all Book.
+     * Get all Books on a datatable format.
      *
-     * @return Response
+     * @param bool $paginate
+     * @return JsonResponse
      */
-    public function index(Request $request, $paginate=true)
+    public function index(bool $paginate=true): JsonResponse
     {
         $books = Book::query();
         if ($paginate) {
             $books = $books->paginate(10);
+        return response()->json(['books' =>  $books]);
         } else {
             $books = $books->get();
+            return response()->json($books);
         }
+    }
 
-        return response()->json(['books' =>  $books], 200);
+    /**
+     * Get all Book.
+     *
+     * @return JsonResponse
+     */
+    public function all(): JsonResponse
+    {
+        return $this->index(false);
     }
 
     /**
      * Store a new book.
      *x
-     * @param  Request  $request
-     * @return Response
+     * @param StoreRequest $request
+     * @return JsonResponse
      */
-    public function create(StoreBookRequest $request)
+    public function create(StoreRequest $request): JsonResponse
     {
-        // $user()->can('books', '10000');
-        // $user()->can('Edit books');
         try {
-            $book = Book::create($request->all());
+            $book = Book::query()->create($request->all());
 
             return response()->json(['book' => $book], 201);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al crear el libro', 'error' => $e->getMessage()], 400);
         }
     }
 
     /**
      * Update a book.
      *
-     * @param  Request  $request
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @param UpdateRequest $request
+     * @return JsonResponse
      */
-    public function update($id, StoreBookRequest $request)
+    public function update(int $id, UpdateRequest $request): JsonResponse
     {
         try {
-            // $book = Book::create($request->all());
-            // $book = Book::findOrFail($id);
+            $book = Book::query()->findOrFail($id);
+            $book->fill($request->all());
+            $book->save();
 
-            // return response()->json(['book' => $book], 200);
-            return response()->json(['book' => "book"], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'book not found!'], 404);
+            return response()->json(['book' => $book]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al actualizar el libro', 'error' => $e->getMessage()], 400);
         }
     }
+
 
     /**
      * Delete a book.
      *
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function delete($id)
+    public function delete(int $id): JsonResponse
     {
         try {
-            // $book = Book::create($request->all());
-            $book = Book::find($id);
+            $book = Book::query()->findOrFail($id);
+            $book->delete();
 
-            return response()->json(['book' => $book], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'book not found!'], 404);
+            return response()->json(['book' => $book, 'message' => 'Libro eliminado exitosamente']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al eliminar el libro', 'error' => $e->getMessage()], 400);
         }
     }
 
     /**
      * Get one book.
      *
-     * @param  $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function getById($id)
+    public function getById(int $id): JsonResponse
     {
         try {
-            $book = Book::findOrFail($id);
-
-            return response()->json(['book' => $book], 200);
-
-        } catch (\Exception $e) {
-
-            return response()->json(['message' => 'book not found!'], 404);
+            $book = Book::query()->findOrFail($id);
+            return response()->json(['book' => $book]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'No se pudo encontrar el libro', 'error' => $e->getMessage()], 404);
         }
-
     }
 }

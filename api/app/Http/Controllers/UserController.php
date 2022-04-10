@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-
-use App\Http\Requests\StoreModel\StoreUserRequest;
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
+
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -23,7 +25,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get all User.
+     * Get all Users on a datatable format if paginate=true.
      *
      * @param bool $paginate
      * @return JsonResponse
@@ -31,23 +33,31 @@ class UserController extends Controller
     public function index(bool $paginate=true): JsonResponse
     {
         $users = User::query();
-
         if ($paginate) {
             $users = $users->paginate(10);
         } else {
             $users = $users->get();
         }
+        return response()->json($users);
+    }
 
-        return response()->json(['users' =>  $users]);
+    /**
+     * Get all Users.
+     *
+     * @return JsonResponse
+     */
+    public function all(): JsonResponse
+    {
+        return $this->index(false);
     }
 
     /**
      * Store a new user.
      *
-     * @param  StoreUserRequest  $request
+     * @param StoreRequest $request
      * @return JsonResponse
      */
-    public function create(StoreUserRequest $request): JsonResponse
+    public function create(StoreRequest $request): JsonResponse
     {
         try {
             $user = User::query()->create($request->all());
@@ -55,28 +65,27 @@ class UserController extends Controller
 
             return response()->json(['user' => $user, 'message' => 'Usuario creado exitosamente'], 201);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 409);
+            return response()->json(['message' => 'Hubo un error al crear el usuario', 'error' => $e->getMessage()], 400);
         }
     }
 
     /**
      * Update a user.
      *
-     * @param $id
-     * @param StoreUserRequest $request
+     * @param int $id
+     * @param UpdateRequest $request
      * @return JsonResponse
      */
-    public function update($id, StoreUserRequest $request): JsonResponse
+    public function update(int $id, UpdateRequest $request): JsonResponse
     {
         try {
-            $user = User::query()->findOrFail($id);
-
+            $user = User::query()->findOrFail($request->id);
             $user->fill($request->all());
             $user->save();
 
             return response()->json(['user' => $user, 'message' => 'Usuario editado exitosamente']);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 409);
+            return response()->json(['message' => 'Hubo un error al editar el usuario', 'error' => $e->getMessage()], 400);
         }
     }
 
@@ -90,13 +99,11 @@ class UserController extends Controller
     {
         try {
             $user = User::query()->findOrFail($id);
-
             $user->delete();
-            $user->save();
 
             return response()->json(['user' => $user, 'message' => 'Usuario eliminado exitosamente']);
         } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 409);
+            return response()->json(['message' => 'Hubo un error al eliminar el usuario', 'error' => $e->getMessage()], 400);
         }
     }
 
@@ -110,12 +117,10 @@ class UserController extends Controller
     {
         try {
             $user = User::query()->findOrFail($id);
-
             return response()->json(['user' => $user]);
-
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
+            return response()->json(['message' => 'No se pudo encontrar el usuario', 'error' => $e->getMessage()], 404);
         }
     }
 

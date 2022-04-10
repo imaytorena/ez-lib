@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Classes\Utilities;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Laravel\Lumen\Http\Redirector;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\UnauthorizedException;
@@ -26,17 +25,6 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
      */
     protected $authorizationError = ["message" => "No tienes permiso para acceder.", "code" => 403];
     protected $container;
-    /**
-     * The redirector instance.
-     *
-     * @var \Laravel\Lumen\Http\Redirector
-     */
-    protected $redirector;
-    /**
-     * The route to redirect to if validation fails.
-     *
-     * @var string
-     */
     protected $redirectRoute;
     /**
      * The controller action to redirect to if validation fails.
@@ -172,6 +160,7 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
      * @return array
      */
     public function attributes()
+
     {
         return [
             'username' => 'nombre de usuario',
@@ -179,21 +168,26 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
             'email' => 'correo electrónico',
             'name' => 'nombre',
             'last_name' => 'apellido',
-            'genre' => 'género',
-            'status' => 'estado',
-            
+
             'title' => 'título',
             'description' => 'descripción',
             'autor' => 'autor',
             'publisher' => 'editorial',
             'isbn' => 'ISBN',
             'year' => 'año',
-            'genre' => 'género',
             'available' => 'disponible',
             'stock' => 'existencias',
+
+            'serial_number' => 'número de serie',
+            'option' => 'opción',
+            'details' => 'detalles',
+            'brand' => 'marca',
+            'model' => 'modelo',
+
+            'genre' => 'género',
+            'status' => 'estado',
         ];
     }
-
     protected function cleanData()
     {
         $data = $this->validationData();
