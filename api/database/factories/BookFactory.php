@@ -15,7 +15,7 @@ class BookFactory extends Factory
     {
     	return [
             'title' => $this->faker->sentence(2),
-            'description' => $this->faker->paragraph(2),
+            'description' => $this->faker->paragraph(1),
             'autor' => $this->faker->firstName(),
             'publisher' => $this->faker->company(),
             'isbn' => $this->faker->isbn10(),

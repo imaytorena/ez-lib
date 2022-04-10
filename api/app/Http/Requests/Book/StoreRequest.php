@@ -8,17 +8,17 @@ use Carbon\Carbon;
 class StoreRequest extends FormRequest
 {
     protected array $rules = [
-        'title' => 'string|required',
-        'description' => 'string|nullable',
+        'title' => 'string|max:50|required',
+        'description' => 'string|max:255|nullable',
 
-        'autor' => 'string|required',
-        'publisher' => 'string|required',
+        'autor' => 'string|max:70|required',
+        'publisher' => 'string|max:50|required',
         'isbn' => 'digits:10|required|unique:books',
 
         'genre' => 'string|required',
 
         'available' => 'boolean|required',
-        'stock' => 'nullable',
+        'stock' => 'integer|max:9999|nullable',
     ];
 
     /**

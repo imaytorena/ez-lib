@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Book;
 
 use App\Http\Requests\FormRequest;
+use App\Models\Book;
 use Carbon\Carbon;
 
 class UpdateRequest extends FormRequest
@@ -10,17 +11,17 @@ class UpdateRequest extends FormRequest
     protected array $rules = [
         'id' => 'required|integer|exists:books',
 
-        'title' => 'string|nullable',
-        'description' => 'string|nullable',
+        'title' => 'string|max:50|nullable',
+        'description' => 'string|max:255|nullable',
 
-        'autor' => 'string|nullable',
-        'publisher' => 'string|nullable',
-        'isbn' => 'digits:10|nullable|unique:books',
+        'autor' => 'string|max:70|nullable',
+        'publisher' => 'string|max:50|nullable',
+        'isbn' => 'digits:10|nullable',
 
         'genre' => 'string|nullable',
 
         'available' => 'boolean|nullable',
-        'stock' => 'integer|nullable',
+        'stock' => 'integer|max:9999|nullable',
     ];
 
     /**
@@ -43,7 +44,17 @@ class UpdateRequest extends FormRequest
         $data = $this->validationData();
         $data['id'] = $this->route("id") ?? null;
 
-        $data['isbn'] = isset($data['isbn']) ? (int) $data['isbn'] : null;
+        if(isset($data['isbn'])) {
+            $data['isbn'] = (int) $data['isbn'];
+
+            $exits = Book::query()
+                ->where('isbn', '=', $data['isbn'])
+                ->where('id', '!=', $data['id'])
+                ->first();
+            if($exits) {
+                $this->rules['isbn'] = 'digits:10|unique:books';
+            }
+        }
         $data['year'] = isset($data['year']) ? (int) $data['year'] : null;
 
         // Edits on rule validations

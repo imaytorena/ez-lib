@@ -32,11 +32,10 @@ class BookController extends Controller
         $books = Book::query();
         if ($paginate) {
             $books = $books->paginate(10);
-        return response()->json(['books' =>  $books]);
         } else {
             $books = $books->get();
-            return response()->json($books);
         }
+        return response()->json($books);
     }
 
     /**
@@ -60,7 +59,7 @@ class BookController extends Controller
         try {
             $book = Book::query()->create($request->all());
 
-            return response()->json(['book' => $book], 201);
+            return response()->json(['book' => $book, 'message' => 'Libro creado exitosamente'], 201);
         } catch (Exception $e) {
             return response()->json(['message' => 'Hubo un error al crear el libro', 'error' => $e->getMessage()], 400);
         }
@@ -80,7 +79,7 @@ class BookController extends Controller
             $book->fill($request->all());
             $book->save();
 
-            return response()->json(['book' => $book]);
+            return response()->json(['book' => $book, 'message' => 'Libro editado exitosamente']);
         } catch (Exception $e) {
             return response()->json(['message' => 'Hubo un error al actualizar el libro', 'error' => $e->getMessage()], 400);
         }
