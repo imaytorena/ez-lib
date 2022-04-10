@@ -3,50 +3,43 @@
 namespace App\Http\Requests;
 
 use App\Classes\Utilities;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Foundation\Http\FormRequest as HttpFormRequest;
+use JetBrains\PhpStorm\Pure;
 
 
 class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
 {
     use ValidatesWhenResolvedTrait;
+
     /**
      * The container instance.
      *
-     * @var \Illuminate\Container\Container
      */
-    protected $authorizationError = ["message" => "No tienes permiso para acceder.", "code" => 403];
+    protected array $authorizationError = ["message" => "No tienes permiso para acceder.", "code" => 403];
     protected $container;
     protected $redirectRoute;
+
     /**
      * The controller action to redirect to if validation fails.
      *
      * @var string
      */
     protected $redirectAction;
+
     /**
      * The key to be used for the view error bag.
      *
      * @var string
      */
     protected $errorBag = 'default';
-    /**
-     * The input keys that should not be flashed on redirect.
-     *
-     * @var array
-     */
-    protected $dontFlash = ['password', 'password_confirmation'];
 
-
-    protected $utilities;
+    protected Utilities $utilities;
 
     public function __construct()
     {
@@ -57,9 +50,9 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
     /**
      * Get the validator instance for the request.
      *
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return Validator
      */
-    protected function getValidatorInstance()
+    protected function getValidatorInstance(): Validator
     {
         $factory = $this->container->make(ValidationFactory::class);
         if (method_exists($this, 'validator')) {
@@ -74,17 +67,18 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
      *
      * @return array
      */
-    public  function validationData()
+    public  function validationData(): array
     {
         return $this->all();
     }
+
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param Validator $validator
      * @return void
      *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws HttpResponseException
      */
     protected function failedValidation(Validator $validator)
     {
@@ -92,75 +86,80 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
             $this->formatErrors($validator)
         ));
     }
+
     /**
      * Determine if the request passes the authorization check.
      *
      * @return bool
      */
-    protected function passesAuthorization()
+    protected function passesAuthorization(): bool
     {
         if (method_exists($this, 'authorize')) {
             return $this->container->call([$this, 'authorize']);
         }
         return false;
     }
+
     /**
      * Handle a failed authorization attempt.
      *
      * @return void
      *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws HttpResponseException
      */
     protected function failedAuthorization()
     {
         throw new HttpResponseException($this->forbiddenResponse());
     }
+
     /**
      * Get the proper failed validation response for the request.
      *
      * @param  array  $errors
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function response(array $errors)
+    public function response(array $errors): JsonResponse
     {
         return new JsonResponse($errors, 422);
     }
+
     /**
      * Get the response for a forbidden operation.
      *
      * @return JsonResponse
      */
-    public function forbiddenResponse()
+    public function forbiddenResponse(): JsonResponse
     {
         return new JsonResponse(["error" => $this->authorizationError], $this->authorizationError['code']);
     }
+
     /**
      * Format the errors from the given Validator instance.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param Validator $validator
      * @return array
      */
-    protected function formatErrors(Validator $validator)
+    protected function formatErrors(Validator $validator): array
     {
         return $validator->getMessageBag()->toArray();
     }
+
     /**
      * Get custom messages for validator errors.
      *
      * @return array
      */
-    public function messages()
+    #[Pure] public function messages(): array
     {
-        $messages = $this->utilities->getMessageErrors();
-        return $messages;
+        return $this->utilities->getMessageErrors();
     }
+
     /**
      * Get custom attributes for validator errors.
      *
      * @return array
      */
-    public function attributes()
-
+    public function attributes(): array
     {
         return [
             'username' => 'nombre de usuario',
@@ -188,6 +187,10 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
             'status' => 'estado',
         ];
     }
+
+    /**
+     * @return void
+     */
     protected function cleanData()
     {
         $data = $this->validationData();
@@ -195,12 +198,4 @@ class FormRequest extends HttpFormRequest implements ValidatesWhenResolved
             $this->offsetUnset($key);
         }
     }
-
-    // protected function setAuthorizationErrorMessage($message = 'No tienes permiso para acceder.', $statusCode = 403){
-    //     $this->authorizationError = [
-    //         'message' => $message,
-    //         'code' => $statusCode
-    //     ];
-    // }
-
 }
