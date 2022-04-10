@@ -10,14 +10,14 @@ class UpdateRequest extends FormRequest
     private array $rules = [
         'id' => 'required|integer|exists:users',
 
-        'username' => 'required|string|unique:users',
+        'username' => 'required|max:50|string|unique:users',
         'code' => 'string|digits_between:8,12|nullable|unique:users',
-        'email' => 'email|nullable|unique:users',
+        'email' => 'email|max:50|nullable|unique:users',
 
         'genre' => 'string|nullable|in:male,female,other',
 
-        'name' => 'string|nullable',
-        'last_name' => 'string|nullable',
+        'name' => 'string|max:50|nullable',
+        'last_name' => 'string|max:50|nullable',
 
         'phone' => 'string|nullable|min:10|max:14',
     ];

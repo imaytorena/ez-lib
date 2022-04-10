@@ -7,15 +7,15 @@ use App\Http\Requests\FormRequest;
 class StoreRequest extends FormRequest
 {
     protected array $rules = [
-        'username' => 'required|string|unique:users',
+        'username' => 'required|string|max:50|unique:users',
         'password' => 'required',
 
         'code' => 'string|digits_between:8,12|nullable|unique:users',
-        'email' => 'email|nullable|unique:users',
+        'email' => 'email|max:50|nullable|unique:users',
         'genre' => 'nullable|in:male,female,other',
 
-        'name' => 'string|nullable',
-        'last_name' => 'string|nullable',
+        'name' => 'string|max:50|nullable',
+        'last_name' => 'string|max:50|nullable',
 
         'phone' => 'string|nullable|min:10|max:14',
     ];
