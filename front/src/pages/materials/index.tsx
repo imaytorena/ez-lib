@@ -18,7 +18,7 @@ function Materials({ materials, error }) {
 				isClosable: true,
 			});
 		}
-	}, [error]);
+	}, [error, toast]);
 
     const onPageChange = async (page) => {
         await materialService.getAll({page: page})
@@ -42,7 +42,7 @@ function Materials({ materials, error }) {
 			]}
 			onPageChange={onPageChange}
 			{...materialsData}
-		></Datatable>
+		/>
 	</AdminLayout>;
 }
 
@@ -52,7 +52,7 @@ export async function getServerSideProps() {
 	await materialService.getAll()
 		.then(function (response) {
 			if (response.status == 200) {
-				materials = response.data?.materials;
+				materials = response.data;
 			}
 		})
 		.catch(async (errors) => {

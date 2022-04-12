@@ -2,7 +2,6 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
-import { generos } from "../../components/Pages/User/constants";
 import { userService } from "../../services";
 
 function Users({ users, error }) {
@@ -19,7 +18,7 @@ function Users({ users, error }) {
 				isClosable: true,
 			});
 		}
-	}, [error]);
+	}, [error, toast]);
 
     const onPageChange = async (page) => {
         await userService.getAll({page: page})
@@ -43,7 +42,7 @@ function Users({ users, error }) {
 			]}
 			onPageChange={onPageChange}
 			{...usersData}
-		></Datatable>
+		/>
 	</AdminLayout>;
 }
 
@@ -53,7 +52,7 @@ export async function getServerSideProps() {
 	await userService.getAll()
 		.then(function (response) {
 			if (response.status == 200) {
-				users = response.data?.users;
+				users = response.data;
 			}
 		})
 		.catch(async (errors) => {
