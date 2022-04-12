@@ -62,6 +62,15 @@ Route::group(['prefix' => 'books'], function () {
     Route::put('{id}', [BookController::class, 'update']);
     Route::get('{id}', [BookController::class, 'getById']);
     Route::delete('{id}', [BookController::class, 'delete']);
+    // COPIES
+    Route::group(['prefix' => 'copies'], function () {
+        Route::get('', [BookCopyController::class, 'index']);
+        Route::get('all', [BookCopyController::class, 'all']);
+        Route::post('', [BookCopyController::class, 'create']);
+        Route::put('{id}', [BookCopyController::class, 'update']);
+        Route::get('{id}', [BookCopyController::class, 'getById']);
+        Route::delete('{id}', [BookCopyController::class, 'delete']);
+    });
 });
 
 // MATERIALS

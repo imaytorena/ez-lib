@@ -22,7 +22,7 @@ class Book extends Model
         'stock',
     ];
 
-    public function bookCopies(): HasMany
+    public function copies(): HasMany
     {
         return $this->hasMany(BookCopy::class);
     }

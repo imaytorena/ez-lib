@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookCopy;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -57,7 +58,20 @@ class BookController extends Controller
     public function create(StoreRequest $request): JsonResponse
     {
         try {
-            $book = Book::query()->create($request->all());
+            $book = $request->all();
+            $copies = $book['copies'];
+
+            unset($book['copies']);
+            $book = Book::query()->create($book);
+
+            if (count($copies)) {
+                $copies_created = [];
+                foreach ($copies as $copy) {
+                    $copy['book_id'] = $book['id'];
+                    $copies_created[] = BookCopy::query()->create($copy);
+                }
+                $book['copies'] = $copies_created;
+            }
 
             return response()->json(['book' => $book, 'message' => 'Libro creado exitosamente'], 201);
         } catch (Exception $e) {
@@ -75,10 +89,34 @@ class BookController extends Controller
     public function update(int $id, UpdateRequest $request): JsonResponse
     {
         try {
+            $data = $request->all();
+            $copies = $data['copies'];
+            unset($data['copies']);
+
             $book = Book::query()->findOrFail($id);
-            $book->fill($request->all());
+
+            $book->fill($data);
             $book->save();
 
+            if (count($copies)) {
+                $copies_updated = []; $ids = [];
+                foreach ($copies as $copy) {
+                    $id = $copy['id'];
+                    $ids[] = $id;
+
+                    $book_copy = BookCopy::query()->findOrFail($id);
+                    $book_copy->fill($copy);
+                    $book_copy->save();
+
+                    $index = array_search($id, $ids);
+                    if ($index !== FALSE) {
+                        $copies_updated[$index] = $book_copy;
+                    } else {
+                        $copies_updated[] = $book_copy;
+                    }
+                }
+                $book['copies'] = $copies_updated;
+            }
             return response()->json(['book' => $book, 'message' => 'Libro editado exitosamente']);
         } catch (Exception $e) {
             return response()->json(['message' => 'Hubo un error al actualizar el libro', 'error' => $e->getMessage()], 400);

@@ -1,4 +1,4 @@
-import { Td, Text, Tooltip, useToast } from "@chakra-ui/react";
+import { Td, Text, Tooltip } from "@chakra-ui/react";
 import { useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
@@ -62,7 +62,7 @@ export async function getServerSideProps() {
 		.then(function (response) {
 			// console.log(response)
 			if (response.status == 200) {
-				books = response.data?.books;
+				books = response.data;
 			}
 		})
 		.catch(async (errors) => {

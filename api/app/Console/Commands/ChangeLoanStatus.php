@@ -31,7 +31,7 @@ class ChangeLoanStatus extends Command
      */
     public function handle(): int
     {
-        $this->info('iniciamos procedimiento para eliminar snapshots');
+        $this->info('Initiate validations and status changing');
 
         $pasts_devolution = Devolution::query()
             ->whereDate('return_date', '<', Carbon::now())->where('status_snapshot', '!=','cancelled')

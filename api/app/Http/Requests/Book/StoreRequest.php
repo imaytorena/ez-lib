@@ -4,6 +4,7 @@ namespace App\Http\Requests\Book;
 
 use App\Http\Requests\FormRequest;
 use Carbon\Carbon;
+use App\Rules\IsNotRepeated;
 
 class StoreRequest extends FormRequest
 {
@@ -19,6 +20,11 @@ class StoreRequest extends FormRequest
 
         'available' => 'boolean|required',
         'stock' => 'integer|max:9999|nullable',
+
+        'copies' => 'array|nullable',
+        'copies.*.folio' => [ 'required_with:copies', 'integer', 'unique:book_copies' ],
+        'copies.*.name' => 'required_with:copies|string',
+        'copies.*.features' => 'required_with:copies|string',
     ];
 
     /**
@@ -46,6 +52,17 @@ class StoreRequest extends FormRequest
         // Edits on rule validations
         if (isset($data['available']) && $data['available']) {
             $this->rules['stock'] = 'integer|required';
+        }
+
+        if (isset($data['copies']) && count($data['copies'])) {
+            $copies = $data['copies'];
+            $copies_folio = [];
+            foreach ($copies as $copy) {
+                $copies_folio[] = $copy['folio'];
+            }
+            $this->rules['copies.*.folio'][] = new IsNotRepeated($copies_folio);
+        } else {
+            $data['copies'] = [];
         }
 
         $date = Carbon::tomorrow()->year;

@@ -4,7 +4,11 @@ namespace App\Http\Requests\Book;
 
 use App\Http\Requests\FormRequest;
 use App\Models\Book;
+use App\Models\BookCopy;
+use App\Rules\IsNotRepeated;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -22,6 +26,12 @@ class UpdateRequest extends FormRequest
 
         'available' => 'boolean|nullable',
         'stock' => 'integer|max:9999|nullable',
+
+        'copies' => 'array|nullable',
+        'copies.*.id' => ['integer', 'nullable', 'exists:book_copies'],
+        'copies.*.folio' => [ 'required_with:copies', 'integer' ],
+        'copies.*.name' => 'required_with:copies|string',
+        'copies.*.features' => 'required_with:copies|string',
     ];
 
     /**
@@ -37,7 +47,7 @@ class UpdateRequest extends FormRequest
     /**
      * Prepare the data for validation.
      *
-     * @return void
+     * @return void|JsonResponse
      */
     protected function prepareForValidation()
     {
@@ -65,10 +75,26 @@ class UpdateRequest extends FormRequest
         $date = Carbon::tomorrow()->year;
         $this->rules['year'] = 'integer|nullable|digits:4|max:'.($date);
 
-        $this->cleanData();
-        $data = $this->utilities->cleanEmptysAndNULLKeys($data);
-        $data = $this->utilities->cleanKeys($data, $this->rules);
+        if (isset($data['copies']) && count($data['copies'])) {
+            $copies = $data['copies'];
+            $copies_folio = [];
+            foreach ($copies as $copy) {
+                $booksWhereHasCopies = BookCopy::query()
+                    ->whereHas('book', function ($query) use ($data) {
+                        $query->where('id', '=', $data['id']);
+                    })
+                    ->pluck('id')
+                    ->toArray();
+                $this->rules['copies.*.id'][] = Rule::in($booksWhereHasCopies);
+                $copies_folio[] = $copy['folio'];
+            }
+            $this->rules['copies.*.folio'][] = new IsNotRepeated($copies_folio);
+        } else {
+            $data['copies'] = [];
+        }
 
+
+        $this->cleanData();
         $this->merge($data);
     }
 
