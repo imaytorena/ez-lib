@@ -23,10 +23,10 @@ function Books({ books, error }) {
 	const [booksData, setBooksData] = useState(books);
 
 	const onPageChange = async (page) => {
-		await bookService.getAll({ page: page })
+		await bookService.getList({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
-					setBooksData(response.data?.books)
+					setBooksData(response.data)
 				}
 			})
 			.catch(async (errors) => {
@@ -58,7 +58,7 @@ export async function getServerSideProps() {
 	let books = null, error = null;
 	// use
 
-	await bookService.getAll()
+	await bookService.getList()
 		.then(function (response) {
 			// console.log(response)
 			if (response.status == 200) {

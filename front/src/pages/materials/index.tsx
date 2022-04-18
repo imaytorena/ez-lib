@@ -21,7 +21,7 @@ function Materials({ materials, error }) {
 	}, [error, toast]);
 
     const onPageChange = async (page) => {
-        await materialService.getAll({page: page})
+        await materialService.getList({page: page})
 			.then(function (response) {
 				if (response.status == 200) {
 					setMaterialsData(response.data?.materials)
@@ -49,7 +49,7 @@ function Materials({ materials, error }) {
 export async function getServerSideProps() {
 	let materials = null, error = null;
 
-	await materialService.getAll()
+	await materialService.getList()
 		.then(function (response) {
 			if (response.status == 200) {
 				materials = response.data;

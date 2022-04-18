@@ -36,7 +36,7 @@ function RolesPermissions({ roles, error }) {
 	}, [error, toast]);
 
 	const onPageChange = async (page) => {
-		await roleService.getAll({ page: page })
+		await roleService.getList({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
 					setRolesData(response.data?.roles)
@@ -61,7 +61,7 @@ function RolesPermissions({ roles, error }) {
 			}}
 			onPageChange={onPageChange}
 			{...rolesData}
-		></Datatable>
+		/>
 		{/* <Button onClick={onOpen}>Trigger modal</Button> */}
 
 		<Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -94,7 +94,7 @@ function RolesPermissions({ roles, error }) {
 export async function getServerSideProps() {
 	let roles = null, error = null;
 
-	await roleService.getAll()
+	await roleService.getList()
 		.then(function (response) {
 			if (response.status == 200) {
 				roles = response.data?.roles;

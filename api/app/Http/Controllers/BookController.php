@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Book\UpdateRequest;
 use App\Http\Requests\Book\StoreRequest;
 use App\Models\Book;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -25,17 +26,14 @@ class BookController extends Controller
     /**
      * Get all Books on a datatable format.
      *
-     * @param bool $paginate
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(bool $paginate=true): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $books = Book::query();
-        if ($paginate) {
-            $books = $books->paginate(10);
-        } else {
-            $books = $books->get();
-        }
+        $books = $books->paginate(10);
+
         return response()->json($books);
     }
 
@@ -46,7 +44,10 @@ class BookController extends Controller
      */
     public function all(): JsonResponse
     {
-        return $this->index(false);
+        $books = Book::query();
+        $books = $books->get();
+
+        return response()->json($books);
     }
 
     /**

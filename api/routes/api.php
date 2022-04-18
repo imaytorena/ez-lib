@@ -86,7 +86,11 @@ Route::group(['prefix' => 'materials'], function () {
 // LOANS
 Route::group(['prefix' => 'loans'], function () {
     Route::get('', [LoanController::class, 'index']);
+    Route::get('all', [LoanController::class, 'all']);
     Route::post('', [LoanController::class, 'create']);
+    Route::put('{id}', [LoanController::class, 'update']);
+    Route::get('{id}', [LoanController::class, 'getById']);
+    Route::delete('{id}', [LoanController::class, 'delete']);
 });
 
 // PENALTIES

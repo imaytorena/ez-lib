@@ -21,7 +21,7 @@ function Users({ users, error }) {
 	}, [error, toast]);
 
     const onPageChange = async (page) => {
-        await userService.getAll({page: page})
+        await userService.getList({page: page})
 			.then(function (response) {
 				if (response.status == 200) {
 					setUsersData(response.data?.users)
@@ -49,7 +49,7 @@ function Users({ users, error }) {
 export async function getServerSideProps() {
 	let users = null, error = null;
 
-	await userService.getAll()
+	await userService.getList()
 		.then(function (response) {
 			if (response.status == 200) {
 				users = response.data;

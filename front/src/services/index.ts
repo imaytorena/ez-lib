@@ -63,11 +63,11 @@ export class Service {
         return axios.get(`${this.baseUrl}/profile`);
     }
 
-    getAll(params: { page?: number } = {}) {
+    getList(params: { page?: number } = {}) {
         // axios.defaults.headers.common['Authorization'] = this.getAuthorizationHeader();
         // console.log(this.getAuthorizationHeader())
         return axios.get(
-            `${this.baseUrl}?${params["page"] ? `?page=${params["page"]}` : ""}`
+            `${this.baseUrl}?${params["page"] ? `page=${params["page"]}` : ""}`
         );
     }
 

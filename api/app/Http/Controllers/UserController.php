@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -27,17 +28,13 @@ class UserController extends Controller
     /**
      * Get all Users on a datatable format if paginate=true.
      *
-     * @param bool $paginate
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(bool $paginate=true): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $users = User::query();
-        if ($paginate) {
-            $users = $users->paginate(10);
-        } else {
-            $users = $users->get();
-        }
+        $users = $users->paginate(10);
         return response()->json($users);
     }
 
@@ -48,7 +45,9 @@ class UserController extends Controller
      */
     public function all(): JsonResponse
     {
-        return $this->index(false);
+        $users = User::query();
+        $users = $users->get();
+        return response()->json($users);
     }
 
     /**

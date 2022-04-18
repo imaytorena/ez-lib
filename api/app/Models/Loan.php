@@ -4,13 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Models\User;
 
 class Loan extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected array $types = [
+        'ejemplar' => 'App\Models\BookCopy',
+        'material' => 'App\Models\Material',
+    ];
 
     protected $fillable = [
         'user_id', 
@@ -26,17 +33,17 @@ class Loan extends Model
         'deleted_at',
     ];
     
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function object()
+    public function object(): MorphTo
     {
         return $this->morphTo();
     }
     
-    public function devolutions()
+    public function devolutions(): HasMany
     {
         return $this->hasMany(Devolution::class);
     }

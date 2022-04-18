@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\StoreModel;
+namespace App\Http\Requests\Loan;
 
 use App\Http\Requests\FormRequest;
 use Carbon\Carbon;
 
-class StoreLoanRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
-    protected $rules =  [
+    protected array $rules =  [
         'user_id' => 'required|exists:users,id',
         'details' => 'string|nullable',
         'status' => 'string|nullable',

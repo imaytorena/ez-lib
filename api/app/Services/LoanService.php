@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Devolution;
 use App\Models\Loan;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -82,4 +84,26 @@ class LoanService
         return null;
     }
 
+
+    /**
+     * Get loans with user and object relationships
+     *
+     * @return Builder
+     */
+    public static function getLoansWithRelations(): Builder
+    {
+        return DB::table('loans as l')
+            ->join('users as u', 'u.id', '=', 'l.user_id')
+            ->select(
+                'l.id as id',
+                'u.id as user_id',
+                'u.username',
+                'l.status',
+                'l.details',
+                'l.object_id',
+                'l.object_type',
+                DB::raw('(CASE WHEN l.object_type = "App\\\Models\\\BookCopy" THEN "Ejemplar" ELSE "Material" END) AS object_type')
+            )
+            ->orderBy('id');
+    }
 }
