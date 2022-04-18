@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\Devolution;
 use App\Models\Loan;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  *
@@ -14,21 +16,18 @@ class LoanService
 {
     protected static array $status = [ 'ok', 'extension', 'overtime', 'cancelled' ];
 
-
     /**
      * Get the next status based on current loan one
      *
      * @param array $data
-     * @param Loan|null $activeLoan
+     * @param Builder|object|Model]Loan|null $activeLoan
      * @return array
      */
-    public static function create(array $data = [], Loan $activeLoan = null): array
+    #[ArrayShape(['loan' => "mixed", 'devolution' => "mixed"])] public static function create(array $data = [], $activeLoan = null): array
     {
-        $loan = []; $devolution = [];
-
-        // Validate if Loan exists
+        // Validate if Loan already exists with user.id key
         if(!isset($activeLoan)) {
-            $activeLoan = Loan::where('user_id', $data['user_id'])
+            $activeLoan = Loan::query()->where('user_id', $data['user_id'])
                 ->whereHasMorph(
                     'object',
                     $data['object_type'],
@@ -40,13 +39,13 @@ class LoanService
         }
 
         if($activeLoan) {
-            $oldDevolution = Devolution::where('loan_id', '=', $activeLoan->id)->latest()->first();
+            $oldDevolution = Devolution::query()->where('loan_id', '=', $activeLoan->id)->latest()->first();
             $oldDevolution->active = $oldDevolution->active == "cancelled" ? 1 : 0;
             $newStatus = self::getNextStatus($activeLoan->status);
 
             if($newStatus) {
                 $activeLoan->status = $newStatus;
-                $devolution = Devolution::create([
+                $devolution = Devolution::query()->create([
                     'loan_id' => $activeLoan->id,
                     'return_date' => $data['return_date'],
                     'status_snapshot' => $newStatus,
@@ -58,10 +57,10 @@ class LoanService
 
             $oldDevolution->save();
             $loan = $activeLoan;
-            // $newStatus == "cancelled" ? $activeLoan->delete() : $activeLoan->save();
             $activeLoan->save();
         } else {
-            $loan = Loan::create($data);
+            $loan = Loan::query()->create($data);
+            /** @noinspection PhpUndefinedFieldInspection */
             $devolution = $loan->devolutions->first();
         }
         return ['loan' => $loan, 'devolution' => $devolution];

@@ -16,9 +16,9 @@ class LoanObserver
      */
     public function created(Loan $loan)
     {
-        Devolution::create([
+        Devolution::query()->create([
             'loan_id' => $loan->id,
-            'return_date' => Carbon::now()->addWeek(2),
+            'return_date' => Carbon::now()->addWeeks(2),
             'status_snapshot' => "ok",
             'active' => 1,
         ]);

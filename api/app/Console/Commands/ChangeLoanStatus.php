@@ -41,8 +41,8 @@ class ChangeLoanStatus extends Command
         $this->info("Devolutions to be updated : ".count($pasts_devolution));
 
         $pasts_devolution->each(function ($devolution) {
-            $loan = Loan::where('id', '=', $devolution->loan_id)->first();
-            $data = [ 'return_date' => Carbon::now()->addWeek(1) ];
+            $loan = Loan::query()->where('id', '=', $devolution->loan_id)->first();
+            $data = [ 'return_date' => Carbon::now()->addWeek() ];
             $obj_created = LoanService::create($data, $loan);
 
             $this->info("Loan (".$obj_created['loan']->id.") updated : Devolution status from (".$devolution->status_snapshot.") to (".$obj_created['devolution']->status_snapshot.")");
