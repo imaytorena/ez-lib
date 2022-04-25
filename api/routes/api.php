@@ -96,10 +96,26 @@ Route::group(['prefix' => 'loans'], function () {
 // PENALTIES
 Route::group(['prefix' => 'penalties'], function () {
     Route::get('', [PenaltyController::class, 'index']);
+    Route::get('all', [PenaltyController::class, 'all']);
+    Route::post('', [PenaltyController::class, 'create']);
+    Route::put('{id}', [PenaltyController::class, 'update']);
+    Route::get('{id}', [PenaltyController::class, 'getById']);
+    Route::delete('{id}', [PenaltyController::class, 'delete']);
 });
 
 // FEES
 Route::group(['prefix' => 'fees'], function () {
     Route::get('', [FeeController::class, 'index']);
+    Route::get('all', [FeeController::class, 'all']);
+    Route::post('', [FeeController::class, 'create']);
+    Route::put('{id}', [FeeController::class, 'update']);
+    Route::get('{id}', [FeeController::class, 'getById']);
+    Route::delete('{id}', [FeeController::class, 'delete']);
+});
+
+
+// REPORTS
+Route::group(['prefix' => 'reports'], function () {
+    Route::get('{model}/{slug}', [ExcelCSVController::class, 'export']);
 });
 //});

@@ -3,16 +3,8 @@ import Datatable from "../../components/Datatable";
 import { bookService } from "../../services";
 import {
 	Box,
-	VStack,
 	Button,
-	Flex,
 	Divider,
-	chakra,
-	Grid,
-	GridItem,
-	Container,
-	Text,
-	Link as ChakraLink,
 	HStack,
 	useColorModeValue,
 	SimpleGrid,
@@ -64,7 +56,7 @@ function Reports({ reports }) {
 		},
 	];
 	return <AdminLayout>
-		<Heading as='h3' size='lg' mb={5}>Reportes</Heading>
+		<Heading as='h2' size='2xl' mb={5}>Reportes</Heading>
 		<Box
             bg={useColorModeValue('white', 'gray.700')}
             boxShadow={'1xs'}
@@ -79,9 +71,9 @@ function Reports({ reports }) {
                 <Button colorScheme="blue" disabled>
 					Descargar todo en CSV
                 </Button>
-                <Button colorScheme="blue" disabled>
+                {/* <Button colorScheme="blue" disabled>
                     Imprimir todo
-                </Button>
+                </Button> */}
             </HStack>
         </Box>
 		<Divider my={5}/>

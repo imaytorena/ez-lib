@@ -2,107 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
+
 use App\Models\Fee;
+use Illuminate\Http\Request;
 
 class FeeController extends Controller
 {
     /**
-    * Instantiate a new FeeController instance.
-    *
-    * @return void
-    */
-   public function __construct()
-   {
-       // $this->middleware('auth');
-   }
+     * Instantiate a new FeeController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // $this->middleware('auth');
+    }
 
-   /**
-    * Get all Fee.
-    *
-    * @return Response
-    */
-   public function index()
-   {
-       return response()->json(['fees' =>  Fee::all()], 200);
-   }
-   
-   /**
-    * Store a new fee.
-    *x
-    * @param  Request  $request
-    * @return Response
-    */
-   public function create(Request $request)
-   {
-       try {
-           $fee = Fee::create($request->all());
+    /**
+     * Get all Fees on a datatable format.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @noinspection PhpUnusedParameterInspection
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $fees = Fee::query();
+        $fees = $fees->paginate(10);
 
-           return response()->json(['fee' => $fee], 200);
+        return response()->json($fees);
+    }
 
-       } catch (\Exception $e) {
+    /**
+     * Get all Fees.
+     *
+     * @return JsonResponse
+     */
+    public function all(): JsonResponse
+    {
+        $fees = Fee::query();
+        $fees = $fees->get();
 
-           return response()->json(['message' => 'fee not found!'], 404);
-       }
-   }
+        return response()->json($fees);
+    }
 
-   /**
-    * Update a fee.
-    *
-    * @param  Request  $request
-    * @param  $id
-    * @return Response
-    */
-   public function update(Request $request, $id)
-   {
-       try {
-           // $fee = Fee::create($request->all());
-           $fee = Fee::find($id);
+    /**
+     * Store a new fee.
+     *x
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function create(Request $request): JsonResponse
+    {
+        try {
+            $fee = Fee::query()->create($request->all());
 
-           return response()->json(['fee' => $fee], 200);
+            return response()->json(['fee' => $fee], 201);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al crear el fee', 'error' => $e->getMessage()], 400);
+        }
+    }
 
-       } catch (\Exception $e) {
+    /**
+     * Update a fee.
+     *
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update(int $id, Request $request): JsonResponse
+    {
+        try {
+            $fee = Fee::query()->findOrFail($id);
+            $fee->fill($request->all());
+            $fee->save();
 
-           return response()->json(['message' => 'fee not found!'], 404);
-       }
-   }
-   
-   /**
-    * Delete a fee.
-    *
-    * @param  $id
-    * @return Response
-    */
-   public function delete($id)
-   {
-       try {
-           // $fee = Fee::create($request->all());
-           $fee = Fee::find($id);
+            return response()->json(['fee' => $fee]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al actualizar el fee', 'error' => $e->getMessage()], 400);
+        }
+    }
 
-           return response()->json(['fee' => $fee], 200);
 
-       } catch (\Exception $e) {
+    /**
+     * Delete a fee.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function delete(int $id): JsonResponse
+    {
+        try {
+            $fee = Fee::query()->findOrFail($id);
+            $fee->delete();
 
-           return response()->json(['message' => 'fee not found!'], 404);
-       }
-   }
-   
-   /**
-    * Get one fee.
-    *
-    * @param  $id
-    * @return Response
-    */
-   public function getById($id)
-   {
-       try {
-           $fee = Fee::findOrFail($id);
+            return response()->json(['fee' => $fee, 'message' => 'Fee eliminado exitosamente']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Hubo un error al eliminar el fee', 'error' => $e->getMessage()], 400);
+        }
+    }
 
-           return response()->json(['fee' => $fee], 200);
-
-       } catch (\Exception $e) {
-
-           return response()->json(['message' => 'fee not found!'], 404);
-       }
-   }
+    /**
+     * Get one fee.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getById(int $id): JsonResponse
+    {
+        try {
+            $fee = Fee::query()->findOrFail($id);
+            return response()->json(['fee' => $fee]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'No se pudo encontrar el fee', 'error' => $e->getMessage()], 404);
+        }
+    }
 }

@@ -1,16 +1,16 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
-import { bookService } from "../../services";
+import { penaltyService } from "../../services";
 import {useState} from "react";
 
 function Penalties({ penalties }) {
-	const [booksData, setBooksData] = useState(penalties);
+	const [penaltiesData, setPenaltiesData] = useState(penalties);
 
 	const onPageChange = async (page) => {
-		await bookService.getAll({ page: page })
+		await penaltyService.getList({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
-					setBooksData(response.data?.books)
+					setPenaltiesData(response.data)
 				}
 			})
 			.catch(async (errors) => {
@@ -28,24 +28,29 @@ function Penalties({ penalties }) {
 				{key: 'total', label: 'Total'},
 			]}
 			onPageChange={onPageChange}
-			{...booksData}
+			{...penaltiesData}
 		/>
 	</AdminLayout>;
 }
 
-
 export async function getServerSideProps() {
 	let penalties = null, error = null;
 
-	await bookService.getAll()
+	await penaltyService.getList()
 		.then(function (response) {
+			// console.log(response)
 			if (response.status == 200) {
-				penalties = response.data?.books;
+				penalties = response.data;
 			}
 		})
 		.catch(async (errors) => {
+			// console.error(errors.response?.data)
 			error = errors.response?.data
+			if (errors.response.status == 403) {
+				error = { status: 403, message: 'Usuario no autenticado' }
+			}
 		});
+
 	return {
 		props: {
 			penalties,

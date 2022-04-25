@@ -101,8 +101,15 @@ class LoanService
                 'l.details',
                 'l.object_id',
                 'l.object_type',
-                DB::raw('(CASE WHEN l.object_type = "App\\\Models\\\BookCopy" THEN "Ejemplar" ELSE "Material" END) AS object_type')
+                DB::raw('(CASE WHEN l.object_type = "App\\\Models\\\BookCopy" THEN "Ejemplar" ELSE "Material" END) AS object_type'),
+                DB::raw('(CASE
+                    WHEN l.status = "ok" THEN "BIEN"
+                    WHEN l.status = "extension" THEN "PRORROGA"
+                    WHEN l.status = "overtime" THEN "PRORROGA+"
+                    ELSE "CANCELADO" END
+                ) AS status'),
             )
             ->orderBy('id');
+        //'ok', 'extension', 'overtime', 'cancelled'
     }
 }

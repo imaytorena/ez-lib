@@ -5,26 +5,14 @@ import {useState} from "react";
 import {CustomRowProps} from "../../constants";
 import {Td, Text, Tooltip} from "@chakra-ui/react";
 
-const customRow = ({ header, data, index, ...rest }: CustomRowProps) => {
-	let available = parseInt(data["available"]);
-	return <Td
-		key={`${header}-${index}`}
-		{...rest}
-	>
-		<Text noOfLines={1}>
-			{data["type"] == "App\\Models\\BookCopy" ? "Libro" : "Material"}
-		</Text>
-	</Td>
-}
-
 function Loans({ loans }) {
-	const [booksData, setBooksData] = useState(loans);
+	const [loansData, setLoansData] = useState(loans);
 
 	const onPageChange = async (page) => {
 		await loanService.getList({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
-					setBooksData(response.data)
+					setLoansData(response.data)
 				}
 			})
 			.catch(async (errors) => {
@@ -38,10 +26,10 @@ function Loans({ loans }) {
 				{ key: 'username', label: 'Usuario' },
 				{ key: 'status', label: 'Estatus' },
 				{ key: 'details', label: 'Detalles' },
-				{ key: 'type', label: 'Objeto prestado' },
+				{ key: 'object_type', label: 'Objeto prestado' },
 			]}
 			onPageChange={onPageChange}
-			{...booksData}
+			{...loansData}
 		/>
 	</AdminLayout>;
 }

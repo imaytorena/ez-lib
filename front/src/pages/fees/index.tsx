@@ -1,16 +1,16 @@
 import AdminLayout from "../../components/AdminLayout";
 import Datatable from "../../components/Datatable";
-import { bookService } from "../../services";
+import { feeService } from "../../services";
 import {useState} from "react";
 
 function Fees({ fees, error }) {
-	const [booksData, setBooksData] = useState(fees);
+	const [feesData, setFeesData] = useState(fees);
 
 	const onPageChange = async (page) => {
-		await bookService.getAll({ page: page })
+		await feeService.getList({ page: page })
 			.then(function (response) {
 				if (response.status == 200) {
-					setBooksData(response.data?.books)
+					setFeesData(response.data)
 				}
 			})
 			.catch(async (errors) => {
@@ -33,24 +33,29 @@ function Fees({ fees, error }) {
 				{ key: 'stock', label: 'stock' },
 			]}
 			onPageChange={onPageChange}
-			{...booksData}
+			{...feesData}
 		/>
 	</AdminLayout>;
 }
 
+export async function getServerSideProps() {
+	let fees = null, error = null;
 
-export async function getStaticProps() {
-	let fees, error;
-
-	await bookService.getAll()
+	await feeService.getList()
 		.then(function (response) {
+			// console.log(response)
 			if (response.status == 200) {
-				fees = response.data?.books;
+				fees = response.data;
 			}
 		})
 		.catch(async (errors) => {
+			// console.error(errors.response?.data)
 			error = errors.response?.data
+			if (errors.response.status == 403) {
+				error = { status: 403, message: 'Usuario no autenticado' }
+			}
 		});
+
 	return {
 		props: {
 			fees,

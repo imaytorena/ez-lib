@@ -45,12 +45,12 @@ const BookCard = ({ id, title, description, autor, publisher, isbn, year, genre,
 
 	const copies = [
 		{ id: "1", name: "2da Edicion", return_date: "20 Marzo 2022", details: "Pasta gruesa, portada color verde letras negras" },
-		{ id: "2", name: "Pasta gruesa", return_date: "20 Marzo 2022", details: "Pasta blanda, portada color verde letras negras" },
-		{ id: "3", name: "2da Edicion", return_date: "20 Marzo 2022", details: "Pasta blanda, portada color verde letras negras" },
-		{ id: "4", name: "2da Edicion", return_date: "20 Marzo 2022", details: "Pasta blanda, portada color blanco letras negras" },
+		{ id: "2", name: "Pasta gruesa", return_date: "5 Abril 2022", details: "Pasta blanda, portada color verde letras negras" },
+		{ id: "3", name: "2da Edicion", return_date: "1 Mayo 2022", details: "Pasta blanda, portada color verde letras negras" },
+		{ id: "4", name: "2da Edicion", return_date: "12 Mayo 2022", details: "Pasta blanda, portada color blanco letras negras" },
 		{ id: "5", name: "2da Edicion", return_date: "DISPONIBLE", details: "Pasta blanda, portada color blanco letras negras" },
 		{ id: "6", name: "3ra Edicion", return_date: "DISPONIBLE", details: "Pasta gruesa, portada color blanco letras negras" },
-		{ id: "7", name: "4ta Edicion", return_date: "20 Marzo 2022", details: "Pasta gruesa, engargolado" },
+		{ id: "7", name: "4ta Edicion", return_date: "18 Abril 2022", details: "Pasta gruesa, engargolado" },
 	]
 
 	return (

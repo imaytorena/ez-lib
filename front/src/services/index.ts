@@ -100,6 +100,22 @@ export const userService = new Service(`/users`);
 export const bookService = new Service(`/books`);
 export const materialService = new Service(`/materials`);
 export const loanService = new Service(`/loans`);
+export const feeService = new Service(`/fees`);
+export const penaltyService = new Service(`/penalties`);
+
+export const reportService = {
+    get: (module, file_type) => axios.get(`/reports/${module}/${file_type}`, {
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${module}.${file_type}`);
+            document.body.appendChild(link);
+            link.click();
+        })
+}
 
 export const roleService = new Service(`/roles`);
 // export const permissionService = new Service(`/permission`);

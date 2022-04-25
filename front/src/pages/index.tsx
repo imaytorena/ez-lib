@@ -58,7 +58,7 @@ export default function Home() {
 								Ingresar o Crear una cuenta
 							</Button>
 						</Link>
-						<Link href={"/public/books"}>
+						<Link href={"/books"}>
 							<Button rounded={'full'}>
 								Explorar catalogo
 							</Button>

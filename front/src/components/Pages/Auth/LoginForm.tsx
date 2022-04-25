@@ -33,36 +33,37 @@ const LoginForm = ({ element = null }: LoginProps) => {
     const handleLogin: SubmitHandler<Response> = useCallback(async (values) => {
         setIsLoading(true);
         // TODO:https://dev.to/mabaranowski/nextjs-authentication-jwt-refresh-token-rotation-with-nextauthjs-5696
-        await authService.login(values)
-            .then(function (response) {
-                if (response.status == 201) {
-                    router.push(`/books`);
-                    toast({
-                        description: response.data?.message || "Se inicio exitosamente la sesión ",
-                        status: "success",
-                        position: "bottom",
-                        duration: 4000,
-                        isClosable: true,
-                    });
-                }
-            })
-            .catch(async (errors) => {
-                let responseData = errors.response?.data
+        router.push('/books');
+        // await authService.login(values)
+        //     .then(function (response) {
+        //         if (response.status == 201) {
+        //             router.push(`/books`);
+        //             toast({
+        //                 description: response.data?.message || "Se inicio exitosamente la sesión ",
+        //                 status: "success",
+        //                 position: "bottom",
+        //                 duration: 4000,
+        //                 isClosable: true,
+        //             });
+        //         }
+        //     })
+        //     .catch(async (errors) => {
+        //         let responseData = errors.response?.data
 
-                Object.keys(responseData).forEach((key) => {
-                    setError(key, {
-                        type: "manual",
-                        message: responseData[key],
-                    });
-                })
-                toast({
-                    description: errors.response?.data?.message || "Hubo un error al registrar el usuario",
-                    status: "error",
-                    position: "bottom",
-                    duration: 4000,
-                    isClosable: true,
-                });
-            });
+        //         Object.keys(responseData).forEach((key) => {
+        //             setError(key, {
+        //                 type: "manual",
+        //                 message: responseData[key],
+        //             });
+        //         })
+        //         toast({
+        //             description: errors.response?.data?.message || "Hubo un error al registrar el usuario",
+        //             status: "error",
+        //             position: "bottom",
+        //             duration: 4000,
+        //             isClosable: true,
+        //         });
+        //     });
         setIsLoading(false);
     }, [router, toast, setError]);
 

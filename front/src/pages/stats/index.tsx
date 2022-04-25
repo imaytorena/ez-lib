@@ -1,46 +1,19 @@
+import { Box, Flex, SimpleGrid, useColorModeValue } from "@chakra-ui/react";
 import AdminLayout from "../../components/AdminLayout";
-import Datatable from "../../components/Datatable";
-import { bookService } from "../../services";
+import BarChart from "../../components/Pages/Stats/BarChart";
+import PieChart from "../../components/Pages/Stats/PieChart";
+import SimpleLineChart from "../../components/Pages/Stats/SimpleLineChart";
+import StackedAreaChart from "../../components/Pages/Stats/StackedAreaChart";
 
 function Stats({ stats }) {
-	return <AdminLayout>
-		<Datatable
-			header={'Estadísticas'}
-			header_rows={[
-				{key: 'title', label: 'Titulo'},
-				{key: 'description', label: 'Descripción'},
-				{key: 'autor', label: 'Autor'},
-				{key: 'publisher', label: 'Editorial'},
-				{key: 'isbn', label: 'ISBN'},
-				{key: 'year', label: 'Año'},
-				{key: 'genre', label: 'Género'},
-				{key: 'available', label: 'Disponibilidad'},
-				{key: 'stock', label: 'stock'},
-			]}
-			data={stats}
-			totalCount={33}
-		></Datatable>
-	</AdminLayout>;
-}
-
-export async function getStaticProps() {
-	let stats, error;
-
-	await bookService.getAll()
-		.then(function (response) {
-			if (response.status == 200) {
-				stats = response.data?.books;
-			}
-		})
-		.catch(async (errors) => {
-			error = errors.response?.data
-		});
-	return {
-		props: {
-			stats,
-			error
-		},
-	}
+    return <AdminLayout>
+        <Flex justifyContent={"space-around"} flexWrap={"wrap"}>
+            <SimpleLineChart />
+            <StackedAreaChart />
+            <BarChart />
+            <PieChart />
+        </Flex>
+    </AdminLayout>;
 }
 
 export default Stats
