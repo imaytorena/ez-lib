@@ -35,7 +35,6 @@ class LoanController extends Controller
         $loans = $loans->paginate(10);
 
         return response()->json($loans);
-
     }
 
     /**

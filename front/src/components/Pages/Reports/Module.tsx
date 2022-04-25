@@ -1,0 +1,54 @@
+import React from 'react'
+import {
+    Box,
+    VStack,
+    Button,
+    Flex,
+    Divider,
+    chakra,
+    Grid,
+    GridItem,
+    Container,
+    Text,
+    Link as ChakraLink,
+    HStack,
+    useColorModeValue,
+} from '@chakra-ui/react';
+import Link from "next/link";
+
+interface ModuleProps {
+    title: string;
+    path: string;
+    color: string;
+};
+const Module = ({ title, path, color }: ModuleProps) => {
+    return (
+
+        <Box
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'1xs'}
+            rounded={'lg'}
+            p={6}
+            textAlign={'center'}
+        >
+            <VStack alignItems="flex-start" spacing="20px">
+                <chakra.h2 fontSize="3xl" fontWeight="700">
+                    {title}
+                </chakra.h2>
+            </VStack>
+            <HStack spacing='24px' my={4}>
+                <Button colorScheme={color}>
+                    Descargar Excel
+                </Button>
+                <Button colorScheme={color}>
+                    Descargar CSV
+                </Button>
+                <Button colorScheme={color}>
+                    Imprimir
+                </Button>
+            </HStack>
+        </Box>
+    )
+}
+
+export default Module
