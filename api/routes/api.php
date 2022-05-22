@@ -120,8 +120,8 @@ Route::group(['prefix' => 'reports'], function () {
 });
 //});
 
-// PUBBLIC
-Route::group(['prefix' => 'public'], function () {
-    Route::get('books', [BookController::class, 'public']);
-});
+// PUBLIC
+//Route::group(['prefix' => 'public'], function () {
+//    Route::get('books', [BookController::class, 'public']);
+//});
 //});
