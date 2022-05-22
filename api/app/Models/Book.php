@@ -18,6 +18,7 @@ class Book extends Model
         'isbn',
         'year',
         'genre',
+        'image_url',
         'available',
         'stock',
     ];

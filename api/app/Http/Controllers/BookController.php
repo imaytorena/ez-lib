@@ -150,12 +150,13 @@ class BookController extends Controller
     /**
      * Get one book.
      *
-     * @param Book $book
+     * @param int $id
      * @return JsonResponse
      */
-    public function getById(Book $book): JsonResponse
+    public function getById(int $id): JsonResponse
     {
         try {
+            $book = Book::query()->findOrFail($id);
             return response()->json(['book' => $book]);
         } catch (Exception $e) {
             return response()->json(['message' => 'No se pudo encontrar el libro', 'error' => $e->getMessage()], 404);
@@ -183,15 +184,21 @@ class BookController extends Controller
             return response()->json($categories);
         }
 
+        //cover
         foreach ($categories as $key => $value) {
             $category = (array)$value;
-            if ($key < 2) {
-                $res = $client->get("http://www.etnassoft.com/api/v1/get/?category=" . $category['nicename'] . "&criteria=most_viewed&num_items=2");
-                $data = $res->getBody();
-                [$a, $b] = json_decode($data);
-                $most_viewed[] = $a;
-                $most_viewed[] = $b;
-            }
+            $res = $client->get("http://www.etnassoft.com/api/v1/get/?category=" . $category['nicename'] . "&criteria=most_viewed&num_items=1");
+            $data = $res->getBody();
+            [$a] = json_decode($data);
+            $a = (array) $a;
+
+            $key = (int) $key;
+            $book =  Book::query()->findOrFail($key+1);
+            $book['image_url'] = $a['cover'];
+            $book->save();
+
+            $most_viewed[] = $a['cover'];
+
         }
         return response()->json($most_viewed);
     }

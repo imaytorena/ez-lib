@@ -21,6 +21,7 @@ class BookFactory extends Factory
             'isbn' => $this->faker->isbn10(),
             'year' => $this->faker->year(),
             'genre' => $this->faker->word(),
+            'image_url' => $this->faker->imageUrl(),
             'available' => $this->faker->boolean(),
             'stock' => $this->faker->randomNumber(2, false),
     	];

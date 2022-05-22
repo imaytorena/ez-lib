@@ -60,7 +60,7 @@ Route::group(['prefix' => 'books'], function () {
     Route::get('all', [BookController::class, 'all']);
     Route::post('', [BookController::class, 'create']);
     Route::put('{id}', [BookController::class, 'update']);
-    Route::get('{book}', [BookController::class, 'getById']);
+    Route::get('{id}', [BookController::class, 'getById']);
     Route::delete('{id}', [BookController::class, 'delete']);
     // COPIES
     Route::group(['prefix' => 'copies'], function () {

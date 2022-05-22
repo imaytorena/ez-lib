@@ -21,6 +21,7 @@ export async function getServerSideProps(context) {
 			if (response.status == 200) {
 				book = response.data?.book;
 			}
+			console.log(response.data?.book)
 		})
 		.catch(async (errors) => {
 			error = errors.response?.data?.message;

@@ -25,6 +25,7 @@ export interface Book extends Row {
     isbn: string;
     year: string;
     genre: string;
+    image_url: string;
 
     available: string;
     stock: string;

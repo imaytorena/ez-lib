@@ -38,7 +38,7 @@ import { useRouter } from 'next/router';
 interface BookCardProps extends BookType {
 	copies?: string[];
 }
-const BookCard = ({ id, title, description, autor, publisher, isbn, year, genre, available, stock, }: BookCardProps) => {
+const BookCard = ({ id, title, description, autor, publisher, isbn, year, genre, available, stock, image_url }: BookCardProps) => {
 	const { colorMode } = useColorMode();
 	const [ copyDrawer, setCopyDrawer] = useState({ open: false, data: null});
 	const router = useRouter();
@@ -62,7 +62,7 @@ const BookCard = ({ id, title, description, autor, publisher, isbn, year, genre,
 						height={"xs"}
 						width={"auto"}
 						margin={"auto"}
-						src='https://images-na.ssl-images-amazon.com/images/I/91oy4zw56KL.jpg'
+						src={image_url}
 						alt='Dan Abramov'
 					/>
 				</Box>
