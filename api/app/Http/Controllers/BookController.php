@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\BookCopy;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
+
+use GuzzleHttp\Client;
 
 use App\Http\Requests\Book\UpdateRequest;
 use App\Http\Requests\Book\StoreRequest;
@@ -13,7 +16,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-     /**
+    /**
      * Instantiate a new BookController instance.
      *
      * @return void
@@ -100,7 +103,8 @@ class BookController extends Controller
             $book->save();
 
             if (count($copies)) {
-                $copies_updated = []; $ids = [];
+                $copies_updated = [];
+                $ids = [];
                 foreach ($copies as $copy) {
                     $id = $copy['id'];
                     $ids[] = $id;
@@ -146,16 +150,49 @@ class BookController extends Controller
     /**
      * Get one book.
      *
-     * @param int $id
+     * @param Book $book
      * @return JsonResponse
      */
-    public function getById(int $id): JsonResponse
+    public function getById(Book $book): JsonResponse
     {
         try {
-            $book = Book::query()->findOrFail($id);
             return response()->json(['book' => $book]);
         } catch (Exception $e) {
             return response()->json(['message' => 'No se pudo encontrar el libro', 'error' => $e->getMessage()], 404);
         }
+    }
+
+    /**
+     * Get all public Books.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws GuzzleException
+     */
+    public function public(Request $request): JsonResponse
+    {
+        $client = new Client();
+        $most_viewed = [];
+
+        $res = $client->get('http://www.etnassoft.com/api/v1/get/?get_categories=all');
+        $data = $res->getBody();
+        $categories = json_decode($data);
+
+
+        if (isset($request->categories)) {
+            return response()->json($categories);
+        }
+
+        foreach ($categories as $key => $value) {
+            $category = (array)$value;
+            if ($key < 2) {
+                $res = $client->get("http://www.etnassoft.com/api/v1/get/?category=" . $category['nicename'] . "&criteria=most_viewed&num_items=2");
+                $data = $res->getBody();
+                [$a, $b] = json_decode($data);
+                $most_viewed[] = $a;
+                $most_viewed[] = $b;
+            }
+        }
+        return response()->json($most_viewed);
     }
 }

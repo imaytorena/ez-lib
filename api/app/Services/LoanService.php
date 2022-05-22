@@ -74,7 +74,7 @@ class LoanService
      */
     public static function getNextStatus(string $currentStatus): ?string
     {
-        // [ 'right', 'extension', 'overtime', 'cancelled' ];
+        // [ 'ok', 'extension', 'overtime', 'cancelled' ];
         $statusList = self::$status;
         if ($currentStatus != "cancelled") {
             $idx = array_search($currentStatus, $statusList);

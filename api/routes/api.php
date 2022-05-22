@@ -60,7 +60,7 @@ Route::group(['prefix' => 'books'], function () {
     Route::get('all', [BookController::class, 'all']);
     Route::post('', [BookController::class, 'create']);
     Route::put('{id}', [BookController::class, 'update']);
-    Route::get('{id}', [BookController::class, 'getById']);
+    Route::get('{book}', [BookController::class, 'getById']);
     Route::delete('{id}', [BookController::class, 'delete']);
     // COPIES
     Route::group(['prefix' => 'copies'], function () {
@@ -117,5 +117,11 @@ Route::group(['prefix' => 'fees'], function () {
 // REPORTS
 Route::group(['prefix' => 'reports'], function () {
     Route::get('{model}/{slug}', [ExcelCSVController::class, 'export']);
+});
+//});
+
+// PUBBLIC
+Route::group(['prefix' => 'public'], function () {
+    Route::get('books', [BookController::class, 'public']);
 });
 //});
