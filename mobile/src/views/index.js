@@ -1,6 +1,7 @@
 import Welcome from './Welcome';
-import Books from './Books';
+import Library from './Library';
 import Home from './Home';
 import Categories from './Categories';
+import Books from './Books';
 
-export { Welcome, Home, Categories, Books };
+export { Welcome, Home, Library, Categories, Books };

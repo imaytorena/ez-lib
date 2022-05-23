@@ -6,14 +6,6 @@ import { View, Text } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
-const DetailsScreen = () => {
-    return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Details Screen</Text>
-        </View>
-    );
-}
-
 export default function App() {
     return <NavigationContainer>
         <Stack.Navigator
@@ -27,11 +19,8 @@ export default function App() {
                 },
             }}
         >
-            <Stack.Screen name="welcome" component={Welcome}/>
             <Stack.Screen name="home" component={Home}/>
-            <Stack.Screen name="categories" component={Categories}/>
-            <Stack.Screen name="category_books" component={Books}/>
-            <Stack.Screen name="book" component={DetailsScreen}/>
+            {/*<Stack.Screen name="welcome" component={Welcome}/>*/}
         </Stack.Navigator>
     </NavigationContainer>;
 }

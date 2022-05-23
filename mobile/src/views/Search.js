@@ -1,46 +1,108 @@
-import React, {useEffect, useState} from "react";
-import {Button, StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
 
-const Search = ({navigation}) => {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState([]);
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
-    const getBooks = async () => {
-        try {
-            const response = await fetch('http://www.easylibrary.site/api/books');
-            const json = await response.json();
-            return json.data
-        } catch (error) {
-            console.error(error);
-            return [];
-        } finally {
-            setLoading(false);
-        }
-    }
+const Search = ({ navigation }) => {
+    const [search, setSearch] = useState('');
+    const [filteredDataSource, setFilteredDataSource] = useState([]);
+    const [masterDataSource, setMasterDataSource] = useState([]);
 
     useEffect(() => {
-        getBooks().then(r => setData(r));
+        fetch('https://jsonplaceholder.typicode.com/posts')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                setFilteredDataSource(responseJson);
+                setMasterDataSource(responseJson);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
-    return <View style={styles.container}>
-        {isLoading ? <ActivityIndicator size="large" /> :
-            <View>
-                {data?.map((d, i) => <Text key={`%i${i}`}>{d.title}</Text>)}
-                <Button
-                    title="Go to Details"
-                    onPress={() => navigation.navigate('welcome')}
-                />
-            </View>
+
+    const searchFilterFunction = (text) => {
+        // Check if searched text is not blank
+        if (text) {
+            // Inserted text is not blank
+            // Filter the masterDataSource
+            // Update FilteredDataSource
+            const newData = masterDataSource.filter(function (item) {
+                const itemData = item.title
+                    ? item.title.toUpperCase()
+                    : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            setFilteredDataSource(newData);
+            setSearch(text);
+        } else {
+            // Inserted text is blank
+            // Update FilteredDataSource with masterDataSource
+            setFilteredDataSource(masterDataSource);
+            setSearch(text);
         }
-    </View>
+    };
+
+    const ItemView = ({ item }) => {
+        return (
+            // Flat List Item
+            <Text style={styles.itemStyle} onPress={() => getItem(item)}>
+                {item.id}
+                {'.'}
+                {item.title.toUpperCase()}
+            </Text>
+        );
+    };
+
+    const ItemSeparatorView = () => {
+        return (
+            // Flat List Item Separator
+            <View
+                style={{
+                    height: 0.5,
+                    width: '100%',
+                    backgroundColor: '#C8C8C8',
+                }}
+            />
+        );
+    };
+
+    const getItem = (item) => {
+        // Function for click on an item
+        alert('Id : ' + item.id + ' Title : ' + item.title);
+    };
+
+    return (
+        <View style={styles.container}>
+            <SearchBar
+                round
+                onChangeText={(text) => {
+                    searchFilterFunction(text)
+                }}
+                onClear={(_) => {
+                    searchFilterFunction('')
+                }}
+                placeholder="Type Here..."
+                value={search}
+            />
+            {/*<FlatList*/}
+            {/*    data={filteredDataSource}*/}
+            {/*    keyExtractor={(item, index) => index.toString()}*/}
+            {/*    ItemSeparatorComponent={ItemSeparatorView}*/}
+            {/*    renderItem={ItemView}*/}
+            {/*/>*/}
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#22272EF2',
-
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: "10%",
+        backgroundColor: '#22272EF2'
+    },
+    itemStyle: {
+        padding: 10,
     },
 });
 

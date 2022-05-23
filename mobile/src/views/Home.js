@@ -3,32 +3,10 @@ import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import Books from "./Books";
 
-
-function BooksScreen() {
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Books!</Text>
-        </View>
-    );
-}
-
-function SearchScreen() {
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Search!</Text>
-        </View>
-    );
-}
-
-function SettingsScreen() {
-    return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Settings!</Text>
-        </View>
-    );
-}
+import Library from "./Library";
+import Search from "./Search";
+import Config from "./Config";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,8 +33,8 @@ export default function Home() {
             })}
         >
             <Tab.Screen
-                name="books"
-                component={Books}
+                name="library"
+                component={Library}
                 options={({route, navigation}) => {
                     const state = navigation.getState();
                     return ({
@@ -73,7 +51,7 @@ export default function Home() {
             <Tab.Screen
                 style={{}}
                 name="search"
-                component={SearchScreen}
+                component={Search}
                 options={({route, navigation}) => {
                     const state = navigation.getState();
                     return ({
@@ -89,7 +67,7 @@ export default function Home() {
             />
             <Tab.Screen
                 name="Settings"
-                component={SettingsScreen}
+                component={Config}
                 options={({route, navigation}) => {
                     const state = navigation.getState();
                     return ({
