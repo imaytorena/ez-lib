@@ -9,7 +9,7 @@ const Search = ({ navigation }) => {
     const [masterDataSource, setMasterDataSource] = useState([]);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/posts')
+        fetch('http://api.easylibrary.site/api/books/all')
             .then((response) => response.json())
             .then((responseJson) => {
                 setFilteredDataSource(responseJson);
@@ -27,6 +27,7 @@ const Search = ({ navigation }) => {
             // Filter the masterDataSource
             // Update FilteredDataSource
             const newData = masterDataSource.filter(function (item) {
+                console.log(item)
                 const itemData = item.title
                     ? item.title.toUpperCase()
                     : ''.toUpperCase();
@@ -85,12 +86,12 @@ const Search = ({ navigation }) => {
                 placeholder="Type Here..."
                 value={search}
             />
-            {/*<FlatList*/}
-            {/*    data={filteredDataSource}*/}
-            {/*    keyExtractor={(item, index) => index.toString()}*/}
-            {/*    ItemSeparatorComponent={ItemSeparatorView}*/}
-            {/*    renderItem={ItemView}*/}
-            {/*/>*/}
+            <FlatList
+                data={filteredDataSource}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={ItemSeparatorView}
+                renderItem={ItemView}
+            />
         </View>
     );
 };
@@ -98,10 +99,10 @@ const Search = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: "10%",
         backgroundColor: '#22272EF2'
     },
     itemStyle: {
+        color: "white",
         padding: 10,
     },
 });

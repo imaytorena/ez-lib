@@ -41,7 +41,7 @@ const Library = ({route, navigation}) => {
 
     return <View style={styles.container}>
         {isLoading ?
-            <ActivityIndicator size="large"/>
+            <View style={{ flex: 1 }}><ActivityIndicator size="large"/></View>
             : <ScrollView style={styles.scrollView}>
                 <View style={{ height: 350}}>
                         <Title
@@ -49,15 +49,14 @@ const Library = ({route, navigation}) => {
                             size={30}
                         />
                         <FlatList
-                            style={{ height: 350 }}
                             keyExtractor={item => item.nicename}
                             initialScrollIndex={0}
-                            initialNumToRender={2}
+                            initialNumToRender={4}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({item, index}) => (
                                 <View style={{
                                     display: "flex",
-                                    flexDirection: "column",
+                                    // flexDirection: "column",
                                     alignItems: "center",
                                     justifyContent: "center",
                                 }}>
@@ -87,8 +86,8 @@ const Library = ({route, navigation}) => {
                     <FlatList
                         style={{ height: 80}}
                         keyExtractor={item => item.nicename}
-                        initialScrollIndex={0}
-                        initialNumToRender={10}
+                        initialScrollIndex={1}
+                        initialNumToRender={4}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({item, index}) => (
                             <View style={{
@@ -109,13 +108,12 @@ const Library = ({route, navigation}) => {
                         horizontal
                     />
                 </View>
-                <View style={{ height: 250}}>
+                <View style={{ height: 250, marginBottom: 20}}>
                     <Title
                         text={"Nuevos Materiales"}
                         size={30}
                     />
                     <FlatList
-                        style={{ height: 220 }}
                         keyExtractor={item => item.nicename}
                         initialScrollIndex={0}
                         initialNumToRender={2}
@@ -154,11 +152,13 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // justifyContent: 'flex-start',
 
-        paddingTop: "10%",
+        // paddingTop: "2%",
+        // paddingBottom: "2%",
         // paddingBottom: "15%",
     },
     scrollView: {
-        height: "100%"
+        height: "100%",
+        width: "100%"
     }
 });
 

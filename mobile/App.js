@@ -19,8 +19,8 @@ export default function App() {
                 },
             }}
         >
+            <Stack.Screen name="welcome" component={Welcome}/>
             <Stack.Screen name="home" component={Home}/>
-            {/*<Stack.Screen name="welcome" component={Welcome}/>*/}
         </Stack.Navigator>
     </NavigationContainer>;
 }
