@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Button, StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 
-const Books = ({navigation}) => {
+const Categories = ({navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Books;
+export default Categories;
