@@ -1,14 +1,12 @@
 import axios from "axios";
 
 class Service {
-    baseUrl = "/auth";
-
     register(params) {
-        return axios.post(`/register`, params);
+        return axios.post(`/auth/register`, params);
     }
     
     login(params) {
-        return axios.post(`/login`, params);
+        return axios.post(`/auth/login`, params);
     }
 }
 
