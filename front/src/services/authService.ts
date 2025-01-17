@@ -4,11 +4,11 @@ class Service {
     baseUrl = "/auth";
 
     register(params) {
-        return axios.post(`${this.baseUrl}/register`, params);
+        return axios.post(`/register`, params);
     }
     
     login(params) {
-        return axios.post(`${this.baseUrl}/login`, params);
+        return axios.post(`/login`, params);
     }
 }
 
