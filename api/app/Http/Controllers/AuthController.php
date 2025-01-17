@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreModel\StoreUserRequest;
+use App\Http\Requests\User\StoreRequest;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules;
@@ -62,10 +62,10 @@ class AuthController extends Controller
     /**
      * Store a new user.
      *
-     * @param  StoreUserRequest  $request
-     * @return Response
+     * @param  StoreRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(StoreUserRequest $request)
+    public function register(StoreRequest $request)
     {
         try {
             $data = $request->all();
