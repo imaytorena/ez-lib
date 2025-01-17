@@ -6,7 +6,7 @@ import { UserProvider } from "../context/UsersContext";
 
 import { theme } from "../styles/theme"
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL ?? `http://localhost:80/api`;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API ?? `http://localhost:80/api`;
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
